@@ -1,5 +1,7 @@
 ![ss](https://user-images.githubusercontent.com/16024979/215224137-4ed3b36b-623b-4eaa-b5e1-a40b77086ef6.png)
 
+> wip
+
 # Tauri + Next.js 13 + shadcn/ui
 
 [Tauri](https://github.com/tauri-apps/tauri) boilerplate with [Next.js 13](https://beta.nextjs.org/docs) and [shadcn/ui](https://github.com/shadcn/ui).
