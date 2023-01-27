@@ -2,15 +2,43 @@
 
 # Tauri + Next.js 13 + shadcn/ui
 
-[Tauri](https://github.com/tauri-apps/tauri) boilerplate [shadcn/ui](https://github.com/shadcn/ui)
+[Tauri](https://github.com/tauri-apps/tauri) boilerplate with [Next.js 13](https://beta.nextjs.org/docs) and [shadcn/ui](https://github.com/shadcn/ui).
 
 ## Customization
 
-- package.json
-- src-tauri/tauri.conf.json
-- src-tauri/icons
+- [package.json](/package.json)
+- [src-tauri/tauri.conf.json](src-tauri/tauri.conf.json)
+- [src-tauri/icons](src-tauri/icons)
 
 ## Folder Structure
+
+```
+.
+├── next-env.d.ts
+├── next.config.js
+├── package.json
+├── postcss.config.js
+├── README.md
+├── src
+│   ├── app
+│   ├── assets
+│   ├── components
+│   │   └── ui
+│   ├── config
+│   ├── lib
+│   ├── styles
+│   └── types
+├── src-tauri
+│   ├── build.rs
+│   ├── Cargo.lock
+│   ├── Cargo.toml
+│   ├── icons
+│   ├── src
+│   └── tauri.conf.json
+├── tailwind.config.js
+├── tsconfig.json
+└── yarn.lock
+```
 
 ## Recommended IDE Setup
 
