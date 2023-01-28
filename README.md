@@ -8,6 +8,11 @@
 
 [Tauri](https://github.com/tauri-apps/tauri) boilerplate with [Next.js 13](https://beta.nextjs.org/docs) and [shadcn/ui](https://github.com/shadcn/ui).
 
+```
+yarn tauri dev
+yarn tauri build
+```
+
 ## Customization
 
 - [package.json](/package.json)
