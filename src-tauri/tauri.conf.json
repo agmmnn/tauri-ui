@@ -16,7 +16,8 @@
       "shell": {
         "all": false,
         "open": true
-      }
+      },
+      "window": { "startDragging": true }
     },
     "bundle": {
       "active": true,

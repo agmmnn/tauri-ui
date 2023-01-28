@@ -93,6 +93,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { playlists, listenNowAlbums, madeForYouAlbums } from "@/app/data";
 import logo from "../assets/logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { appWindow } from "@tauri-apps/api/window";
 
 interface Album {
   name: string;
@@ -114,12 +115,14 @@ function App() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     setGreetMsg(await invoke("greet", { name }));
   }
-
   return (
     <div className="overflow-hidden rounded-md border border-slate-200  dark:border-slate-800">
-      <Menubar className="rounded-none border-b border-none bg-orange-50 dark:bg-slate-900">
+      <Menubar
+        data-tauri-drag-region
+        className="rounded-none border-b border-none bg-orange-50 dark:bg-slate-900"
+      >
         <MenubarMenu>
-          <MenubarTrigger className="font-bold">Music</MenubarTrigger>
+          <MenubarTrigger className="font-bold">App</MenubarTrigger>
           <MenubarContent>
             <MenubarItem>About Music</MenubarItem>
             <MenubarSeparator />
@@ -371,7 +374,7 @@ function App() {
                   <h2 className="relative px-8 text-lg font-semibold tracking-tight">
                     Playlists
                   </h2>
-                  <ScrollArea className="h-[230px] px-4">
+                  <ScrollArea className="h-[280px] px-4">
                     <div className="space-y-1 p-2">
                       {playlists.map((playlist) => (
                         <Button

@@ -19,20 +19,18 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
-      <html lang="en">
-        <body
-          className={cn(
-            "overflow-hidden rounded-md font-sans text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50",
-            fontSans.variable
-          )}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
-            {/* <TailwindIndicator /> */}
-          </ThemeProvider>
-        </body>
-      </html>
-    </>
+    <html lang="en">
+      <body
+        className={cn(
+          "overflow-hidden  rounded-md font-sans text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50",
+          fontSans.variable
+        )}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+          {/* <TailwindIndicator /> */}
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
