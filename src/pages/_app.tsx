@@ -1,3 +1,5 @@
+import type { AppProps } from "next/app";
+
 import { Inter as FontSans } from "@next/font/google";
 
 import "@/styles/globals.css";
@@ -16,8 +18,8 @@ const fontSans = FontSans({
 interface RootLayoutProps {
   children: React.ReactNode;
 }
-
-export default function RootLayout({ children }: RootLayoutProps) {
+// This default export is required in a new `pages/_app.js` file.
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <html lang="en">
       <body
@@ -27,7 +29,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <Component {...pageProps} />
           {/* <TailwindIndicator /> */}
         </ThemeProvider>
       </body>

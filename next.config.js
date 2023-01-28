@@ -8,7 +8,7 @@ const nextConfig = {
     domains: ["avatars.githubusercontent.com", "images.unsplash.com"],
   },
   experimental: {
-    appDir: true,
+    // appDir: true,
     fontLoaders: [
       {
         loader: "@next/font/google",

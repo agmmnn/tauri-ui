@@ -90,7 +90,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { playlists, listenNowAlbums, madeForYouAlbums } from "@/app/data";
+import { playlists, listenNowAlbums, madeForYouAlbums } from "@/lib/data";
 import logo from "../assets/logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { appWindow } from "@tauri-apps/api/window";

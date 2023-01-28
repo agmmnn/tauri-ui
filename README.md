@@ -2,14 +2,13 @@
 
 > wip
 
-> build issue https://github.com/agmmnn/tauri-ui-boilerplate/issues/1
-
 # Tauri + Next.js 13 + shadcn/ui
 
 [Tauri](https://github.com/tauri-apps/tauri) boilerplate with [Next.js 13](https://beta.nextjs.org/docs) and [shadcn/ui](https://github.com/shadcn/ui).
 
 ```
 yarn tauri dev
+
 yarn tauri build
 ```
 
