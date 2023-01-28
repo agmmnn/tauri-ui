@@ -2,7 +2,7 @@
 
 > wip
 
-> build issue #1
+> build issue https://github.com/agmmnn/tauri-ui-boilerplate/issues/1
 
 # Tauri + Next.js 13 + shadcn/ui
 
