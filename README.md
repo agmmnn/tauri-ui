@@ -28,12 +28,12 @@ yarn tauri build
 ├── postcss.config.js
 ├── README.md
 ├── src
-│   ├── app
 │   ├── assets
 │   ├── components
 │   │   └── ui
 │   ├── config
 │   ├── lib
+│   ├── pages
 │   ├── styles
 │   └── types
 ├── src-tauri
