@@ -10,10 +10,10 @@
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",
     "class-variance-authority": "^0.4.0",
-    "@next/font": "^13.1.5",
+    "@next/font": "^13.1.6",
     "clsx": "^1.2.1",
     "lucide-react": "^0.107.0",
-    "next": "^13.1.5",
+    "next": "^13.1.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind-merge": "^1.8.1",
