@@ -42,6 +42,7 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 - [x] Titlebar draggable.
 - [x] Titlebar minimize, maximize, close buttons.
 - [x] Titlebar double-click maximize.
+- [x] Decomposing UI into components.
 - [ ] Dark-Light mode switch.
 - [ ] Get simple data from the Rust backend code.
 
