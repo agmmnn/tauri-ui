@@ -48,7 +48,7 @@ export function Titlebar() {
   return (
     <Menubar
       data-tauri-drag-region
-      className="rounded-none border-b border-none bg-orange-50 dark:bg-slate-900"
+      className="rounded-none border-b border-none bg-orange-50 dark:bg-slate-800"
     >
       <MenubarMenu>
         <MenubarTrigger className="font-bold">App</MenubarTrigger>
