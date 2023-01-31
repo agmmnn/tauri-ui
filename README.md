@@ -31,7 +31,7 @@ yarn tauri build
 
 - [package.json](/package.json)
 - [src-tauri/tauri.conf.json](src-tauri/tauri.conf.json)
-- [src-tauri/icons](src-tauri/icons)
+- Update `app-icon.png`, run `yarn tauri icon`. This will automatically generate icon files into src-tauri/icons.
 
 ## Update Components
 
@@ -40,7 +40,9 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 ## To-Do
 
 - [x] Titlebar draggable.
-- [ ] Titlebar minimize, maximize, close buttons.
+- [x] Titlebar minimize, maximize, close buttons.
+- [x] Titlebar double-click maximize.
+- [ ] Dark-Light mode switch.
 - [ ] Get simple data from the Rust backend code.
 
 ## Folder Structure
@@ -48,7 +50,7 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 ```
 .
 ├── next-env.d.ts
-├── next.config.js    //nextjs config file
+├── next.config.js    //nextjs config file https://nextjs.org/docs/api-reference/next.config.js/introduction
 ├── package.json
 ├── postcss.config.js
 ├── README.md
@@ -63,10 +65,10 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 ├── src-tauri         //backend src:
 │   ├── build.rs
 │   ├── Cargo.lock
-│   ├── Cargo.toml
-│   ├── icons
+│   ├── Cargo.toml    // https://doc.rust-lang.org/cargo/reference/manifest.html
+│   ├── icons         // https://tauri.app/v1/guides/features/icons/
 │   ├── src           //rust codes
-│   └── tauri.conf.json    //tauri config file
+│   └── tauri.conf.json    //tauri config file https://tauri.app/v1/api/config/
 ├── tailwind.config.js     //tailwind config file
 ├── tsconfig.json          //typescript config file
 └── yarn.lock
