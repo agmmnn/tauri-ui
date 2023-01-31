@@ -17,7 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function LeftMenu() {
   return (
-    <aside className="pb-12">
+    <aside className="pb-12 h-screen">
       <div className="px-8 py-6">
         <p className="flex items-center text-2xl font-semibold tracking-tight select-none">
           <Image
@@ -81,7 +81,7 @@ export function LeftMenu() {
           <h2 className="relative px-8 text-lg font-semibold tracking-tight">
             Playlists
           </h2>
-          <ScrollArea className="h-[280px] px-4">
+          <ScrollArea className="h-80 px-4 mb-4">
             <div className="space-y-1 p-2">
               {playlists.map((playlist) => (
                 <Button
