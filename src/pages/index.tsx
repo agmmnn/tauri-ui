@@ -4,6 +4,7 @@ import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 
 import Image from "next/image";
+import { nanoid } from "nanoid";
 
 import {
   Album,
@@ -378,6 +379,7 @@ function App() {
                     <div className="space-y-1 p-2">
                       {playlists.map((playlist) => (
                         <Button
+                          key={nanoid()}
                           variant="ghost"
                           size="sm"
                           className="w-full justify-start font-normal"
