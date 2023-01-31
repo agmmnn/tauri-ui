@@ -36,6 +36,7 @@ yarn tauri build
 - [x] Decomposing UI into components.
 - [x] Dark-Light mode switch.
 - [x] Get simple data from the Rust backend code.
+- [ ] Change 'useEffect.querySelector("body").classList.add' it cause font flicker when the application starts.
 
 ## Customization
 
