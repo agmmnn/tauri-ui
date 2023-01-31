@@ -1,23 +1,19 @@
 import { Button } from "@/components/ui/button";
 import {
-  Globe,
   LayoutGrid,
   Library,
   ListMusic,
-  Maximize,
-  Mic,
   Mic2,
   Music2,
   PlayCircle,
   Radio,
   User,
-  X,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "../assets/logo.png";
 import { playlists } from "@/lib/data";
 import { nanoid } from "nanoid";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function LeftMenu() {
   return (

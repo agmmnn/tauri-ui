@@ -19,6 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Globe, Maximize, Mic, X } from "lucide-react";
 import { WebviewWindow } from "@tauri-apps/api/window";
 import { useState, useEffect } from "react";
+import { ThemeToggle } from "./theme-toggle";
+import { Icons } from "./icons";
 
 export function Titlebar() {
   const [appWindow, setAppWindow] = useState<null | WebviewWindow>(null);
@@ -201,26 +203,20 @@ export function Titlebar() {
           <MenubarItem inset>Add Account...</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
-
       <div
         data-tauri-drag-region
         className="inline-flex justify-end h-full w-full"
       >
+        <div className="pr-3">
+          <ThemeToggle />
+        </div>
+
         <Button
           onClick={minimizeWindow}
           variant="ghost"
           className="h-8 focus:outline-none"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            className="h-3 w-3"
-          >
-            <path
-              fill="#0f172a"
-              d="M480 480H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h448c17.7 0 32 14.3 32 32s-14.3 32-32 32z"
-            />
-          </svg>
+          <Icons.minimize className="h-3 w-3" />
         </Button>
         <Button
           onClick={maximizeWindow}

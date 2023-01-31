@@ -1,38 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
-
-import Image from "next/image";
-import { nanoid } from "nanoid";
-
 import {
   Album,
   CreditCard,
   Keyboard,
-  LayoutGrid,
-  Library,
   ListMusic,
   LogOut,
   Mail,
   MessageSquare,
-  Mic2,
-  Music2,
-  PlayCircle,
   Plus,
   PlusCircle,
   Podcast,
-  Radio,
   Settings,
   User,
   UserPlus,
   Users,
 } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -68,16 +51,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Titlebar } from "@/components/titlebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { Titlebar } from "@/components/titlebar";
+import { LeftMenu } from "@/components/left-menu";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 import { playlists, listenNowAlbums, madeForYouAlbums } from "@/lib/data";
 
-import { ThemeToggle } from "@/components/theme-toggle";
-import { LeftMenu } from "@/components/left-menu";
+import Image from "next/image";
+import { nanoid } from "nanoid";
+import { cn } from "@/lib/utils";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { invoke } from "@tauri-apps/api/tauri";
 
 interface Album {
   name: string;

@@ -1,7 +1,7 @@
 "use client";
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-
+import { type Icon as LucideIcon } from "lucide-react";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,13 +12,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function ThemeToggle() {
-  const { setTheme } = useTheme();
+  const { setTheme, theme, systemTheme } = useTheme();
+  const [currentTheme, setCurrentTheme] = useState("");
+
+  useEffect(() => {
+    setCurrentTheme(
+      theme === "system"
+        ? systemTheme === "light"
+          ? "light"
+          : "dark"
+        : theme === "light"
+        ? "light"
+        : "dark"
+    );
+  }, [theme, systemTheme]);
+
+  const ThemeIcon = Icons[currentTheme === "light" ? "sun" : "moon"];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm">
-          <Icons.sun className="hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" />
+          <ThemeIcon className="hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
