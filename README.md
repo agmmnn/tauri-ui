@@ -1,4 +1,4 @@
-![ss](https://user-images.githubusercontent.com/16024979/215265499-c90cd692-c960-48f9-94a2-a3abb81e1ae4.png)
+![tauri-ui-boilerplate](https://user-images.githubusercontent.com/16024979/215889825-c509395e-a15e-41ef-8762-e8990deb0519.png)
 
 > wip
 
@@ -44,7 +44,7 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 - [x] Titlebar double-click maximize.
 - [x] Decomposing UI into components.
 - [x] Dark-Light mode switch.
-- [ ] Get simple data from the Rust backend code.
+- [x] Get simple data from the Rust backend code.
 
 ## Folder Structure
 
