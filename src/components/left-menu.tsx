@@ -16,8 +16,8 @@ import {
 import Image from "next/image";
 import logo from "../assets/logo.png";
 import { playlists } from "@/lib/data";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { nanoid } from "nanoid";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export function LeftMenu() {
   return (
