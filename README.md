@@ -12,6 +12,7 @@
 - TypeScript
 - Tailwind
 - Lucide Icons
+- [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [Cargo.toml](/src-tauri/Cargo.toml) (.msi 1.8mb)
 
 ## Getting Started
 
@@ -47,27 +48,27 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 ```
 .
 ├── next-env.d.ts
-├── next.config.js
+├── next.config.js    //nextjs config file
 ├── package.json
 ├── postcss.config.js
 ├── README.md
-├── src
-│   ├── assets        //image assets
+├── src               //frontend src:
+│   ├── assets
 │   ├── components    //from shadcn/ui
 │   │   └── ui        //from shadcn/ui
 │   ├── lib
 │   ├── pages         //next.js pages folder
 │   ├── styles
 │   └── types
-├── src-tauri
+├── src-tauri         //backend src:
 │   ├── build.rs
 │   ├── Cargo.lock
 │   ├── Cargo.toml
 │   ├── icons
-│   ├── src
-│   └── tauri.conf.json
-├── tailwind.config.js
-├── tsconfig.json
+│   ├── src           //rust codes
+│   └── tauri.conf.json    //tauri config file
+├── tailwind.config.js     //tailwind config file
+├── tsconfig.json          //typescript config file
 └── yarn.lock
 ```
 
