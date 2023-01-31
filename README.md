@@ -6,9 +6,23 @@
 
 [Tauri](https://github.com/tauri-apps/tauri) boilerplate with [Next.js 13](https://beta.nextjs.org/docs) and [shadcn/ui](https://github.com/shadcn/ui).
 
+- Tauri
+- Next.js 13
+- shadcn/ui
+- TypeScript
+- Tailwind
+- Lucide Icons
+
+## Getting Started
+
+```
+gh repo clone agmmnn/tauri-ui-boilerplate
+cd tauri-ui-boilerplate
+yarn
+```
+
 ```
 yarn tauri dev
-
 yarn tauri build
 ```
 
@@ -17,6 +31,16 @@ yarn tauri build
 - [package.json](/package.json)
 - [src-tauri/tauri.conf.json](src-tauri/tauri.conf.json)
 - [src-tauri/icons](src-tauri/icons)
+
+## Update Components
+
+shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to update components by hand. You can [download](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2Fshadcn%2Fui%2Ftree%2Fmain%2Fapps%2Fwww%2Fcomponents%2Fui) the [shadcn/ui/apps/www/components/ui](https://github.com/shadcn/ui/tree/main/apps/www/components/ui) directory and paste it into [src/components/ui](/src/components/ui).
+
+## To-Do
+
+- [x] Titlebar draggable.
+- [ ] Titlebar minimize, maximize, close buttons.
+- [ ] Get simple data from the Rust backend code.
 
 ## Folder Structure
 
@@ -28,12 +52,11 @@ yarn tauri build
 ├── postcss.config.js
 ├── README.md
 ├── src
-│   ├── assets
-│   ├── components
-│   │   └── ui
-│   ├── config
+│   ├── assets        //image assets
+│   ├── components    //from shadcn/ui
+│   │   └── ui        //from shadcn/ui
 │   ├── lib
-│   ├── pages
+│   ├── pages         //next.js pages folder
 │   ├── styles
 │   └── types
 ├── src-tauri
