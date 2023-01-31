@@ -1,8 +1,9 @@
 import type { AppProps } from "next/app";
-
+import { useEffect } from "react";
 import { Inter as FontSans } from "@next/font/google";
 
 import "@/styles/globals.css";
+import Head from "next/head";
 
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
@@ -15,24 +16,32 @@ const fontSans = FontSans({
   display: "swap",
 });
 
-interface RootLayoutProps {
-  children: React.ReactNode;
-}
 // This default export is required in a new `pages/_app.js` file.
 export default function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    document.querySelector("body").classList.add(
+      "overflow-hidden",
+      // "h-screen",
+      "rounded-md",
+      "font-sans",
+      "text-slate-900",
+      "antialiased",
+      "dark:bg-slate-900",
+      "dark:text-slate-50",
+      fontSans.variable
+    );
+  }, []);
+
   return (
-    <html lang="en">
-      <body
-        className={cn(
-          "overflow-hidden  rounded-md font-sans text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50",
-          fontSans.variable
-        )}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Component {...pageProps} />
-          {/* <TailwindIndicator /> */}
-        </ThemeProvider>
-      </body>
-    </html>
+    <>
+      <Head>
+        <link rel="shortcut icon" href="#" />
+      </Head>
+
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <Component {...pageProps} />
+        <TailwindIndicator />
+      </ThemeProvider>
+    </>
   );
 }
