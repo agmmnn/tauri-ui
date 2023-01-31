@@ -57,7 +57,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { Titlebar } from "@/components/titlebar";
 import { LeftMenu } from "@/components/left-menu";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 import { playlists, listenNowAlbums, madeForYouAlbums } from "@/lib/data";
 
@@ -91,9 +90,9 @@ function App() {
   });
 
   return (
-    <div className="overflow-hidden rounded-md border border-slate-200  dark:border-slate-800">
+    <div className="overflow-hidden h-screen rounded-md border border-slate-200  dark:border-slate-800">
       <Titlebar />
-      <div className="overflow-hidden h-screen bg-white transition-all dark:bg-slate-900">
+      <div className="overflow-hidden bg-white transition-all dark:bg-slate-900">
         <div className="grid grid-cols-4 xl:grid-cols-5">
           <LeftMenu />
           <div className="col-span-3 border-l border-l-slate-200 dark:border-l-slate-700 xl:col-span-4">
