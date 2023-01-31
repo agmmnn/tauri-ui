@@ -9,6 +9,7 @@
 - Tauri
 - Next.js 13
 - shadcn/ui
+- Radix UI
 - TypeScript
 - Tailwind
 - Lucide Icons
@@ -27,6 +28,15 @@ yarn tauri dev
 yarn tauri build
 ```
 
+## To-Do
+
+- [x] Titlebar draggable.
+- [x] Titlebar minimize, maximize, close buttons.
+- [x] Titlebar double-click maximize.
+- [x] Decomposing UI into components.
+- [x] Dark-Light mode switch.
+- [x] Get simple data from the Rust backend code.
+
 ## Customization
 
 - [package.json](/package.json)
@@ -36,15 +46,6 @@ yarn tauri build
 ## Update Components
 
 shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to update components by hand. You can [download](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2Fshadcn%2Fui%2Ftree%2Fmain%2Fapps%2Fwww%2Fcomponents%2Fui) the [shadcn/ui/apps/www/components/ui](https://github.com/shadcn/ui/tree/main/apps/www/components/ui) directory and paste it into [src/components/ui](/src/components/ui).
-
-## To-Do
-
-- [x] Titlebar draggable.
-- [x] Titlebar minimize, maximize, close buttons.
-- [x] Titlebar double-click maximize.
-- [x] Decomposing UI into components.
-- [x] Dark-Light mode switch.
-- [x] Get simple data from the Rust backend code.
 
 ## Folder Structure
 
