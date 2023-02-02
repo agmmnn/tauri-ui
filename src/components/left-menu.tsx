@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import Image from "next/image"
 import {
   LayoutGrid,
   Library,
@@ -8,12 +8,13 @@ import {
   PlayCircle,
   Radio,
   User,
-} from "lucide-react";
-import Image from "next/image";
-import logo from "../assets/logo.png";
-import { playlists } from "@/lib/data";
-import { nanoid } from "nanoid";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from "lucide-react"
+import { nanoid } from "nanoid"
+
+import { playlists } from "@/lib/data"
+import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import logo from "../assets/logo.png"
 
 export function LeftMenu() {
   return (
@@ -99,5 +100,5 @@ export function LeftMenu() {
         </div>
       </div>
     </aside>
-  );
+  )
 }

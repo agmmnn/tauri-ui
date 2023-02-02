@@ -1,19 +1,21 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
-import { type Icon as LucideIcon } from "lucide-react";
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import { useEffect, useState } from "react"
+import { type Icon as LucideIcon } from "lucide-react"
+import { useTheme } from "next-themes"
+
+import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 
 export function ThemeToggle() {
-  const { setTheme, theme, systemTheme } = useTheme();
-  const [currentTheme, setCurrentTheme] = useState("");
+  const { setTheme, theme, systemTheme } = useTheme()
+  const [currentTheme, setCurrentTheme] = useState("")
 
   useEffect(() => {
     setCurrentTheme(
@@ -24,10 +26,10 @@ export function ThemeToggle() {
         : theme === "light"
         ? "light"
         : "dark"
-    );
-  }, [theme, systemTheme]);
+    )
+  }, [theme, systemTheme])
 
-  const ThemeIcon = Icons[currentTheme === "light" ? "sun" : "moon"];
+  const ThemeIcon = Icons[currentTheme === "light" ? "sun" : "moon"]
 
   return (
     <DropdownMenu>
@@ -52,5 +54,5 @@ export function ThemeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

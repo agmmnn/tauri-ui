@@ -1,17 +1,19 @@
-import type { AppProps } from "next/app";
-import { useEffect } from "react";
-import { Inter as FontSans } from "@next/font/google";
-import "@/styles/globals.css";
-import Head from "next/head";
-import { cn } from "@/lib/utils";
-import { TailwindIndicator } from "@/components/tailwind-indicator";
-import { ThemeProvider } from "@/components/theme-provider";
+import { useEffect } from "react"
+import type { AppProps } from "next/app"
+import { Inter as FontSans } from "@next/font/google"
+
+import "@/styles/globals.css"
+import Head from "next/head"
+
+import { cn } from "@/lib/utils"
+import { TailwindIndicator } from "@/components/tailwind-indicator"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
-});
+})
 
 // This default export is required in a new `pages/_app.js` file.
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -27,8 +29,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         "antialiased",
         "dark:text-slate-50",
         fontSans.variable
-      );
-  }, []);
+      )
+  }, [])
 
   return (
     <>
@@ -41,5 +43,5 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <TailwindIndicator />
       </ThemeProvider>
     </>
-  );
+  )
 }

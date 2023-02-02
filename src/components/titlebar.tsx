@@ -1,4 +1,10 @@
-"use client";
+"use client"
+
+import { useEffect, useState } from "react"
+import { WebviewWindow } from "@tauri-apps/api/window"
+import { Globe, Maximize, Mic, X } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 import {
   Menubar,
   MenubarCheckboxItem,
@@ -14,36 +20,32 @@ import {
   MenubarSubContent,
   MenubarSubTrigger,
   MenubarTrigger,
-} from "@/components/ui/menubar";
-import { Button } from "@/components/ui/button";
-import { Globe, Maximize, Mic, X } from "lucide-react";
-import { WebviewWindow } from "@tauri-apps/api/window";
-import { useState, useEffect } from "react";
-import { ThemeToggle } from "./theme-toggle";
-import { Icons } from "./icons";
+} from "@/components/ui/menubar"
+import { Icons } from "./icons"
+import { ThemeToggle } from "./theme-toggle"
 
 export function Titlebar() {
-  const [appWindow, setAppWindow] = useState<null | WebviewWindow>(null);
+  const [appWindow, setAppWindow] = useState<null | WebviewWindow>(null)
   // Dinamically import the tauri API, but only when it's in a tauri window
   useEffect(() => {
     import("@tauri-apps/api/window").then(({ appWindow }) => {
-      setAppWindow(appWindow);
-    });
-  }, []);
+      setAppWindow(appWindow)
+    })
+  }, [])
 
   const minimizeWindow = () => {
-    appWindow?.minimize();
-  };
+    appWindow?.minimize()
+  }
   const maximizeWindow = async () => {
     if (await appWindow?.isMaximized()) {
-      appWindow?.unmaximize();
+      appWindow?.unmaximize()
     } else {
-      appWindow?.maximize();
+      appWindow?.maximize()
     }
-  };
+  }
   const closeWindow = () => {
-    appWindow?.close();
-  };
+    appWindow?.close()
+  }
 
   return (
     <Menubar
@@ -234,5 +236,5 @@ export function Titlebar() {
         </Button>
       </div>
     </Menubar>
-  );
+  )
 }

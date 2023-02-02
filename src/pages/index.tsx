@@ -1,5 +1,8 @@
-"use client";
+"use client"
 
+import { useEffect, useState } from "react"
+import Image from "next/image"
+import { invoke } from "@tauri-apps/api/tauri"
 import {
   Album,
   CreditCard,
@@ -15,7 +18,16 @@ import {
   User,
   UserPlus,
   Users,
-} from "lucide-react";
+} from "lucide-react"
+import { nanoid } from "nanoid"
+
+import { listenNowAlbums, madeForYouAlbums, playlists } from "@/lib/data"
+import { cn } from "@/lib/utils"
+import { LeftMenu } from "@/components/left-menu"
+import { Titlebar } from "@/components/titlebar"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   ContextMenu,
   ContextMenuContent,
@@ -25,7 +37,7 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "@/components/ui/context-menu";
+} from "@/components/ui/context-menu"
 import {
   Dialog,
   DialogContent,
@@ -34,7 +46,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,46 +60,32 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import { Titlebar } from "@/components/titlebar";
-import { LeftMenu } from "@/components/left-menu";
-
-import { playlists, listenNowAlbums, madeForYouAlbums } from "@/lib/data";
-
-import Image from "next/image";
-import { nanoid } from "nanoid";
-import { cn } from "@/lib/utils";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Album {
-  name: string;
-  artist: string;
-  cover: string;
+  name: string
+  artist: string
+  cover: string
 }
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [greetMsg, setGreetMsg] = useState("")
+  const [name, setName] = useState("")
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
+    setGreetMsg(await invoke("greet", { name }))
   }
 
   useEffect(() => {
     // inspect console: Hello, World! You've been greeted from Rust!
-    invoke("greet", { name: "World" }).then(console.log).catch(console.error);
-  });
+    invoke("greet", { name: "World" }).then(console.log).catch(console.error)
+  })
 
   return (
     <div className="overflow-hidden h-screen rounded-md border border-slate-200  dark:border-slate-800">
@@ -303,14 +301,14 @@ function App() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
-  album: Album;
-  aspectRatio?: number;
+  album: Album
+  aspectRatio?: number
 }
 
 function AlbumArtwork({
@@ -368,5 +366,5 @@ function AlbumArtwork({
         </p>
       </div>
     </div>
-  );
+  )
 }
