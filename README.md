@@ -1,4 +1,4 @@
-![tauri-ui-boilerplate](https://user-images.githubusercontent.com/16024979/215889825-c509395e-a15e-41ef-8762-e8990deb0519.png)
+![tauri-ui-boilerplate](https://user-images.githubusercontent.com/16024979/216376616-123be614-b6f0-465d-a18e-aee43bc5d005.png)
 
 > wip
 
