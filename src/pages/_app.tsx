@@ -25,7 +25,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         "font-sans",
         "text-slate-900",
         "antialiased",
-        "dark:bg-slate-900",
         "dark:text-slate-50",
         fontSans.variable
       );
