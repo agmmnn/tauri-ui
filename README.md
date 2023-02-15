@@ -11,7 +11,7 @@
 - TypeScript
 - Tailwind
 - Lucide Icons
-- [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [Cargo.toml](/src-tauri/Cargo.toml) (.msi 1.8mb)
+- [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [Cargo.toml](/src-tauri/Cargo.toml) (.msi 2mb)
 
 ## Getting Started
 
@@ -34,7 +34,6 @@ yarn tauri build
 - [x] Decomposing UI into components.
 - [x] Dark-Light mode switch.
 - [x] Get simple data from the Rust backend code.
-- [ ] Change 'useEffect.querySelector("body").classList.add' it cause font flicker when the application starts.
 
 ## Customization
 
