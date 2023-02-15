@@ -1,4 +1,4 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
+const { fontFamily } = require("tailwindcss/defaultTheme")
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -9,12 +9,12 @@ module.exports = {
       center: true,
       padding: "1.5rem",
       screens: {
-        "2xl": "1360px",
+        "2xl": "1440px",
       },
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
+        sans: ["Inter"],
       },
       keyframes: {
         "accordion-down": {
@@ -32,5 +32,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-};
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/line-clamp")],
+}

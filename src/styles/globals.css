@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/Inter.var.woff2") format("woff2");
+}
+
+@layer base {
+  body {
+    @apply overflow-hidden rounded-md font-sans antialiased text-slate-900 dark:text-slate-50;
+  }
+}
