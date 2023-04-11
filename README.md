@@ -47,7 +47,7 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 
 ## Folder Structure
 
-```
+```js
 .
 ├── next-env.d.ts
 ├── next.config.js    //nextjs config file https://nextjs.org/docs/api-reference/next.config.js/introduction
@@ -55,18 +55,18 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 ├── postcss.config.js
 ├── README.md
 ├── src               //frontend src:
+│   ├── app           //next.js app dir https://beta.nextjs.org/docs/routing/fundamentals
 │   ├── assets
 │   ├── components    //from shadcn/ui
 │   │   └── ui        //from shadcn/ui
 │   ├── lib
-│   ├── pages         //next.js pages folder
 │   ├── styles
 │   └── types
 ├── src-tauri         //backend src:
 │   ├── build.rs
 │   ├── Cargo.lock
-│   ├── Cargo.toml    // https://doc.rust-lang.org/cargo/reference/manifest.html
-│   ├── icons         // https://tauri.app/v1/guides/features/icons/
+│   ├── Cargo.toml    //https://doc.rust-lang.org/cargo/reference/manifest.html
+│   ├── icons         //https://tauri.app/v1/guides/features/icons/
 │   ├── src           //rust codes
 │   └── tauri.conf.json    //tauri config file https://tauri.app/v1/api/config/
 ├── tailwind.config.js     //tailwind config file
