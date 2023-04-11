@@ -1,6 +1,6 @@
 ![tauri-ui-boilerplate](https://user-images.githubusercontent.com/16024979/216376616-123be614-b6f0-465d-a18e-aee43bc5d005.png)
 
-# Tauri + Next.js 13 + shadcn/ui
+# Tauri 2 + Next.js 13 + shadcn/ui
 
 [Tauri](https://github.com/tauri-apps/tauri) boilerplate with [Next.js 13](https://beta.nextjs.org/docs) and [shadcn/ui](https://github.com/shadcn/ui).
 
@@ -18,12 +18,12 @@
 ```
 gh repo clone agmmnn/tauri-ui-boilerplate
 cd tauri-ui-boilerplate
-yarn
+pnpm i
 ```
 
 ```
-yarn tauri dev
-yarn tauri build
+pnpm tauri dev
+pnpm tauri build
 ```
 
 ## To-Do
@@ -39,7 +39,7 @@ yarn tauri build
 
 - [package.json](/package.json)
 - [src-tauri/tauri.conf.json](src-tauri/tauri.conf.json)
-- Update `app-icon.png`, run `yarn tauri icon`. This will automatically generate icon files into src-tauri/icons.
+- Update `app-icon.png`, run `pnpm tauri icon`. This will automatically generate icon files into src-tauri/icons.
 
 ## Update Components
 
@@ -70,8 +70,7 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 │   ├── src           //rust codes
 │   └── tauri.conf.json    //tauri config file https://tauri.app/v1/api/config/
 ├── tailwind.config.js     //tailwind config file
-├── tsconfig.json          //typescript config file
-└── yarn.lock
+└── tsconfig.json          //typescript config file
 ```
 
 ## Recommended IDE Setup
