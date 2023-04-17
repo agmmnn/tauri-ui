@@ -1,25 +1,31 @@
 import Image from "next/image"
+import logo from "@/assets/logo.png"
 import {
   LayoutGrid,
   Library,
   ListMusic,
   Mic2,
+  Music,
   Music2,
   PlayCircle,
   Radio,
   User,
 } from "lucide-react"
-import { nanoid } from "nanoid"
 
-import { playlists } from "@/lib/data"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import logo from "../assets/logo.png"
 
-export function LeftMenu() {
+import { Playlist } from "../../data/playlists"
+
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
+  playlists: Playlist[]
+}
+
+export function Sidebar({ className, playlists }: SidebarProps) {
   return (
-    <aside className="pb-12 h-screen">
-      <div className="px-8 py-6">
+    <div className={cn("pb-12 h-screen", className)}>
+      <div className="px-8 pt-6">
         <p className="flex items-center text-2xl font-semibold tracking-tight select-none">
           <Image
             src={logo}
@@ -31,13 +37,17 @@ export function LeftMenu() {
           Music Tauri
         </p>
       </div>
-      <div className="space-y-4">
-        <div className="px-6 py-2">
+      <div className="space-y-4 py-4">
+        <div className="px-4 py-2">
           <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
             Discover
           </h2>
           <div className="space-y-1">
-            <Button variant="subtle" size="sm" className="w-full justify-start">
+            <Button
+              variant="secondary"
+              size="sm"
+              className="w-full justify-start"
+            >
               <PlayCircle className="mr-2 h-4 w-4" />
               Listen Now
             </Button>
@@ -51,7 +61,7 @@ export function LeftMenu() {
             </Button>
           </div>
         </div>
-        <div className="px-6 py-2">
+        <div className="px-4 py-2">
           <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
             Library
           </h2>
@@ -79,14 +89,14 @@ export function LeftMenu() {
           </div>
         </div>
         <div className="py-2">
-          <h2 className="relative px-8 text-lg font-semibold tracking-tight">
+          <h2 className="relative px-6 text-lg font-semibold tracking-tight">
             Playlists
           </h2>
-          <ScrollArea className="h-80 px-4 mb-4">
+          <ScrollArea className="h-[300px] px-2">
             <div className="space-y-1 p-2">
-              {playlists.map((playlist) => (
+              {playlists?.map((playlist) => (
                 <Button
-                  key={nanoid()}
+                  key={playlist}
                   variant="ghost"
                   size="sm"
                   className="w-full justify-start font-normal"
@@ -99,6 +109,6 @@ export function LeftMenu() {
           </ScrollArea>
         </div>
       </div>
-    </aside>
+    </div>
   )
 }

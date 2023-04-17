@@ -21,10 +21,11 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar"
-import { Icons } from "./icons"
-import { ThemeToggle } from "./theme-toggle"
 
-export function Titlebar() {
+import { Icons } from "../icons"
+import { ModeToggle } from "../mode-toggle"
+
+export function Menu() {
   const [appWindow, setAppWindow] = useState<null | WebviewWindow>(null)
   // Dinamically import the tauri API, but only when it's in a tauri window
   useEffect(() => {
@@ -48,10 +49,7 @@ export function Titlebar() {
   }
 
   return (
-    <Menubar
-      data-tauri-drag-region
-      className="rounded-none border-b border-none bg-orange-50 dark:bg-slate-800"
-    >
+    <Menubar className="rounded-none border-b border-none px-2 lg:px-4">
       <MenubarMenu>
         <MenubarTrigger className="font-bold">App</MenubarTrigger>
         <MenubarContent>
@@ -190,7 +188,7 @@ export function Titlebar() {
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>
-        <MenubarTrigger>Account</MenubarTrigger>
+        <MenubarTrigger className="hidden md:block">Account</MenubarTrigger>
         <MenubarContent forceMount>
           <MenubarLabel inset>Switch Account</MenubarLabel>
           <MenubarSeparator />
@@ -210,7 +208,7 @@ export function Titlebar() {
         className="inline-flex justify-end h-full w-full"
       >
         <div className="pr-3">
-          <ThemeToggle />
+          <ModeToggle />
         </div>
 
         <Button

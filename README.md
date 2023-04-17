@@ -1,4 +1,4 @@
-![tauri-ui-boilerplate](https://user-images.githubusercontent.com/16024979/216376616-123be614-b6f0-465d-a18e-aee43bc5d005.png)
+![tauri-ui-boilerplate](https://user-images.githubusercontent.com/16024979/232614671-c83f72ee-82f1-4877-8236-13a732764ec6.png)
 
 # Tauri 2 + Next.js 13 + shadcn/ui
 
