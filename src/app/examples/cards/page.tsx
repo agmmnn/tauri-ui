@@ -36,58 +36,40 @@ function DemoContainer({
 
 export default function CardsPage() {
   return (
-    <>
-      <div className="md:hidden">
-        <Image
-          src="/examples/cards-light.png"
-          width={1280}
-          height={1214}
-          alt="Cards"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/cards-dark.png"
-          width={1280}
-          height={1214}
-          alt="Cards"
-          className="hidden dark:block"
-        />
+    <div className=" items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3">
+      <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
+        <DemoContainer>
+          <DemoCreateAccount />
+        </DemoContainer>
+        <DemoContainer>
+          <DemoPaymentMethod />
+        </DemoContainer>
       </div>
-      <div className="hidden items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3">
-        <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
-          <DemoContainer>
-            <DemoCreateAccount />
-          </DemoContainer>
-          <DemoContainer>
-            <DemoPaymentMethod />
-          </DemoContainer>
-        </div>
-        <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
-          <DemoContainer>
-            <DemoTeamMembers />
-          </DemoContainer>
-          <DemoContainer>
-            <DemoShareDocument />
-          </DemoContainer>
-          <DemoContainer>
-            <DemoDatePicker />
-          </DemoContainer>
-          <DemoContainer>
-            <DemoNotifications />
-          </DemoContainer>
-        </div>
-        <div className="col-span-2 grid items-start gap-6 lg:col-span-1 lg:grid-cols-2 xl:grid-cols-1">
-          <DemoContainer>
-            <DemoReportAnIssue />
-          </DemoContainer>
-          <DemoContainer>
-            <DemoGithub />
-          </DemoContainer>
-          <DemoContainer>
-            <DemoCookieSettings />
-          </DemoContainer>
-        </div>
+      <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
+        <DemoContainer>
+          <DemoTeamMembers />
+        </DemoContainer>
+        <DemoContainer>
+          <DemoShareDocument />
+        </DemoContainer>
+        <DemoContainer>
+          <DemoDatePicker />
+        </DemoContainer>
+        <DemoContainer>
+          <DemoNotifications />
+        </DemoContainer>
       </div>
-    </>
+      <div className="col-span-2 grid items-start gap-6 lg:col-span-1 lg:grid-cols-2 xl:grid-cols-1">
+        <DemoContainer>
+          <DemoReportAnIssue />
+        </DemoContainer>
+        <DemoContainer>
+          <DemoGithub />
+        </DemoContainer>
+        <DemoContainer>
+          <DemoCookieSettings />
+        </DemoContainer>
+      </div>
+    </div>
   )
 }
