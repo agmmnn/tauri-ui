@@ -46,7 +46,7 @@
     "date-fns": "^2.29.3",
     "lucide-react": "^0.162.0",
     "nanoid": "^4.0.2",
-    "next": "^13.3.1-canary.12",
+    "next": "^13.3.1-canary.13",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-day-picker": "^8.7.1",
@@ -65,6 +65,7 @@
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.22",
     "prettier": "^2.8.7",
+    "tailwind-scrollbar": "^3.0.0",
     "tailwindcss": "^3.3.1",
     "taze": "^0.9.1",
     "typescript": "^5.0.4"

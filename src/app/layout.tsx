@@ -1,6 +1,5 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-import { usePathname } from "next/navigation"
 
 import { fontMono, fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
@@ -14,12 +13,22 @@ export default function MyApp({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={cn("bg-transparent font-sans antialiased")}>
+      <body
+        className={cn("bg-transparent font-sans antialiased scrollbar-none")}
+      >
         <Greeting />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="overflow-hidden h-screen bg-background rounded-lg border border-slate-600  dark:border-blue-900">
+          <div className="overflow-clip h-screen rounded-lg border border-slate-600  dark:border-blue-900">
             <Menu />
-            {children}
+            <div
+              className={cn(
+                "overflow-auto h-screen pb-8 border-t bg-background",
+                "scrollbar-none"
+                // "scrollbar scrollbar-track-rounded-lg scrollbar-thumb-rounded-lg scrollbar-thumb-gray-900 scrollbar-track-gray-100"
+              )}
+            >
+              {children}
+            </div>
           </div>
           <TailwindIndicator />
         </ThemeProvider>
