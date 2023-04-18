@@ -61,7 +61,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "title": "Music Tauri",
+        "title": "Tauri UI",
         "center": true,
         "resizable": true,
         "decorations": false,
