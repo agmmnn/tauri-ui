@@ -68,8 +68,7 @@ export function Menu() {
             Hide Others... <MenubarShortcut>⇧⌘H</MenubarShortcut>
           </MenubarItem>
           <MenubarShortcut />
-          <MenubarItem>
-            {/*onClick={closeWindow}*/}
+          <MenubarItem onClick={closeWindow}>
             Quit Music <MenubarShortcut>⌘Q</MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
