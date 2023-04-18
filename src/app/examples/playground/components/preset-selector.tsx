@@ -71,7 +71,7 @@ export function PresetSelector({ presets, ...props }: PresetSelectorProps) {
             ))}
           </CommandGroup>
           <CommandGroup className="pt-0">
-            <CommandItem onSelect={() => router.push("/examples")}>
+            <CommandItem onSelect={() => router.push("/")}>
               More examples
             </CommandItem>
           </CommandGroup>
