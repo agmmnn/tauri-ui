@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "tauri-ui-boilerplate",
+    "productName": "tauri-ui",
     "version": "0.1.0"
   },
   "tauri": {
