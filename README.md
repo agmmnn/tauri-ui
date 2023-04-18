@@ -1,4 +1,4 @@
-![tauri-ui-boilerplate](https://user-images.githubusercontent.com/16024979/232614671-c83f72ee-82f1-4877-8236-13a732764ec6.png)
+![tauri-ui-boilerplate](https://user-images.githubusercontent.com/16024979/232823230-19d22434-8e28-43c2-bb70-e45a2fc2da88.gif)
 
 # Tauri 2 + Next.js 13 + shadcn/ui
 
@@ -54,23 +54,26 @@ shadcn/ui [is not a library](https://ui.shadcn.com/docs#faqs). So you need to up
 ├── package.json
 ├── postcss.config.js
 ├── README.md
+├── public
 ├── src               //frontend src:
-│   ├── app           //next.js app dir https://beta.nextjs.org/docs/routing/fundamentals
+│   ├── app           //next.js appdir https://beta.nextjs.org/docs/routing/fundamentals
 │   ├── assets
 │   ├── components    //from shadcn/ui
-│   │   └── ui        //from shadcn/ui
+│   │   └── ui
+│   ├── data
+│   ├── hooks
 │   ├── lib
-│   ├── styles
-│   └── types
+│   └── styles
 ├── src-tauri         //backend src:
 │   ├── build.rs
 │   ├── Cargo.lock
 │   ├── Cargo.toml    //https://doc.rust-lang.org/cargo/reference/manifest.html
 │   ├── icons         //https://tauri.app/v1/guides/features/icons/
 │   ├── src           //rust codes
-│   └── tauri.conf.json    //tauri config file https://tauri.app/v1/api/config/
-├── tailwind.config.js     //tailwind config file
-└── tsconfig.json          //typescript config file
+│   └── tauri.conf.json  //tauri config file https://next--tauri.netlify.app/next/api/config
+├── prettier.config.js     //prettier config file https://prettier.io/docs/en/configuration.html
+├── tailwind.config.js     //tailwind config file https://tailwindcss.com/docs/configuration
+└── tsconfig.json          //typescript config file https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
 ```
 
 ## Recommended IDE Setup
