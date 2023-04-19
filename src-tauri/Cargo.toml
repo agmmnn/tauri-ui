@@ -6,17 +6,16 @@ authors = ["you"]
 license = ""
 repository = ""
 edition = "2021"
-rust-version = "1.57"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "2.0.0-alpha.2", features = [] }
+tauri-build = { version = "2.0.0-alpha.4", features = [] }
 
 [dependencies]
-serde_json = "1.0.93"
-serde = { version = "1.0.152", features = ["derive"] }
-tauri = { version = "2.0.0-alpha.4", features = ["shell-open", "window-all"] }
+tauri = { version = "2.0.0-alpha.8", features = ["shell-open", "window-all"] }
+serde = { version = "1.0.160", features = ["derive"] }
+serde_json = "1.0.96"
 
 [features]
 # by default Tauri runs in production mode
