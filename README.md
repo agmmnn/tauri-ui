@@ -13,6 +13,8 @@ Tauri UI Template is a starting point for building modern desktop applications w
 - [Lucide Icons](https://lucide.dev/)
 - [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [`Cargo.toml`](/src-tauri/Cargo.toml) (.exe 3mb, .msi 2mb)
 
+> _You can download pre-built final bundles from the [Releases](https://github.com/agmmnn/tauri-ui/releases) section._
+
 ## Getting Started
 
 ```
