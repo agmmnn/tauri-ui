@@ -7,8 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "tauri-ui",
-    "version": "0.1.0"
+    "productName": "tauri-ui"
   },
   "tauri": {
     "allowlist": {
@@ -49,7 +48,8 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "",
+        "nsis": { "installerIcon": "./icons/icon.ico" }
       }
     },
     "security": {
