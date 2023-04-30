@@ -1,4 +1,4 @@
-![tauri-ui](https://user-images.githubusercontent.com/16024979/232823230-19d22434-8e28-43c2-bb70-e45a2fc2da88.gif)
+![tauri-ui](https://user-images.githubusercontent.com/16024979/235379115-e5d9928b-6efe-4b6e-bd6e-66cfe718c829.png)
 
 # Tauri UI Template
 
@@ -7,11 +7,11 @@ Tauri UI Template is a starting point for building modern desktop applications w
 - Support for dark and light modes
 - Components-based UI design
 - A draggable titlebar with minimize, maximize, and close buttons
-- Interfacing with Rust backend code for more complex logic
 - [Radix UI](https://www.radix-ui.com/) for UI primitives
 - [TypeScript](https://www.typescriptlang.org/)
 - [Lucide Icons](https://lucide.dev/)
 - [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [`Cargo.toml`](/src-tauri/Cargo.toml) (.exe 3mb, .msi 2mb)
+- [Tauri GitHub Action](https://github.com/tauri-apps/tauri-action)
 
 > _You can download pre-built final bundles from the [Releases](https://github.com/agmmnn/tauri-ui/releases) section._
 
@@ -28,12 +28,15 @@ pnpm tauri dev
 pnpm tauri build
 ```
 
+![tauri-ui](https://user-images.githubusercontent.com/16024979/232823230-19d22434-8e28-43c2-bb70-e45a2fc2da88.gif)
+
 ## Customization
 
 The template can be customized by editing the following files:
 
-- [package.json](/package.json)
 - [src-tauri/tauri.conf.json](src-tauri/tauri.conf.json)
+- [package.json](/package.json)
+- [src-tauri/cargo.toml](src-tauri/cargo.toml)
 - To change the app icon, update `app-icon.png`, and then run `pnpm tauri icon`. This will automatically generate icon files into _src-tauri/icons_.
 
 ## Update Components
