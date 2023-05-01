@@ -18,11 +18,11 @@ export default function MyApp({ children }) {
       >
         <Greeting />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="overflow-clip h-screen rounded-lg border border-slate-600  dark:border-blue-900">
+          <div className="h-screen overflow-clip rounded-lg border border-slate-600  dark:border-blue-900">
             <Menu />
             <div
               className={cn(
-                "overflow-auto h-screen pb-8 border-t bg-background",
+                "h-screen overflow-auto border-t bg-background pb-8",
                 "scrollbar-none"
                 // "scrollbar scrollbar-track-rounded-lg scrollbar-thumb-rounded-lg scrollbar-thumb-gray-900 scrollbar-track-gray-100"
               )}

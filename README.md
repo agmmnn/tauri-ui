@@ -36,7 +36,7 @@ The template can be customized by editing the following files:
 
 - [src-tauri/tauri.conf.json](src-tauri/tauri.conf.json)
 - [package.json](/package.json)
-- [src-tauri/cargo.toml](src-tauri/cargo.toml)
+- [src-tauri/cargo.toml](src-tauri/Cargo.toml)
 - To change the app icon, update `app-icon.png`, and then run `pnpm tauri icon`. This will automatically generate icon files into _src-tauri/icons_.
 
 ## Update Components

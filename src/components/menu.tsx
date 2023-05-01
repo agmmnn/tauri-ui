@@ -208,7 +208,7 @@ export function Menu() {
       <ExamplesNav />
       <div
         data-tauri-drag-region
-        className="inline-flex justify-end h-full w-full"
+        className="inline-flex h-full w-full justify-end"
       >
         <div className="pr-3">
           <ModeToggle />
