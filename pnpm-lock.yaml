@@ -104,17 +104,17 @@ dependencies:
     specifier: ^2.30.0
     version: 2.30.0
   lucide-react:
-    specifier: ^0.190.0
-    version: 0.190.0(react@18.2.0)
+    specifier: ^0.192.0
+    version: 0.192.0(react@18.2.0)
   nanoid:
     specifier: ^4.0.2
     version: 4.0.2
   next:
-    specifier: ^13.3.3-canary.1
-    version: 13.3.3-canary.1(@babel/core@7.21.4)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^13.3.5-canary.1
+    version: 13.3.5-canary.1(@babel/core@7.21.4)(react-dom@18.2.0)(react@18.2.0)
   next-themes:
     specifier: ^0.2.1
-    version: 0.2.1(next@13.3.3-canary.1)(react-dom@18.2.0)(react@18.2.0)
+    version: 0.2.1(next@13.3.5-canary.1)(react-dom@18.2.0)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -162,6 +162,9 @@ devDependencies:
   prettier:
     specifier: ^2.8.8
     version: 2.8.8
+  prettier-plugin-tailwindcss:
+    specifier: ^0.2.8
+    version: 0.2.8(@ianvs/prettier-plugin-sort-imports@3.7.2)(prettier@2.8.8)
   tailwind-scrollbar:
     specifier: ^3.0.0
     version: 3.0.0(tailwindcss@3.3.2)
@@ -456,12 +459,12 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
 
-  /@next/env@13.3.3-canary.1:
-    resolution: {integrity: sha512-bds/Fb78aLcJEuAoKycSzEsaQKr5Yk0mqyVB81B9/EYUsX+7KxsGXswjBeK3aJojk4AMmr4sUE2m4kCBzRh77A==}
+  /@next/env@13.3.5-canary.1:
+    resolution: {integrity: sha512-JdHRQv5Du8fLmSBhuISjyn1WS2mE5Vk1geP8Zwn0TgHVni1rzJODrTECe9u8ddNNnRlHQhSQUZ86eQAGfZB2NA==}
     dev: false
 
-  /@next/swc-darwin-arm64@13.3.3-canary.1:
-    resolution: {integrity: sha512-KIzllv5XbvzinDWlHsBKRAHSPqT6tgQAEOnDcSDvUIzHpXfVCnXtUHI0ajAPKlgQvQ/kjaIMHxaIDNU6iEXxZg==}
+  /@next/swc-darwin-arm64@13.3.5-canary.1:
+    resolution: {integrity: sha512-Dej5J0RDzZvnpwjCDi7twns+o/zNXMgGrfLiEbNqhWDpAImZSKQtLhgjXc0o4iZugUprLTf6bEJKjN9hH4Vfrw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
@@ -469,8 +472,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-darwin-x64@13.3.3-canary.1:
-    resolution: {integrity: sha512-e72gdOViNSdvyfct9wbLOoYplUyGcfV99g3+hLVY8ttr8neOS3D0n6EsDbA5zWIXYMU3WsnmpoOMfwbVYhBj3A==}
+  /@next/swc-darwin-x64@13.3.5-canary.1:
+    resolution: {integrity: sha512-S6sOqsvJncrbm4ZPm0ZSMFaVqx+e9v8rf5WQ+mXgHySRGVV4Kf3Qs/HomFwSpuCAknq2+IT1jPA3hrXecVAMIA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
@@ -478,8 +481,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-arm64-gnu@13.3.3-canary.1:
-    resolution: {integrity: sha512-jUnJCbdY97BgZQslg2sDhmCrllWRci9y8qUcAly29kIpQGbFVNYslcFOTOMcQAfOax2VwBp+lDLzPwnc9fiXmw==}
+  /@next/swc-linux-arm64-gnu@13.3.5-canary.1:
+    resolution: {integrity: sha512-y5MOydhAwTTp3NJvWeVVGtHC5P0iYwvdTRiDaQdw63ykh6SSEgnX3tEqzOeKwFa7fxcp75Nr6Xy9DlifTGHDSg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -487,8 +490,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-arm64-musl@13.3.3-canary.1:
-    resolution: {integrity: sha512-IOm38wd6qyZhrZT9uoRcLgkUiHuF1ga14AuRyiJ+67yvC6LK12r4KtQsVIXttOmf3xawAODou/EFMUGjij+ibA==}
+  /@next/swc-linux-arm64-musl@13.3.5-canary.1:
+    resolution: {integrity: sha512-b2ydvpMc+QQBiGu5CcDJWCtFBSslTFhQBHKw+I4U+80cAINwR9GStj9iLIkCCOuMLhA9s/jmCpqB6RPp4fyphg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -496,8 +499,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-x64-gnu@13.3.3-canary.1:
-    resolution: {integrity: sha512-D0BWzBocUdW2IiFwujZ0zABQ0lhLND1Uz9hQz1PIRibTVIf6GM1le/bRWpsIkGeyN4i62dd1Yi92ZulAPJDWuw==}
+  /@next/swc-linux-x64-gnu@13.3.5-canary.1:
+    resolution: {integrity: sha512-Q4ZefQfIrzarhuBYa4Sv4AWLG7nZ8fAXIyR1W4WcxMInV7BXJlq8vT65bzbXjcxCFZESYoigsM8jll2x6ORUdw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -505,8 +508,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-linux-x64-musl@13.3.3-canary.1:
-    resolution: {integrity: sha512-UH2A0v4m+n5o08Xg2QbBR6AnE5aJgnbJMAbIs/hLXl+b+R6m1QyS5YStConrIIqHCAwbJCINdkk1rVk2QSr2kQ==}
+  /@next/swc-linux-x64-musl@13.3.5-canary.1:
+    resolution: {integrity: sha512-9sJXJBDOTjcn2lm6qMqDAA+JpWLVQx1vzHP0Xuq1tkF13TpwBb3fK+G7SyelcAD2qrB+mVRC+Gn5nNMZPMJ4UQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -514,8 +517,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-win32-arm64-msvc@13.3.3-canary.1:
-    resolution: {integrity: sha512-qrgY/WgPv6fIH5HWdQNmHSMBbu7Vtr2yhPatZSRVeKGL97q1pxHYYAT1r9U8Od+q3SiThngjuUz0jnvoz00d9g==}
+  /@next/swc-win32-arm64-msvc@13.3.5-canary.1:
+    resolution: {integrity: sha512-fOwL6PyGopbNaet6PxlUKtgANT0Fa/NniMqDUEfFYLqdJLgkMMPnKP98icSUuMThF51C9zRNK2mULZBXyKF9VA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
@@ -523,8 +526,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-win32-ia32-msvc@13.3.3-canary.1:
-    resolution: {integrity: sha512-Ngo8+0wsIMugmjCcTiqlIKL6kT4ZxWVQZXBO2hiDF4No5BrGS+y6gbaFeEN/egn4TpznC6vI7neLyIN5FRxVYw==}
+  /@next/swc-win32-ia32-msvc@13.3.5-canary.1:
+    resolution: {integrity: sha512-fAgqU79HEJ5rUCT1xIfVZJzuv/q0HgZdRtiqchO7yFSXFw5K5ReBcO5ET0Q7EVVs5SbVXpBJl6IG8aaRfJBtOw==}
     engines: {node: '>= 10'}
     cpu: [ia32]
     os: [win32]
@@ -532,8 +535,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/swc-win32-x64-msvc@13.3.3-canary.1:
-    resolution: {integrity: sha512-DIAcMiPAhnhDnQz/M2DHKUnT2AGUs4TCVMpynuaSuHoogqbxqSN6snk+Pi+B9zCD5gQAZl6np7bCou52X+h3Nw==}
+  /@next/swc-win32-x64-msvc@13.3.5-canary.1:
+    resolution: {integrity: sha512-GV4vU/jWHvFlAOvsGFuSJ/9YFJprYF/Lo7WKweJI8wA23/knIVrwn+tzKLowQ6dbfxT3uN5XQuwKFkS9CXZvlg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -2651,8 +2654,8 @@ packages:
     engines: {node: 14 || >=16.14}
     dev: true
 
-  /lucide-react@0.190.0(react@18.2.0):
-    resolution: {integrity: sha512-a3usWP+PuTBOL2Py8jduu1CnHm6eF2FJWt4gLqsu3/tDgJKnQ/Q/3iaNveqPXUYVg9Akn8Gp14ydPf23QaOqhw==}
+  /lucide-react@0.192.0(react@18.2.0):
+    resolution: {integrity: sha512-ThZ1jGJhUzDP8oQbHtvvG/xh0uodewEt0G6aM/pAtC9RRKPZWNHKmDfoc5sbBC5hU9CHAYknq4/R/JY/QzLOjg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
@@ -2828,20 +2831,20 @@ packages:
     engines: {node: '>= 0.6'}
     dev: true
 
-  /next-themes@0.2.1(next@13.3.3-canary.1)(react-dom@18.2.0)(react@18.2.0):
+  /next-themes@0.2.1(next@13.3.5-canary.1)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-B+AKNfYNIzh0vqQQKqQItTS8evEouKD7H5Hj3kmuPERwddR2TxvDSFZuTj6T7Jfn1oyeUyJMydPl1Bkxkh0W7A==}
     peerDependencies:
       next: '*'
       react: '*'
       react-dom: '*'
     dependencies:
-      next: 13.3.3-canary.1(@babel/core@7.21.4)(react-dom@18.2.0)(react@18.2.0)
+      next: 13.3.5-canary.1(@babel/core@7.21.4)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /next@13.3.3-canary.1(@babel/core@7.21.4)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-EFkQCJ3HKBITj37CHP70/+iAR2j+gluqv3FyTZcw10oWhCSHwdF38rYevufMLLlw3mByyvEAkikjgJTJPX4tgw==}
+  /next@13.3.5-canary.1(@babel/core@7.21.4)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-2hlFgSVqmvnPtOcSLheZ+w4mTqjlir2/uUZIt//+kbUA2T5KhmRezRlp+aGxF34YQfYDkcSsOT+v/C2JM8IDOg==}
     engines: {node: '>=16.8.0'}
     hasBin: true
     peerDependencies:
@@ -2861,7 +2864,7 @@ packages:
       sass:
         optional: true
     dependencies:
-      '@next/env': 13.3.3-canary.1
+      '@next/env': 13.3.5-canary.1
       '@swc/helpers': 0.5.1
       busboy: 1.6.0
       caniuse-lite: 1.0.30001480
@@ -2870,15 +2873,15 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
       styled-jsx: 5.1.1(@babel/core@7.21.4)(react@18.2.0)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 13.3.3-canary.1
-      '@next/swc-darwin-x64': 13.3.3-canary.1
-      '@next/swc-linux-arm64-gnu': 13.3.3-canary.1
-      '@next/swc-linux-arm64-musl': 13.3.3-canary.1
-      '@next/swc-linux-x64-gnu': 13.3.3-canary.1
-      '@next/swc-linux-x64-musl': 13.3.3-canary.1
-      '@next/swc-win32-arm64-msvc': 13.3.3-canary.1
-      '@next/swc-win32-ia32-msvc': 13.3.3-canary.1
-      '@next/swc-win32-x64-msvc': 13.3.3-canary.1
+      '@next/swc-darwin-arm64': 13.3.5-canary.1
+      '@next/swc-darwin-x64': 13.3.5-canary.1
+      '@next/swc-linux-arm64-gnu': 13.3.5-canary.1
+      '@next/swc-linux-arm64-musl': 13.3.5-canary.1
+      '@next/swc-linux-x64-gnu': 13.3.5-canary.1
+      '@next/swc-linux-x64-musl': 13.3.5-canary.1
+      '@next/swc-win32-arm64-msvc': 13.3.5-canary.1
+      '@next/swc-win32-ia32-msvc': 13.3.5-canary.1
+      '@next/swc-win32-x64-msvc': 13.3.5-canary.1
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
@@ -3189,6 +3192,59 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /prettier-plugin-tailwindcss@0.2.8(@ianvs/prettier-plugin-sort-imports@3.7.2)(prettier@2.8.8):
+    resolution: {integrity: sha512-KgPcEnJeIijlMjsA6WwYgRs5rh3/q76oInqtMXBA/EMcamrcYJpyhtRhyX1ayT9hnHlHTuO8sIifHF10WuSDKg==}
+    engines: {node: '>=12.17.0'}
+    peerDependencies:
+      '@ianvs/prettier-plugin-sort-imports': '*'
+      '@prettier/plugin-pug': '*'
+      '@shopify/prettier-plugin-liquid': '*'
+      '@shufo/prettier-plugin-blade': '*'
+      '@trivago/prettier-plugin-sort-imports': '*'
+      prettier: '>=2.2.0'
+      prettier-plugin-astro: '*'
+      prettier-plugin-css-order: '*'
+      prettier-plugin-import-sort: '*'
+      prettier-plugin-jsdoc: '*'
+      prettier-plugin-organize-attributes: '*'
+      prettier-plugin-organize-imports: '*'
+      prettier-plugin-style-order: '*'
+      prettier-plugin-svelte: '*'
+      prettier-plugin-twig-melody: '*'
+    peerDependenciesMeta:
+      '@ianvs/prettier-plugin-sort-imports':
+        optional: true
+      '@prettier/plugin-pug':
+        optional: true
+      '@shopify/prettier-plugin-liquid':
+        optional: true
+      '@shufo/prettier-plugin-blade':
+        optional: true
+      '@trivago/prettier-plugin-sort-imports':
+        optional: true
+      prettier-plugin-astro:
+        optional: true
+      prettier-plugin-css-order:
+        optional: true
+      prettier-plugin-import-sort:
+        optional: true
+      prettier-plugin-jsdoc:
+        optional: true
+      prettier-plugin-organize-attributes:
+        optional: true
+      prettier-plugin-organize-imports:
+        optional: true
+      prettier-plugin-style-order:
+        optional: true
+      prettier-plugin-svelte:
+        optional: true
+      prettier-plugin-twig-melody:
+        optional: true
+    dependencies:
+      '@ianvs/prettier-plugin-sort-imports': 3.7.2(prettier@2.8.8)
+      prettier: 2.8.8
+    dev: true
 
   /prettier@2.8.8:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}

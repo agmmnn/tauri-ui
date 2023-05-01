@@ -7,6 +7,7 @@
     "dev": "next dev -p 1420",
     "build": "next build",
     "tauri": "tauri",
+    "format": "npx prettier --write . --ignore-path .gitignore ",
     "taze": "taze major -I"
   },
   "dependencies": {
@@ -44,9 +45,9 @@
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
-    "lucide-react": "^0.190.0",
+    "lucide-react": "^0.192.0",
     "nanoid": "^4.0.2",
-    "next": "^13.3.3-canary.1",
+    "next": "^13.3.5-canary.1",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-day-picker": "^8.7.1",
@@ -65,6 +66,7 @@
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
     "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.2.8",
     "tailwind-scrollbar": "^3.0.0",
     "tailwindcss": "^3.3.2",
     "taze": "^0.9.2",
