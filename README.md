@@ -15,6 +15,8 @@ Tauri UI Template is a starting point for building modern desktop applications w
 
 > _You can download pre-built final bundles from the [Releases](https://github.com/agmmnn/tauri-ui/releases) section._
 
+> _[Next.js](https://nextjs.org/) is used in this template to facilitate quick integration of the [`/examples`](https://github.com/shadcn/ui/tree/main/apps/www/app/examples) directory of shadcn/ui. You can also easily use shadcn/ui with the [React + Vite](https://tauri.app/v1/guides/getting-started/setup/vite/) stack and any [React router](https://react.libhunt.com/libs/router) library in Tauri._
+
 ## Getting Started
 
 ```
