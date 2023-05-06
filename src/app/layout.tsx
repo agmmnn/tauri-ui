@@ -13,12 +13,10 @@ export default function MyApp({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body
-        className={cn("bg-transparent font-sans antialiased scrollbar-none")}
-      >
+      <body className="bg-transparent font-sans antialiased scrollbar-none">
         <Greeting />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="h-screen overflow-clip rounded-lg border border-slate-600  dark:border-blue-900">
+          <div className="h-screen overflow-clip rounded-lg border">
             <Menu />
             <div
               className={cn(
@@ -42,8 +40,4 @@ export const metadata: Metadata = {
   icons: {
     shortcut: ["#"],
   },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
 }
