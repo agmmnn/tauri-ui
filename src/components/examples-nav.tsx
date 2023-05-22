@@ -20,8 +20,16 @@ const examples = [
     href: "/examples/cards",
   },
   {
+    name: "Tasks",
+    href: "/examples/tasks",
+  },
+  {
     name: "Playground",
     href: "/examples/playground",
+  },
+  {
+    name: "Forms",
+    href: "/examples/forms",
   },
   {
     name: "Music",
@@ -40,7 +48,12 @@ export function ExamplesNav({ className, ...props }: ExamplesNavProps) {
 
   return (
     <MenubarMenu>
-      <MenubarTrigger>{pathname}</MenubarTrigger>
+      <MenubarTrigger>
+        <span className="rounded-md bg-cyan-500 px-1.5 py-0.5 text-xs font-medium leading-none text-[#000000] no-underline group-hover:no-underline">
+          nav
+        </span>
+        {pathname}
+      </MenubarTrigger>
       <MenubarContent forceMount>
         <MenubarRadioGroup value={pathname}>
           {examples.map((example) => (

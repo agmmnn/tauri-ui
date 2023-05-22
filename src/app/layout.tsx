@@ -11,18 +11,18 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 export default function MyApp({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="overflow-clip bg-black">
       <head />
-      <body className="bg-transparent font-sans antialiased scrollbar-none">
+      <body className="overflow-clip bg-transparent font-sans antialiased scrollbar-none">
         <Greeting />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="h-screen overflow-clip rounded-lg border">
+          <div className="h-screen overflow-clip">
             <Menu />
             <div
               className={cn(
                 "h-screen overflow-auto border-t bg-background pb-8",
-                "scrollbar-none"
-                // "scrollbar scrollbar-track-rounded-lg scrollbar-thumb-rounded-lg scrollbar-thumb-gray-900 scrollbar-track-gray-100"
+                // "scrollbar-none"
+                "scrollbar scrollbar-track-transparent scrollbar-thumb-accent scrollbar-thumb-rounded-md"
               )}
             >
               {children}
