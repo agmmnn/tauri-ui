@@ -1,8 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import type { WebviewWindow } from "@tauri-apps/api/window"
-import { Globe, Maximize, Mic, X } from "lucide-react"
+import { useCallback, useEffect, useState } from "react"
+import Image from "next/image"
+import { usePathname } from "next/navigation"
+import logo from "@/assets/logo.png"
+// import { appWindow, type WebviewWindow } from "@tauri-apps/plugin-window"
+import { Globe, Maximize, Mic, Music2, Sailboat, X, Zap } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -24,38 +27,58 @@ import {
 
 import { ExamplesNav } from "./examples-nav"
 import { Icons } from "./icons"
+import { MenuModeToggle } from "./menu-mode-toggle"
 import { ModeToggle } from "./mode-toggle"
 
 export function Menu() {
-  const [appWindow, setAppWindow] = useState<null | WebviewWindow>(null)
+  // const [appWindow, setAppWindow] = useState(null)
 
-  // Dinamically import the tauri API, but only when it's in a tauri window
-  useEffect(() => {
-    import("@tauri-apps/api/window").then(({ appWindow }) => {
-      setAppWindow(appWindow)
-    })
+  // // Dinamically import the tauri API, but only when it's in a tauri window
+  // useEffect(() => {
+  //   import("@tauri-apps/plugin-window").then(({ tauriWindow }: any) => {
+  //     setAppWindow(tauriWindow)
+  //   })
+  // }, [])
+
+  const minimizeWindow = useCallback(async () => {
+    const { appWindow } = await import("@tauri-apps/plugin-window")
+
+    appWindow?.minimize()
   }, [])
 
-  const minimizeWindow = () => {
-    appWindow?.minimize()
-  }
-  const maximizeWindow = async () => {
+  const maximizeWindow = useCallback(async () => {
+    const { appWindow } = await import("@tauri-apps/plugin-window")
+
     if (await appWindow?.isMaximized()) {
       appWindow?.unmaximize()
     } else {
       appWindow?.maximize()
     }
-  }
-  const closeWindow = () => {
-    appWindow?.close()
-  }
+  }, [])
+
+  const closeWindow = useCallback(async () => {
+    const { appWindow } = await import("@tauri-apps/plugin-window")
+
+    appWindow.close()
+  }, [])
 
   return (
-    <Menubar className="rounded-none border-b border-none pl-2 lg:pl-4">
+    <Menubar className="rounded-none border-b border-none pl-2 lg:pl-3">
+      {/* App Logo */}
+      <MenubarMenu>
+        <div className="inline-flex h-fit w-fit items-center text-cyan-500">
+          {usePathname() === "/" || usePathname() === "/examples/music" ? (
+            <Image src={logo} alt="logo" width={40} />
+          ) : (
+            <Sailboat className="h-5 w-5" />
+          )}
+        </div>
+      </MenubarMenu>
+
       <MenubarMenu>
         <MenubarTrigger className="font-bold">App</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>About Music</MenubarItem>
+          <MenubarItem>About App</MenubarItem>
           <MenubarSeparator />
           <MenubarItem>
             Preferences... <MenubarShortcut>⌘,</MenubarShortcut>
@@ -205,14 +228,18 @@ export function Menu() {
           <MenubarItem inset>Add Account...</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
+
+      <MenuModeToggle />
+
       <ExamplesNav />
+
       <div
         data-tauri-drag-region
         className="inline-flex h-full w-full justify-end"
       >
-        <div className="pr-3">
+        {/* <div className="pr-3">
           <ModeToggle />
-        </div>
+        </div> */}
 
         <Button
           onClick={minimizeWindow}
