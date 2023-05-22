@@ -10,14 +10,6 @@
     "productName": "tauri-ui"
   },
   "tauri": {
-    "allowlist": {
-      "all": false,
-      "shell": {
-        "all": false,
-        "open": true
-      },
-      "window": { "all": true }
-    },
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
@@ -54,9 +46,6 @@
     },
     "security": {
       "csp": null
-    },
-    "updater": {
-      "active": false
     },
     "windows": [
       {
