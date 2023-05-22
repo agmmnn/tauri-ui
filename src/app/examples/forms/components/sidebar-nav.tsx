@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
@@ -25,7 +24,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       {...props}
     >
       {items.map((item) => (
-        <Link
+        <a
           key={item.href}
           href={item.href}
           className={cn(
@@ -37,7 +36,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
           )}
         >
           {item.title}
-        </Link>
+        </a>
       ))}
     </nav>
   )

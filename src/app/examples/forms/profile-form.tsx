@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFieldArray, useForm } from "react-hook-form"
 import * as z from "zod"
@@ -125,7 +124,7 @@ export function ProfileForm() {
               </Select>
               <FormDescription>
                 You can manage verified email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
+                <a href="/examples/forms">email settings</a>.
               </FormDescription>
               <FormMessage />
             </FormItem>

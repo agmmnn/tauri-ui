@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -71,7 +70,7 @@ export function SelectReactHookForm() {
               </Select>
               <FormDescription>
                 You can manage email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
+                <a href="/examples/forms">email settings</a>.
               </FormDescription>
               <FormMessage />
             </FormItem>
