@@ -6,13 +6,19 @@ Tauri UI Template is a starting point for building modern desktop applications w
 
 ## Getting Started
 
-```
-gh repo clone agmmnn/tauri-ui
-cd tauri-ui
-pnpm i
+Using [create-tauri-ui](https://github.com/agmmnn/create-tauri-ui):
+
+```bash
+pnpm create tauri-ui
 ```
 
-```
+Or Cloning the Repository:
+
+```bash
+gh repo clone agmmnn/tauri-ui
+cd tauri-ui
+
+pnpm i
 pnpm tauri dev
 pnpm tauri build
 ```
