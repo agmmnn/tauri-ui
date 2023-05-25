@@ -1,10 +1,9 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback } from "react"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import logo from "@/assets/logo.png"
-// import { appWindow, type WebviewWindow } from "@tauri-apps/plugin-window"
 import { Globe, Maximize, Mic, Music2, Sailboat, X, Zap } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -31,15 +30,6 @@ import { MenuModeToggle } from "./menu-mode-toggle"
 import { ModeToggle } from "./mode-toggle"
 
 export function Menu() {
-  // const [appWindow, setAppWindow] = useState(null)
-
-  // // Dinamically import the tauri API, but only when it's in a tauri window
-  // useEffect(() => {
-  //   import("@tauri-apps/plugin-window").then(({ tauriWindow }: any) => {
-  //     setAppWindow(tauriWindow)
-  //   })
-  // }, [])
-
   const minimizeWindow = useCallback(async () => {
     const { appWindow } = await import("@tauri-apps/plugin-window")
 
@@ -48,8 +38,9 @@ export function Menu() {
 
   const maximizeWindow = useCallback(async () => {
     const { appWindow } = await import("@tauri-apps/plugin-window")
+    const isMaximized = await appWindow?.isMaximized()
 
-    if (await appWindow?.isMaximized()) {
+    if (isMaximized) {
       appWindow?.unmaximize()
     } else {
       appWindow?.maximize()
