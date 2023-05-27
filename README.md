@@ -4,15 +4,17 @@
 
 Tauri UI Template is a starting point for building modern desktop applications with web technologies. Customizable UI components with [shadcn/ui](https://github.com/shadcn/ui), a lightweight and secure desktop app framework [Tauri 2](https://github.com/tauri-apps/tauri), the React-based framework [Next.js 13](https://beta.nextjs.org/docs), the utility-first CSS framework [Tailwind](https://tailwindcss.com/).
 
+> _You can download pre-built final bundles from the [Releases](https://github.com/agmmnn/tauri-ui/releases) section._
+
 ## Getting Started
 
 Use [create-tauri-ui](https://github.com/agmmnn/create-tauri-ui) to quickly scaffold a Tauri UI project.
 
 ```bash
-pnpm create tauri-ui
+npm create tauri-ui
 ```
 
-Or Cloning the Repository:
+Or clone the repository:
 
 ```bash
 gh repo clone agmmnn/tauri-ui
@@ -30,14 +32,12 @@ pnpm tauri build
 - A draggable titlebar with minimize, maximize, and close buttons
 - [Radix UI](https://www.radix-ui.com/) for UI primitives
 - [Lucide Icons](https://lucide.dev/)
-- [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [`Cargo.toml`](/src-tauri/Cargo.toml) (.exe 3mb, .msi 2mb)
+- [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [`Cargo.toml`](/src-tauri/Cargo.toml) (.msi 2.2mb, .dmg 1.9mb, .deb 2mb)
 - [Tauri GitHub Action](https://github.com/tauri-apps/tauri-action)
 
-> _You can download pre-built final bundles from the [Releases](https://github.com/agmmnn/tauri-ui/releases) section._
+![tauri-ui](https://user-images.githubusercontent.com/16024979/232823230-19d22434-8e28-43c2-bb70-e45a2fc2da88.gif)
 
 > _[Next.js](https://nextjs.org/) is used in this template to facilitate quick integration of the [`/examples`](https://github.com/shadcn/ui/tree/main/apps/www/app/examples) directory of shadcn/ui. You can also easily use shadcn/ui with the [React + Vite](https://tauri.app/v1/guides/getting-started/setup/vite/) stack and any [React router library](https://react.libhunt.com/libs/router) (optionally) in Tauri._
-
-![tauri-ui](https://user-images.githubusercontent.com/16024979/232823230-19d22434-8e28-43c2-bb70-e45a2fc2da88.gif)
 
 ## Customization
 
@@ -57,13 +57,13 @@ Note that **shadcn/ui** [is not a library](https://ui.shadcn.com/docs#faqs), the
 ```js
 .
 ├── next-env.d.ts
-├── next.config.js    //nextjs config file https://nextjs.org/docs/api-reference/next.config.js/introduction
+├── next.config.js    //nextjs config file https://nextjs.org/docs/pages/api-reference/next-config-js
 ├── package.json
 ├── postcss.config.js
 ├── README.md
 ├── public
 ├── src               //frontend src:
-│   ├── app           //next.js appdir https://beta.nextjs.org/docs/routing/fundamentals
+│   ├── app           //next.js appdir https://nextjs.org/docs/app/building-your-application/routing
 │   ├── assets
 │   ├── components    //from shadcn/ui
 │   │   └── ui
@@ -76,7 +76,7 @@ Note that **shadcn/ui** [is not a library](https://ui.shadcn.com/docs#faqs), the
 │   ├── Cargo.lock
 │   ├── Cargo.toml    //https://doc.rust-lang.org/cargo/reference/manifest.html
 │   ├── icons         //https://tauri.app/v1/guides/features/icons/
-│   ├── src           //rust codes
+│   ├── src
 │   └── tauri.conf.json  //tauri config file https://next--tauri.netlify.app/next/api/config
 ├── prettier.config.js     //prettier config file https://prettier.io/docs/en/configuration.html
 ├── tailwind.config.js     //tailwind config file https://tailwindcss.com/docs/configuration
