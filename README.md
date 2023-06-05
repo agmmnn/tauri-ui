@@ -14,7 +14,12 @@ Use [create-tauri-ui](https://github.com/agmmnn/create-tauri-ui) to quickly scaf
 pnpm create tauri-ui
 ```
 
-Or clone the repository:
+![](https://i.imgur.com/ONV0z45.png)
+
+<details> 
+<summary>
+Or clone the repository
+</summary>
 
 ```bash
 gh repo clone agmmnn/tauri-ui
@@ -24,6 +29,8 @@ pnpm i
 pnpm tauri dev
 pnpm tauri build
 ```
+
+</details>
 
 ## Features
 
