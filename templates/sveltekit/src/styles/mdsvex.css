@@ -1,0 +1,80 @@
+.mdsvex code {
+  @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm;
+}
+
+[data-theme='light'] {
+  display: flex;
+}
+
+[data-theme='dark'] {
+  display: none;
+}
+
+.dark [data-theme='light'] {
+  display: none;
+}
+
+.dark [data-theme='dark'] {
+  display: flex;
+  flex-direction: column;
+}
+
+[data-rehype-pretty-code-fragment] {
+  @apply relative;
+}
+
+[data-rehype-pretty-code-fragment] code {
+  @apply grid min-w-full break-words rounded-none border-0 bg-transparent p-0;
+  counter-reset: line;
+  box-decoration-break: clone;
+}
+
+[data-rehype-pretty-code-fragment] .line {
+  @apply inline-block w-full basis-4 px-4 py-0.5;
+}
+
+[data-rehype-pretty-code-fragment] [data-line-numbers] .line {
+  @apply px-2;
+}
+
+[data-rehype-pretty-code-fragment] [data-line-numbers] > .line::before {
+  @apply text-xs text-muted-foreground/40;
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1.8rem;
+  margin-right: 1.4rem;
+  text-align: right;
+}
+
+[data-metadata] .pre-copy-btn {
+  @apply top-16 !important;
+}
+
+[data-rehype-pretty-code-fragment] .line--highlighted {
+  @apply bg-muted;
+}
+
+[data-rehype-pretty-code-fragment] .with--meta {
+  @apply top-16 !important;
+}
+
+[data-rehype-pretty-code-fragment] .line-highlighted span {
+  @apply relative;
+}
+
+[data-rehype-pretty-code-fragment] .word--highlighted {
+  @apply rounded-md border border-muted bg-muted p-1;
+}
+
+.dark [data-rehype-pretty-code-fragment] .word--highlighted {
+  @apply bg-zinc-900;
+}
+
+[data-rehype-pretty-code-title] {
+  @apply mt-2 px-4 pt-6 text-sm font-medium;
+}
+
+[data-rehype-pretty-code-title] + pre {
+  @apply mt-2;
+}
