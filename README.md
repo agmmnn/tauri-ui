@@ -40,7 +40,7 @@ pnpm create tauri-ui my-tauri-app --template sveltekit
 
 </details>
 
-![](/others/Animation.gif)
+![cli](https://github.com/agmmnn/tauri-ui/assets/16024979/e678e09b-37ac-4281-95ef-fdca63e5742d)
 You can use `.` for the project name to scaffold in the current directory.
 
 <details>
