@@ -47,7 +47,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-latest, windows-latest]
+        # platform: [macos-latest, ubuntu-latest, windows-latest]
+        platform: [windows-latest]
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -80,7 +81,7 @@ jobs:
         run: npm install -g pnpm
 
       - name: Install frontend dependencies
-        run: pnpm install
+        run: pnpm -C templates/next install
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
