@@ -4,14 +4,11 @@ import path from "node:path";
 export function formatTargetDir(targetDir: string | undefined) {
   return targetDir?.trim().replace(/\/+$/g, "");
 }
-const words = ["node_modules", "src-tauri/target", "src-tauri\\target"];
 
 export function copy(src: string, dest: string) {
   const stat = fs.statSync(src);
   if (stat.isDirectory()) {
-    if (!words.some((word) => src.includes(word))) {
-      copyDir(src, dest);
-    }
+    copyDir(src, dest);
   } else {
     fs.copyFileSync(src, dest);
   }
