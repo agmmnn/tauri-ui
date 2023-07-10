@@ -26,8 +26,8 @@ devDependencies:
     specifier: ^1.2.2
     version: 1.2.2
   '@types/node':
-    specifier: ^20.4.0
-    version: 20.4.0
+    specifier: ^20.4.1
+    version: 20.4.1
   '@types/prompts':
     specifier: ^2.4.4
     version: 2.4.4
@@ -629,14 +629,14 @@ packages:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
     dev: true
 
-  /@types/node@20.4.0:
-    resolution: {integrity: sha512-jfT7iTf/4kOQ9S7CHV9BIyRaQqHu67mOjsIQBC3BKZvzvUB6zLxEwJ6sBE3ozcvP8kF6Uk5PXN0Q+c0dfhGX0g==}
+  /@types/node@20.4.1:
+    resolution: {integrity: sha512-JIzsAvJeA/5iY6Y/OxZbv1lUcc8dNSE77lb2gnBH+/PJ3lFR1Ccvgwl5JWnHAkNHcRsT0TbpVOsiMKZ1F/yyJg==}
     dev: true
 
   /@types/prompts@2.4.4:
     resolution: {integrity: sha512-p5N9uoTH76lLvSAaYSZtBCdEXzpOOufsRjnhjVSrZGXikVGHX9+cc9ERtHRV4hvBKHyZb1bg4K+56Bd2TqUn4A==}
     dependencies:
-      '@types/node': 20.4.0
+      '@types/node': 20.4.1
       kleur: 3.0.3
     dev: true
 
