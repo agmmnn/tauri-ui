@@ -59,14 +59,14 @@
     "recharts": "^2.7.2",
     "tailwind-scrollbar": "^3.0.4",
     "tailwindcss-animate": "^1.0.6",
-    "tauri-controls": "^0.0.6",
+    "tauri-controls": "^0.0.7",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
     "@tauri-apps/cli": "^2.0.0-alpha.10",
     "@types/node": "^20.4.5",
-    "@types/react": "^18.2.17",
+    "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "autoprefixer": "^10.4.14",
     "class-variance-authority": "^0.7.0",

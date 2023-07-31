@@ -3,7 +3,7 @@
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
     "devPath": "http://localhost:1420",
-    "distDir": "../dist",
+    "distDir": "../build",
     "withGlobalTauri": false
   },
   "package": {
@@ -51,15 +51,7 @@
           "scheme": "https",
           "domain": "tauri.localhost",
           "windows": ["main"],
-          "plugins": [
-            "clipboard",
-            "path",
-            "dialog",
-            "fs",
-            "shell",
-            "window",
-            "windows"
-          ]
+          "plugins": ["clipboard", "path", "dialog", "fs", "shell", "window", "windows"]
         }
       ]
     },
