@@ -186,11 +186,13 @@ async function init() {
   }
 
   // Copy .shared files
-  const sharedFiles = fs.readdirSync(sharedDir);
-  for (const file of sharedFiles) {
-    const sourcePath = path.join(sharedDir, file);
-    const targetPath = path.join(projectRoot, file);
-    copy(sourcePath, targetPath);
+  if (selectedTemplate !== "sveltekit") {
+    const sharedFiles = fs.readdirSync(sharedDir);
+    for (const file of sharedFiles) {
+      const sourcePath = path.join(sharedDir, file);
+      const targetPath = path.join(projectRoot, file);
+      copy(sourcePath, targetPath);
+    }
   }
 
   // Edit files

@@ -63,7 +63,7 @@ pnpm tauri build
 ## Features
 
 - Components-based UI design with [shadcn/ui](https://ui.shadcn.com/). [Radix UI](https://www.radix-ui.com/) for UI primitives.
-- Cross-platfom native looking window controls with [tauri-controls](https://github.com/agmmnn/tauri-controls). (only vite for now)
+- Native-looking window controls with [tauri-controls](https://github.com/agmmnn/tauri-controls).
 - Support for dark and light modes.
 - [Lucide Icons](https://lucide.dev/), [Radix Icons](https://icons.radix-ui.com/).
 - [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [`Cargo.toml`](/src-tauri/Cargo.toml) (.msi 2.5mb, .dmg 1.9mb, .deb 2mb)
@@ -73,11 +73,12 @@ pnpm tauri build
 
 ## Update Components
 
+### shadcn/ui
+
 Update all components:
 
 ```bash
 npx shadcn-ui@latest add --overwrite
-
 # press "a" to select all components
 ```
 
