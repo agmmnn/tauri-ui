@@ -40,7 +40,7 @@ pnpm create tauri-ui my-tauri-app --template sveltekit
 
 </details>
 
-![cli](https://github.com/agmmnn/tauri-ui/assets/16024979/e678e09b-37ac-4281-95ef-fdca63e5742d)
+![cli](https://github.com/agmmnn/tauri-ui/assets/16024979/86bf3b81-8671-4de3-bb48-7fb24fe48802)
 You can use `.` for the project name to scaffold in the current directory.
 
 <details>
@@ -62,20 +62,29 @@ pnpm tauri build
 
 ## Features
 
-- Support for dark and light modes
-- Components-based UI design
-- A draggable titlebar with minimize, maximize, and close buttons
-- [Radix UI](https://www.radix-ui.com/) for UI primitives
-- [Lucide Icons](https://lucide.dev/)
-- [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [`Cargo.toml`](/src-tauri/Cargo.toml) (.msi 2.2mb, .dmg 1.9mb, .deb 2mb)
-- [Tauri GitHub Action](https://github.com/tauri-apps/tauri-action) Cross-Platform release
+- Components-based UI design with [shadcn/ui](https://ui.shadcn.com/). [Radix UI](https://www.radix-ui.com/) for UI primitives.
+- Cross-platfom native looking window controls with [tauri-controls](https://github.com/agmmnn/tauri-controls). (only vite for now)
+- Support for dark and light modes.
+- [Lucide Icons](https://lucide.dev/), [Radix Icons](https://icons.radix-ui.com/).
+- [Bundle size optimized](https://github.com/johnthagen/min-sized-rust) [`Cargo.toml`](/src-tauri/Cargo.toml) (.msi 2.5mb, .dmg 1.9mb, .deb 2mb)
+- [Tauri GitHub Action](https://github.com/tauri-apps/tauri-action), Cross-platform releases.
 
 ![tauri-ui](https://user-images.githubusercontent.com/16024979/232823230-19d22434-8e28-43c2-bb70-e45a2fc2da88.gif)
 
 ## Update Components
 
+Update all components:
+
+```bash
+npx shadcn-ui@latest add --overwrite
+
+# press "a" to select all components
 ```
-npx shadcn-ui@latest add [component] --overwrite
+
+Update a specific component:
+
+```bash
+npx shadcn-ui@latest add dialog --overwrite
 ```
 
 ## Acknowledgements
@@ -85,4 +94,3 @@ This project utilizes code from the following repository:
 - [vitejs/create-vite](https://github.com/vitejs/vite/blob/main/packages/create-vite) - Used in _[create-tauri-ui](https://www.npmjs.com/package/create-tauri-ui)_
 - [shadcn/ui](https://github.com/shadcn/ui/tree/main/apps/www) - Used in _[Next.js](https://github.com/vercel/next.js/)_ and _[Vite](https://github.com/vitejs/vite)_ templates
 - [huntabyte/shadcn-svelte](https://github.com/huntabyte/shadcn-svelte) - Used in _[SvelteKit](https://github.com/sveltejs/svelte)_ template
-- [fisand/uno-shadcn-ui](https://github.com/fisand/uno-shadcn-ui) - Used in _[Vite](https://github.com/vitejs/vite)+[UnoCSS](https://github.com/unocss/unocss)_ template
