@@ -51,15 +51,7 @@
           "scheme": "https",
           "domain": "tauri.localhost",
           "windows": ["main"],
-          "plugins": [
-            "clipboard",
-            "path",
-            "dialog",
-            "fs",
-            "shell",
-            "window",
-            "windows"
-          ]
+          "plugins": ["app", "os", "shell", "window", "event"]
         }
       ]
     },

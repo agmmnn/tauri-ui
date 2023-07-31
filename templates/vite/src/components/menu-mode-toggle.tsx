@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { LaptopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
@@ -28,15 +29,15 @@ export function MenuModeToggle() {
       <MenubarContent forceMount>
         <MenubarRadioGroup value={theme}>
           <MenubarRadioItem value="light" onClick={() => setTheme("light")}>
-            <Icons.sun className="mr-2 h-4 w-4" />
+            <SunIcon className="mr-2 h-4 w-4" />
             <span>Light</span>
           </MenubarRadioItem>
           <MenubarRadioItem value="dark" onClick={() => setTheme("dark")}>
-            <Icons.moon className="mr-2 h-4 w-4" />
+            <MoonIcon className="mr-2 h-4 w-4" />
             <span>Dark</span>
           </MenubarRadioItem>
           <MenubarRadioItem value="system" onClick={() => setTheme("system")}>
-            <Icons.laptop className="mr-2 h-4 w-4" />
+            <LaptopIcon className="mr-2 h-4 w-4" />
             <span>System</span>
           </MenubarRadioItem>
         </MenubarRadioGroup>
