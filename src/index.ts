@@ -28,7 +28,6 @@ const cwd = process.cwd();
 const FRAMEWORKS: Framework[] = [
   { name: "vite", display: "⚡Vite + React", color: blue },
   { name: "next", display: "▲ Next.js", color: blue },
-  { name: "viteuno", display: "⚡Vite + UnoCSS ", color: blue },
   {
     name: "sveltekit",
     display: "⚡Vite + SvelteKit",
