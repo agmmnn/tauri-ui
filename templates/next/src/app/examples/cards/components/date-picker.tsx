@@ -1,6 +1,8 @@
-import DatePickerWithRange from "@/components/example/date-picker-with-range"
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import DatePickerWithRange from "@/components/example/date-picker-with-range"
 
 export function DemoDatePicker() {
   return (

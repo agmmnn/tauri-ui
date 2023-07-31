@@ -1,3 +1,5 @@
+"use client"
+
 import { BellIcon, EyeNoneIcon, PersonIcon } from "@radix-ui/react-icons"
 
 import {

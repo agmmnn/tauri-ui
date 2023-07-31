@@ -1,4 +1,5 @@
-import { Icons } from "@/components/icons"
+"use client"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -18,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Icons } from "@/components/icons"
 
 export function DemoPaymentMethod() {
   return (

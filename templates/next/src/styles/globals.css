@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("../assets/Inter.var.woff2") format("woff2");
+  src: url("../assets/Inter-VariableFont_slnt,wght.ttf") format("truetype");
 }
 
 @layer base {
@@ -81,6 +81,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 }
