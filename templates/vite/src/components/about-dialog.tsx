@@ -12,7 +12,7 @@ import {
 } from "lucide-react"
 
 import { Icons } from "./icons"
-import { Button } from "./ui/button"
+import { Button, buttonVariants } from "./ui/button"
 import {
   DialogContent,
   DialogDescription,
@@ -89,10 +89,11 @@ export function AboutDialog() {
         >
           <UpdateIcon /> Check for Updates
         </Button>
-        <DialogPrimitive.Close>
-          <Button type="submit" variant="ghost" className="h-7">
-            Close
-          </Button>
+        <DialogPrimitive.Close
+          type="submit"
+          className={buttonVariants({ variant: "ghost", className: "h-7" })}
+        >
+          Close
         </DialogPrimitive.Close>
       </DialogFooter>
     </DialogContent>
