@@ -44,8 +44,8 @@ devDependencies:
     specifier: ^2.4.2
     version: 2.4.2
   tauri-controls:
-    specifier: ^0.0.7
-    version: 0.0.7(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0)
+    specifier: ^0.0.8
+    version: 0.0.8(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0)
   typescript:
     specifier: ^5.1.6
     version: 5.1.6
@@ -1302,8 +1302,8 @@ packages:
     resolution: {integrity: sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==}
     dev: true
 
-  /tauri-controls@0.0.7(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0):
-    resolution: {integrity: sha512-tpVYIrTojmBWkkifS6lWhPMwL8uYHoKbv0U3a5IOsh4pAR5LuHz+oRuLCrpg8ppUuLWNl4rdX0pB2SJleeek0g==}
+  /tauri-controls@0.0.8(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0):
+    resolution: {integrity: sha512-TKdOFQm1usPEwq/8mAEXbkIV2JVOjHa/SvG8U7B5Z7/R7I7ZYKRQ1Mj9MSGSDaFbQLxQWMlVwvD1Htm5dt9lEg==}
     peerDependencies:
       '@tauri-apps/plugin-os': 2.0.0-alpha.0
       '@tauri-apps/plugin-window': 2.0.0-alpha.0
