@@ -1,9 +1,9 @@
 name: "release"
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - "*"
+  # push:
+  #   tags:
+  #     - "*"
 jobs:
   create-release:
     permissions:
