@@ -1,6 +1,6 @@
 {
   "name": "create-tauri-ui",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "🦀 Create modern Tauri desktop apps in just a few simple steps.",
   "main": "index.js",
   "author": "agmmnn",

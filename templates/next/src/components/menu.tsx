@@ -37,8 +37,9 @@ export function Menu() {
 
   return (
     <WindowTitlebar
-    // controlsOrder="system"
-    // windowControlsProps={{ platform: "macos" }}
+    // controlsOrder="left"
+    // className="pl-0"
+    // windowControlsProps={{ platform: "windows", justify: false }}
     >
       <Menubar className="rounded-none border-b border-none pl-2 lg:pl-3">
         <MenubarMenu>

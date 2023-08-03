@@ -10,23 +10,7 @@
   import Search from './Search.svelte';
 </script>
 
-<div class="md:hidden">
-  <img
-    src="/examples/dashboard-light.png"
-    width={1280}
-    height={866}
-    alt="Dashboard"
-    class="block dark:hidden"
-  />
-  <img
-    src="/examples/dashboard-dark.png"
-    width={1280}
-    height={866}
-    alt="Dashboard"
-    class="hidden dark:block"
-  />
-</div>
-<div class="hidden flex-col md:flex">
+<div class="flex-col md:flex">
   <div class="border-b">
     <div class="flex h-16 items-center px-4">
       <MainNav class="mx-6" />
