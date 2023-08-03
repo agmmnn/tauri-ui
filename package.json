@@ -12,7 +12,7 @@
     "start": "unbuild --stub && node index.js",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build",
-    "format": "npx prettier --write . --ignore-path .gitignore ",
+    "format": "npx prettier --write . --ignore-path .gitignore",
     "taze": "taze minor -r -w -i false -I",
     "taze:major": "taze major -r -w -i false -I",
     "updatesub": "git submodule update --init --recursive --remote"
@@ -42,13 +42,13 @@
   },
   "devDependencies": {
     "@types/minimist": "^1.2.2",
-    "@types/node": "^20.4.5",
+    "@types/node": "^20.4.6",
     "@types/prompts": "^2.4.4",
     "commander": "^11.0.0",
     "kolorist": "^1.8.0",
     "minimist": "^1.2.8",
     "prompts": "^2.4.2",
-    "tauri-controls": "^0.0.8",
+    "tauri-controls": "^0.1.0",
     "typescript": "^5.1.6",
     "unbuild": "^1.2.1"
   }

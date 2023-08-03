@@ -171,8 +171,8 @@ dependencies:
     specifier: ^1.0.6
     version: 1.0.6(tailwindcss@3.3.3)
   tauri-controls:
-    specifier: ^0.0.7
-    version: 0.0.7(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0)
+    specifier: ^0.1.0
+    version: 0.1.0(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0)
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -180,13 +180,13 @@ dependencies:
 devDependencies:
   '@ianvs/prettier-plugin-sort-imports':
     specifier: ^4.1.0
-    version: 4.1.0(prettier@3.0.0)
+    version: 4.1.0(prettier@3.0.1)
   '@tauri-apps/cli':
     specifier: 2.0.0-alpha.10
     version: 2.0.0-alpha.10
   '@types/node':
-    specifier: ^20.4.5
-    version: 20.4.5
+    specifier: ^20.4.6
+    version: 20.4.6
   '@types/react':
     specifier: ^18.2.18
     version: 18.2.18
@@ -200,11 +200,11 @@ devDependencies:
     specifier: ^8.4.27
     version: 8.4.27
   prettier:
-    specifier: ^3.0.0
-    version: 3.0.0
+    specifier: ^3.0.1
+    version: 3.0.1
   prettier-plugin-tailwindcss:
     specifier: ^0.4.1
-    version: 0.4.1(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.0)
+    version: 0.4.1(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.1)
   tailwindcss:
     specifier: ^3.3.3
     version: 3.3.3
@@ -456,7 +456,7 @@ packages:
       react-hook-form: 7.45.2(react@18.2.0)
     dev: false
 
-  /@ianvs/prettier-plugin-sort-imports@4.1.0(prettier@3.0.0):
+  /@ianvs/prettier-plugin-sort-imports@4.1.0(prettier@3.0.1):
     resolution: {integrity: sha512-IAXeTLU24k6mRPa6mFbW1qZJ/j0m3OeH44wyijWyr+YqqdNtBnfHxAntOAATS9iDfrT01NesKGsdzqnXdDQa/A==}
     peerDependencies:
       '@vue/compiler-sfc': '>=3.0.0'
@@ -470,7 +470,7 @@ packages:
       '@babel/parser': 7.22.0
       '@babel/traverse': 7.22.1
       '@babel/types': 7.22.0
-      prettier: 3.0.0
+      prettier: 3.0.1
       semver: 7.5.3
     transitivePeerDependencies:
       - supports-color
@@ -2397,8 +2397,8 @@ packages:
     resolution: {integrity: sha512-HNB/9GHqu7Fo8AQiugyJbv6ZxYz58wef0esl4Mv828w1ZKpAshw/uFWVDUcIB9KKFeFKoxS3cHY07FFgtTRZ1g==}
     dev: false
 
-  /@types/node@20.4.5:
-    resolution: {integrity: sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==}
+  /@types/node@20.4.6:
+    resolution: {integrity: sha512-q0RkvNgMweWWIvSMDiXhflGUKMdIxBo2M2tYM/0kEGDueQByFzK4KZAgu5YHGFNxziTlppNpTIBcqHQAxlfHdA==}
     dev: true
 
   /@types/prop-types@15.7.5:
@@ -3962,7 +3962,7 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
-  /prettier-plugin-tailwindcss@0.4.1(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.0):
+  /prettier-plugin-tailwindcss@0.4.1(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.1):
     resolution: {integrity: sha512-hwn2EiJmv8M+AW4YDkbjJ6HlZCTzLyz1QlySn9sMuKV/Px0fjwldlB7tol8GzdgqtkdPtzT3iJ4UzdnYXP25Ag==}
     engines: {node: '>=12.17.0'}
     peerDependencies:
@@ -4014,12 +4014,12 @@ packages:
       prettier-plugin-twig-melody:
         optional: true
     dependencies:
-      '@ianvs/prettier-plugin-sort-imports': 4.1.0(prettier@3.0.0)
-      prettier: 3.0.0
+      '@ianvs/prettier-plugin-sort-imports': 4.1.0(prettier@3.0.1)
+      prettier: 3.0.1
     dev: true
 
-  /prettier@3.0.0:
-    resolution: {integrity: sha512-zBf5eHpwHOGPC47h0zrPyNn+eAEIdEzfywMoYn2XPi0P44Zp0tSq64rq0xAREh4auw2cJZHo9QUob+NqCQky4g==}
+  /prettier@3.0.1:
+    resolution: {integrity: sha512-fcOWSnnpCrovBsmFZIGIy9UqK2FaI7Hqax+DIO0A9UxeVoY4iweyaFjS5TavZN97Hfehph0nhsZnjlVKzEQSrQ==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -4623,8 +4623,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /tauri-controls@0.0.7(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0):
-    resolution: {integrity: sha512-tpVYIrTojmBWkkifS6lWhPMwL8uYHoKbv0U3a5IOsh4pAR5LuHz+oRuLCrpg8ppUuLWNl4rdX0pB2SJleeek0g==}
+  /tauri-controls@0.1.0(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0):
+    resolution: {integrity: sha512-FGdBG7zqqDIRH8QFSyJ2b+koo7dEHchYeY3jQCiJ2VSRAJeiQkpVqCaWLS2AIRisGjEioLeFAZmnRDi6D550TA==}
     peerDependencies:
       '@tauri-apps/plugin-os': 2.0.0-alpha.0
       '@tauri-apps/plugin-window': 2.0.0-alpha.0
