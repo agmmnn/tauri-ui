@@ -51,20 +51,20 @@
           "scheme": "https",
           "domain": "tauri.localhost",
           "windows": ["main"],
-          "plugins": ["clipboard", "path", "dialog", "fs", "shell", "window", "windows"]
+          "plugins": ["app", "shell", "os", "event", "window"]
         }
       ]
     },
     "windows": [
       {
         "fullscreen": false,
-        "title": "Tauri UI",
+        "title": "Tauri Demo",
         "center": true,
         "resizable": true,
         "decorations": false,
         "transparent": true,
-        "height": 920,
-        "width": 1300
+        "height": 900,
+        "width": 1290
       }
     ]
   }
