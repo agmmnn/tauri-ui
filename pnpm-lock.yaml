@@ -6,11 +6,11 @@ settings:
 
 dependencies:
   '@clack/core':
-    specifier: ^0.3.2
-    version: 0.3.2
+    specifier: ^0.3.3
+    version: 0.3.3
   '@clack/prompts':
-    specifier: ^0.6.3
-    version: 0.6.3
+    specifier: ^0.7.0
+    version: 0.7.0
   picocolors:
     specifier: ^1.0.0
     version: 1.0.0
@@ -18,16 +18,16 @@ dependencies:
     specifier: ^1.0.5
     version: 1.0.5
   zod:
-    specifier: ^3.21.4
-    version: 3.21.4
+    specifier: ^3.22.1
+    version: 3.22.1
 
 devDependencies:
   '@types/minimist':
     specifier: ^1.2.2
     version: 1.2.2
   '@types/node':
-    specifier: ^20.4.6
-    version: 20.4.6
+    specifier: ^20.5.0
+    version: 20.5.0
   '@types/prompts':
     specifier: ^2.4.4
     version: 2.4.4
@@ -44,8 +44,8 @@ devDependencies:
     specifier: ^2.4.2
     version: 2.4.2
   tauri-controls:
-    specifier: ^0.1.0
-    version: 0.1.0(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0)
+    specifier: ^0.1.3
+    version: 0.1.3(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0)
   typescript:
     specifier: ^5.1.6
     version: 5.1.6
@@ -264,17 +264,17 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@clack/core@0.3.2:
-    resolution: {integrity: sha512-FZnsNynwGDIDktx6PEZK1EuCkFpY4ldEX6VYvfl0dqeoLPb9Jpw1xoUXaVcGR8ExmYNm1w2vdGdJkEUYD/2pqg==}
+  /@clack/core@0.3.3:
+    resolution: {integrity: sha512-5ZGyb75BUBjlll6eOa1m/IZBxwk91dooBWhPSL67sWcLS0zt9SnswRL0l26TVdBhb0wnWORRxUn//uH6n4z7+A==}
     dependencies:
       picocolors: 1.0.0
       sisteransi: 1.0.5
     dev: false
 
-  /@clack/prompts@0.6.3:
-    resolution: {integrity: sha512-AM+kFmAHawpUQv2q9+mcB6jLKxXGjgu/r2EQjEwujgpCdzrST6BJqYw00GRn56/L/Izw5U7ImoLmy00X/r80Pw==}
+  /@clack/prompts@0.7.0:
+    resolution: {integrity: sha512-0MhX9/B4iL6Re04jPrttDm+BsP8y6mS7byuv0BvXgdXhbV5PdlsHt55dvNsuBCPZ7xq1oTAOOuotR9NFbQyMSA==}
     dependencies:
-      '@clack/core': 0.3.2
+      '@clack/core': 0.3.3
       picocolors: 1.0.0
       sisteransi: 1.0.5
     dev: false
@@ -655,14 +655,14 @@ packages:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
     dev: true
 
-  /@types/node@20.4.6:
-    resolution: {integrity: sha512-q0RkvNgMweWWIvSMDiXhflGUKMdIxBo2M2tYM/0kEGDueQByFzK4KZAgu5YHGFNxziTlppNpTIBcqHQAxlfHdA==}
+  /@types/node@20.5.0:
+    resolution: {integrity: sha512-Mgq7eCtoTjT89FqNoTzzXg2XvCi5VMhRV6+I2aYanc6kQCBImeNaAYRs/DyoVqk1YEUJK5gN9VO7HRIdz4Wo3Q==}
     dev: true
 
   /@types/prompts@2.4.4:
     resolution: {integrity: sha512-p5N9uoTH76lLvSAaYSZtBCdEXzpOOufsRjnhjVSrZGXikVGHX9+cc9ERtHRV4hvBKHyZb1bg4K+56Bd2TqUn4A==}
     dependencies:
-      '@types/node': 20.4.6
+      '@types/node': 20.5.0
       kleur: 3.0.3
     dev: true
 
@@ -1302,8 +1302,8 @@ packages:
     resolution: {integrity: sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==}
     dev: true
 
-  /tauri-controls@0.1.0(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0):
-    resolution: {integrity: sha512-FGdBG7zqqDIRH8QFSyJ2b+koo7dEHchYeY3jQCiJ2VSRAJeiQkpVqCaWLS2AIRisGjEioLeFAZmnRDi6D550TA==}
+  /tauri-controls@0.1.3(@tauri-apps/plugin-os@2.0.0-alpha.0)(@tauri-apps/plugin-window@2.0.0-alpha.0)(clsx@2.0.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-merge@1.14.0):
+    resolution: {integrity: sha512-fYSe0lHmKgqLkK9qBNKWJ4CDYZpwxVICZZnbw5S2beBtJOoKQbcohGIojgvwH/dP08e8DCaCYKczaN1hT0wFuw==}
     peerDependencies:
       '@tauri-apps/plugin-os': 2.0.0-alpha.0
       '@tauri-apps/plugin-window': 2.0.0-alpha.0
@@ -1416,6 +1416,6 @@ packages:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
     dev: true
 
-  /zod@3.21.4:
-    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+  /zod@3.22.1:
+    resolution: {integrity: sha512-+qUhAMl414+Elh+fRNtpU+byrwjDFOS1N7NioLY+tSlcADTx4TkCUua/hxJvxwDXcV4397/nZ420jy4n4+3WUg==}
     dev: false

@@ -1,5 +1,5 @@
 [package]
-name = "tauri-demo"
+name = "tauri-ui"
 version = "0.1.0"
 description = "A Tauri App"
 authors = ["you"]
@@ -16,10 +16,10 @@ tauri-build = { version = "2.0.0-alpha.6", features = [] }
 tauri = { version = "2.0.0-alpha.10", features = [] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tauri-plugin-app = "2.0.0-alpha"
-tauri-plugin-os = "2.0.0-alpha"
-tauri-plugin-shell = "2.0.0-alpha"
-tauri-plugin-window = "2.0.0-alpha"
+tauri-plugin-app = "2.0.0-alpha.0"
+tauri-plugin-os = "2.0.0-alpha.0"
+tauri-plugin-shell = "2.0.0-alpha.0"
+tauri-plugin-window = "2.0.0-alpha.0"
 
 [features]
 # by default Tauri runs in production mode
