@@ -1,6 +1,10 @@
-![tauri-ui](https://github.com/agmmnn/tauri-ui/assets/16024979/c4c62dad-4ea7-4874-9ef4-b5d0b6ec10a1)
+> updates soon
 
-# Tauri UI
+<div align="center">
+<a href="https://tauriui.vercel.app/"><img src="https://github.com/agmmnn/tauri-ui/assets/16024979/9c694ee2-f2c8-4bec-9c06-c3a6f7d4f901" width="44" height="44" alt="crab"/></a> <img src="https://github.com/agmmnn/tauri-ui/assets/16024979/fd89df5b-77f9-417e-89c8-ccf433cdf405" alt="tauri-ui"/>
+
+<br>
+<br>
 
 Create modern Tauri desktop apps in just a few simple steps. Tauri UI Templates is a starting point for building modern desktop applications with web technologies with using [shadcn/ui](https://github.com/shadcn/ui), [Tauri](https://github.com/tauri-apps/tauri).
 
