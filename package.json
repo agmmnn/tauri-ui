@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "tauri-ui",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "prettier": "^3.5.0",
-    "turbo": "^2.4.0",
+    "turbo": "^2.4.4",
     "typescript": "5.7.3"
   },
   "packageManager": "pnpm@9.0.0",
