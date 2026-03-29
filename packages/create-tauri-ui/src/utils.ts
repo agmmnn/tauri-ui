@@ -101,7 +101,7 @@ export function pkgFromUserAgent(userAgent: string | undefined) {
 }
 
 export function editFile(file: string, callback: (content: string) => string) {
-  const content = fs.readFileSync(file, "utf-8");
+  const content = fs.readFileSync(file, "utf-8").replace(/\r\n/g, "\n");
   fs.writeFileSync(file, callback(content), "utf-8");
 }
 

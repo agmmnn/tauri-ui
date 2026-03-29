@@ -138,11 +138,13 @@ function ensureCargoDependency(content: string, dependencyLine: string) {
     return content;
   }
 
-  if (!content.includes("[dependencies]\n")) {
+  const dependenciesHeader = /\[dependencies\]\r?\n/;
+
+  if (!dependenciesHeader.test(content)) {
     throw new Error(`Could not find [dependencies] while inserting ${dependencyLine}.`);
   }
 
-  return content.replace("[dependencies]\n", `[dependencies]\n${dependencyLine}\n`);
+  return content.replace(dependenciesHeader, `[dependencies]\n${dependencyLine}\n`);
 }
 
 function ensureRustLogPlugin(projectDir: string) {
