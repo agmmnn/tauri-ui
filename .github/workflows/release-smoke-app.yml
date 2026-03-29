@@ -32,7 +32,7 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     env:
-      APP_DIR: ${{ runner.temp }}/create-tauri-ui-release-smoke
+      APP_DIR: ${{ github.workspace }}/.release-smoke-app
 
     steps:
       - name: Checkout release tag
