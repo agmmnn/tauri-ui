@@ -1,0 +1,1354 @@
+"use client"
+
+import * as React from "react"
+import {
+  getIdentifier,
+  getName,
+  getTauriVersion,
+  getVersion,
+} from "@tauri-apps/api/app"
+import { appConfigDir, appDataDir, resourceDir } from "@tauri-apps/api/path"
+import { currentMonitor, getCurrentWindow } from "@tauri-apps/api/window"
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow"
+import { attachConsole } from "@tauri-apps/plugin-log"
+import {
+  AlertTriangleIcon,
+  CopyIcon,
+  ExternalLinkIcon,
+  PinIcon,
+  RefreshCwIcon,
+  TerminalSquareIcon,
+  XIcon,
+} from "lucide-react"
+
+import { Badge } from "__ALIAS_PREFIX__components/ui/badge"
+import { Button } from "__ALIAS_PREFIX__components/ui/button"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "__ALIAS_PREFIX__components/ui/sheet"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "__ALIAS_PREFIX__components/ui/tabs"
+import { ToggleGroup, ToggleGroupItem } from "__ALIAS_PREFIX__components/ui/toggle-group"
+import {
+  DEBUG_EVENT_NAME,
+  type DebugEvent,
+  type LogDebugEvent,
+  type RuntimeEventDebugEvent,
+  emitDebugEvent,
+  serializeError,
+} from "__ALIAS_PREFIX__lib/debug-events"
+import { trackedEmit, isTauri } from "__ALIAS_PREFIX__lib/tauri"
+import { cn } from "__ALIAS_PREFIX__lib/utils"
+
+type AppDiagnostics = {
+  name: string | null
+  version: string | null
+  identifier: string | null
+  tauriVersion: string | null
+}
+
+type WindowDiagnostics = {
+  label: string
+  title: string | null
+  viewportSize: { width: number; height: number } | null
+  tauriInnerSize: { width: number; height: number } | null
+  outerSize: { width: number; height: number } | null
+  outerPosition: { x: number; y: number } | null
+  scaleFactor: number | null
+  visible: boolean | null
+  focused: boolean | null
+  maximized: boolean | null
+  fullscreen: boolean | null
+  decorated: boolean | null
+  monitor: {
+    name: string | null
+    size: { width: number; height: number }
+    scaleFactor: number
+  } | null
+}
+
+type ThemeDiagnostics = {
+  system: "dark" | "light"
+  current: "dark" | "light"
+  htmlClass: string
+}
+
+type PathDiagnostics = {
+  appDataDir: string | null
+  appConfigDir: string | null
+  resourceDir: string | null
+}
+
+type ErrorLog = {
+  id: string
+  timestamp: string
+  source: "error" | "unhandledrejection"
+  message: string
+}
+
+type LocationState = {
+  pathname: string
+  href: string
+  search: string
+  hash: string
+}
+
+type DebugPanelSide = "left" | "right" | "bottom"
+type DebugPanelTab = "overview" | "runtime" | "system" | "errors"
+
+const MAX_LOG_ITEMS = 10
+const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)"
+const DEBUG_PANEL_SIDE_KEY = "ctui-debug-panel-side"
+const DEBUG_PANEL_TAB_KEY = "ctui-debug-panel-tab"
+const DEBUG_PANEL_ATTACH_KEY = "ctui-debug-panel-attach"
+const SIDE_PANEL_WIDTH = 480
+const BOTTOM_PANEL_HEIGHT = 320
+
+function isDebugPanelSide(value: string): value is DebugPanelSide {
+  return value === "left" || value === "right" || value === "bottom"
+}
+
+function isDebugPanelTab(value: string): value is DebugPanelTab {
+  return (
+    value === "overview" ||
+    value === "runtime" ||
+    value === "system" ||
+    value === "errors"
+  )
+}
+
+function isTypingTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) {
+    return false
+  }
+
+  return (
+    target.isContentEditable ||
+    target.tagName === "INPUT" ||
+    target.tagName === "TEXTAREA" ||
+    target.tagName === "SELECT"
+  )
+}
+
+function readLocationState(): LocationState {
+  return {
+    pathname: window.location.pathname,
+    href: window.location.href,
+    search: window.location.search,
+    hash: window.location.hash,
+  }
+}
+
+function formatTimestamp(value: string) {
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }).format(new Date(value))
+  } catch {
+    return value
+  }
+}
+
+function parsePluginLogMessage(message: string) {
+  const match = message.match(
+    /^\[([^\]]+)\]\[([^\]]+)\]\[([^\]]+)\]\[([A-Z]+)\]\s*(.*)$/
+  )
+
+  if (!match) {
+    return null
+  }
+
+  const [, date, time, target, level, text] = match
+
+  return {
+    date,
+    time,
+    target,
+    level: level.toLowerCase(),
+    text,
+  }
+}
+
+function getLogLevelClasses(level: string) {
+  switch (level) {
+    case "error":
+      return "border-destructive/40 bg-destructive/10 text-destructive"
+    case "warn":
+      return "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+    case "info":
+      return "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+    case "debug":
+      return "border-sky-500/40 bg-sky-500/10 text-sky-600 dark:text-sky-400"
+    case "trace":
+      return "border-border bg-muted/60 text-muted-foreground"
+    default:
+      return "border-border bg-muted/60 text-foreground"
+  }
+}
+
+function pushRecent<T>(items: T[], nextItem: T) {
+  return [nextItem, ...items].slice(0, MAX_LOG_ITEMS)
+}
+
+function newestFirst<T extends { timestamp: string }>(items: T[]) {
+  return [...items].sort(
+    (left, right) =>
+      new Date(right.timestamp).getTime() - new Date(left.timestamp).getTime()
+  )
+}
+
+function DebugSection({
+  title,
+  description,
+  children,
+}: {
+  title: string
+  description?: string
+  children: React.ReactNode
+}) {
+  return (
+    <section className="space-y-3 rounded-xl border bg-card/60 p-4">
+      <div className="space-y-1">
+        <h3 className="text-sm font-medium">{title}</h3>
+        {description ? (
+          <p className="text-xs text-muted-foreground">{description}</p>
+        ) : null}
+      </div>
+      {children}
+    </section>
+  )
+}
+
+function KeyValueGrid({
+  entries,
+}: {
+  entries: Array<[label: string, value: React.ReactNode]>
+}) {
+  return (
+    <dl className="grid gap-2 text-xs">
+      {entries.map(([label, value]) => (
+        <div
+          key={label}
+          className="grid grid-cols-[110px_minmax(0,1fr)] items-start gap-3"
+        >
+          <dt className="text-muted-foreground">{label}</dt>
+          <dd className="font-mono break-all text-foreground">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+function EntryHighlight() {
+  const [visible, setVisible] = React.useState(true)
+
+  React.useEffect(() => {
+    const fadeTimer = window.setTimeout(() => {
+      setVisible(false)
+    }, 180)
+
+    return () => {
+      window.clearTimeout(fadeTimer)
+    }
+  }, [])
+
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none absolute inset-0 rounded-lg ring-1 ring-primary/50 transition-opacity duration-700",
+        visible ? "opacity-100" : "opacity-0"
+      )}
+    />
+  )
+}
+
+export function DebugPanel() {
+  const [open, setOpen] = React.useState(false)
+  const [panelSide, setPanelSide] = React.useState<DebugPanelSide>("right")
+  const [activeTab, setActiveTab] = React.useState<DebugPanelTab>("overview")
+  const [attached, setAttached] = React.useState(false)
+  const [tauriReady, setTauriReady] = React.useState(false)
+  const [appInfo, setAppInfo] = React.useState<AppDiagnostics>({
+    name: null,
+    version: null,
+    identifier: null,
+    tauriVersion: null,
+  })
+  const [windowInfo, setWindowInfo] = React.useState<WindowDiagnostics>({
+    label: "main",
+    title: null,
+    viewportSize: null,
+    tauriInnerSize: null,
+    outerSize: null,
+    outerPosition: null,
+    scaleFactor: null,
+    visible: null,
+    focused: null,
+    maximized: null,
+    fullscreen: null,
+    decorated: null,
+    monitor: null,
+  })
+  const [themeInfo, setThemeInfo] = React.useState<ThemeDiagnostics>({
+    system: "light",
+    current: "light",
+    htmlClass: "",
+  })
+  const [pathInfo, setPathInfo] = React.useState<PathDiagnostics>({
+    appDataDir: null,
+    appConfigDir: null,
+    resourceDir: null,
+  })
+  const [externalLinks, setExternalLinks] = React.useState<string[]>([])
+  const [invokeLogs, setInvokeLogs] = React.useState<DebugEvent[]>([])
+  const [runtimeEvents, setRuntimeEvents] = React.useState<RuntimeEventDebugEvent[]>([])
+  const [logEntries, setLogEntries] = React.useState<LogDebugEvent[]>([])
+  const [highlightedRuntimeEventIds, setHighlightedRuntimeEventIds] = React.useState<string[]>([])
+  const [highlightedLogIds, setHighlightedLogIds] = React.useState<string[]>([])
+  const [errors, setErrors] = React.useState<ErrorLog[]>([])
+  const [copied, setCopied] = React.useState(false)
+  const [locationState, setLocationState] = React.useState<LocationState>({
+    pathname: "",
+    href: "",
+    search: "",
+    hash: "",
+  })
+  const highlightTimeoutsRef = React.useRef<number[]>([])
+
+  React.useEffect(() => {
+    setTauriReady(isTauri())
+  }, [])
+
+  React.useEffect(() => {
+    return () => {
+      for (const timeoutId of highlightTimeoutsRef.current) {
+        window.clearTimeout(timeoutId)
+      }
+    }
+  }, [])
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return
+    }
+
+    const savedSide = window.sessionStorage.getItem(DEBUG_PANEL_SIDE_KEY)
+
+    if (savedSide && isDebugPanelSide(savedSide)) {
+      setPanelSide(savedSide)
+    }
+
+    const savedTab = window.sessionStorage.getItem(DEBUG_PANEL_TAB_KEY)
+
+    if (savedTab && isDebugPanelTab(savedTab)) {
+      setActiveTab(savedTab)
+    }
+
+    setAttached(window.sessionStorage.getItem(DEBUG_PANEL_ATTACH_KEY) === "true")
+  }, [])
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return
+    }
+
+    window.sessionStorage.setItem(DEBUG_PANEL_SIDE_KEY, panelSide)
+  }, [panelSide])
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return
+    }
+
+    window.sessionStorage.setItem(DEBUG_PANEL_TAB_KEY, activeTab)
+  }, [activeTab])
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return
+    }
+
+    window.sessionStorage.setItem(DEBUG_PANEL_ATTACH_KEY, String(attached))
+  }, [attached])
+
+  React.useEffect(() => {
+    function updateThemeInfo() {
+      const htmlClass = document.documentElement.className
+      const system = window.matchMedia(COLOR_SCHEME_QUERY).matches ? "dark" : "light"
+
+      setThemeInfo({
+        system,
+        current: document.documentElement.classList.contains("dark") ? "dark" : "light",
+        htmlClass,
+      })
+    }
+
+    updateThemeInfo()
+
+    const mediaQuery = window.matchMedia(COLOR_SCHEME_QUERY)
+    const handleMediaChange = () => {
+      updateThemeInfo()
+    }
+
+    mediaQuery.addEventListener("change", handleMediaChange)
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaChange)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    async function loadAppInfo() {
+      if (!tauriReady) {
+        return
+      }
+
+      const [name, version, identifier, tauriVersion] = await Promise.all([
+        getName(),
+        getVersion(),
+        getIdentifier(),
+        getTauriVersion(),
+      ])
+
+      setAppInfo({
+        name,
+        version,
+        identifier,
+        tauriVersion,
+      })
+    }
+
+    void loadAppInfo()
+  }, [tauriReady])
+
+  React.useEffect(() => {
+    async function loadPaths() {
+      if (!tauriReady) {
+        return
+      }
+
+      const [dataPath, configPath, resourcesPath] = await Promise.all([
+        appDataDir(),
+        appConfigDir(),
+        resourceDir(),
+      ])
+
+      setPathInfo({
+        appDataDir: dataPath,
+        appConfigDir: configPath,
+        resourceDir: resourcesPath,
+      })
+    }
+
+    void loadPaths()
+  }, [tauriReady])
+
+  React.useEffect(() => {
+    if (!tauriReady || !locationState.pathname) {
+      return
+    }
+
+    void trackedEmit("ctui://debug-panel-mounted", {
+      route: locationState.pathname,
+    })
+  }, [locationState.pathname, tauriReady])
+
+  React.useEffect(() => {
+    function updateLocationState() {
+      const nextState = readLocationState()
+
+      setLocationState((current) => {
+        if (
+          current.pathname === nextState.pathname &&
+          current.href === nextState.href &&
+          current.search === nextState.search &&
+          current.hash === nextState.hash
+        ) {
+          return current
+        }
+
+        return nextState
+      })
+    }
+
+    updateLocationState()
+
+    const intervalId = window.setInterval(updateLocationState, 250)
+    window.addEventListener("hashchange", updateLocationState)
+    window.addEventListener("popstate", updateLocationState)
+
+    return () => {
+      window.clearInterval(intervalId)
+      window.removeEventListener("hashchange", updateLocationState)
+      window.removeEventListener("popstate", updateLocationState)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    async function refreshWindowInfo() {
+      if (!tauriReady) {
+        return
+      }
+
+      const currentWindow = getCurrentWindow()
+      const currentWebviewWindow = getCurrentWebviewWindow()
+      const [
+        title,
+        tauriInnerSize,
+        outerSize,
+        outerPosition,
+        scaleFactor,
+        visible,
+        focused,
+        maximized,
+        fullscreen,
+        decorated,
+        monitor,
+      ] = await Promise.all([
+        currentWindow.title(),
+        currentWindow.innerSize(),
+        currentWindow.outerSize(),
+        currentWindow.outerPosition(),
+        currentWindow.scaleFactor(),
+        currentWindow.isVisible(),
+        currentWindow.isFocused(),
+        currentWindow.isMaximized(),
+        currentWindow.isFullscreen(),
+        currentWindow.isDecorated(),
+        currentMonitor(),
+      ])
+
+      setWindowInfo({
+        label: currentWebviewWindow.label,
+        title,
+        viewportSize: {
+          width: window.innerWidth,
+          height: window.innerHeight,
+        },
+        tauriInnerSize,
+        outerSize,
+        outerPosition,
+        scaleFactor,
+        visible,
+        focused,
+        maximized,
+        fullscreen,
+        decorated,
+        monitor: monitor
+          ? {
+              name: monitor.name,
+              size: monitor.size,
+              scaleFactor: monitor.scaleFactor,
+            }
+          : null,
+      })
+    }
+
+    void refreshWindowInfo()
+
+    if (!tauriReady) {
+      return
+    }
+
+    const currentWindow = getCurrentWindow()
+    let unlistenFocus: (() => void) | undefined
+    let unlistenResize: (() => void) | undefined
+    let unlistenMove: (() => void) | undefined
+
+    void currentWindow
+      .onFocusChanged(() => {
+        emitDebugEvent({
+          id: crypto.randomUUID(),
+          kind: "runtime-event",
+          name: "window:focus-changed",
+          source: "window",
+          timestamp: new Date().toISOString(),
+        })
+        void refreshWindowInfo()
+      })
+      .then((unlisten) => {
+        unlistenFocus = unlisten
+      })
+
+    void currentWindow
+      .onResized(() => {
+        emitDebugEvent({
+          id: crypto.randomUUID(),
+          kind: "runtime-event",
+          name: "window:resized",
+          source: "window",
+          timestamp: new Date().toISOString(),
+        })
+        void refreshWindowInfo()
+      })
+      .then((unlisten) => {
+        unlistenResize = unlisten
+      })
+
+    void currentWindow
+      .onMoved(() => {
+        emitDebugEvent({
+          id: crypto.randomUUID(),
+          kind: "runtime-event",
+          name: "window:moved",
+          source: "window",
+          timestamp: new Date().toISOString(),
+        })
+        void refreshWindowInfo()
+      })
+      .then((unlisten) => {
+        unlistenMove = unlisten
+      })
+
+    return () => {
+      unlistenFocus?.()
+      unlistenResize?.()
+      unlistenMove?.()
+    }
+  }, [locationState.pathname, tauriReady])
+
+  React.useEffect(() => {
+    function queueHighlight(
+      id: string,
+      setIds: React.Dispatch<React.SetStateAction<string[]>>
+    ) {
+      setIds((current) => (current.includes(id) ? current : [id, ...current]))
+
+      const timeoutId = window.setTimeout(() => {
+        setIds((current) => current.filter((currentId) => currentId !== id))
+        highlightTimeoutsRef.current = highlightTimeoutsRef.current.filter(
+          (currentTimeoutId) => currentTimeoutId !== timeoutId
+        )
+      }, 900)
+
+      highlightTimeoutsRef.current.push(timeoutId)
+    }
+
+    function handleDebugEvent(event: Event) {
+      const debugEvent = (event as CustomEvent<DebugEvent>).detail
+
+      if (debugEvent.kind === "external-link") {
+        setExternalLinks((current) => pushRecent(current, debugEvent.href))
+        return
+      }
+
+      if (debugEvent.kind === "runtime-event") {
+        setRuntimeEvents((current) => pushRecent(current, debugEvent))
+        queueHighlight(debugEvent.id, setHighlightedRuntimeEventIds)
+        return
+      }
+
+      if (debugEvent.kind === "log") {
+        setLogEntries((current) => pushRecent(current, debugEvent))
+        queueHighlight(debugEvent.id, setHighlightedLogIds)
+        return
+      }
+
+      setInvokeLogs((current) => pushRecent(current, debugEvent))
+    }
+
+    function handleError(event: ErrorEvent) {
+      setErrors((current) =>
+        pushRecent(current, {
+          id: crypto.randomUUID(),
+          timestamp: new Date().toISOString(),
+          source: "error",
+          message: event.message || "Unknown runtime error",
+        })
+      )
+    }
+
+    function handleRejection(event: PromiseRejectionEvent) {
+      const reason = serializeError(event.reason)
+
+      setErrors((current) =>
+        pushRecent(current, {
+          id: crypto.randomUUID(),
+          timestamp: new Date().toISOString(),
+          source: "unhandledrejection",
+          message: reason.message,
+        })
+      )
+    }
+
+    window.addEventListener(DEBUG_EVENT_NAME, handleDebugEvent as EventListener)
+    window.addEventListener("error", handleError)
+    window.addEventListener("unhandledrejection", handleRejection)
+
+    return () => {
+      window.removeEventListener(DEBUG_EVENT_NAME, handleDebugEvent as EventListener)
+      window.removeEventListener("error", handleError)
+      window.removeEventListener("unhandledrejection", handleRejection)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    const originalConsole = {
+      log: window.console.log,
+      info: window.console.info,
+      warn: window.console.warn,
+      error: window.console.error,
+      debug: window.console.debug,
+    }
+
+    function capture(
+      level: LogDebugEvent["level"],
+      args: unknown[],
+      originalMethod: (...data: unknown[]) => void
+    ) {
+      const message = args
+        .map((value) => {
+          if (typeof value === "string") {
+            return value
+          }
+
+          try {
+            return JSON.stringify(value)
+          } catch {
+            return String(value)
+          }
+        })
+        .join(" ")
+
+      emitDebugEvent({
+        id: crypto.randomUUID(),
+        kind: "log",
+        level,
+        message,
+        timestamp: new Date().toISOString(),
+      })
+
+      originalMethod(...args)
+    }
+
+    window.console.log = (...args: unknown[]) => {
+      capture("log", args, originalConsole.log)
+    }
+
+    window.console.info = (...args: unknown[]) => {
+      capture("info", args, originalConsole.info)
+    }
+
+    window.console.warn = (...args: unknown[]) => {
+      capture("warn", args, originalConsole.warn)
+    }
+
+    window.console.error = (...args: unknown[]) => {
+      capture("error", args, originalConsole.error)
+    }
+
+    window.console.debug = (...args: unknown[]) => {
+      capture("debug", args, originalConsole.debug)
+    }
+
+    let detachConsole: (() => void) | undefined
+
+    if (tauriReady) {
+      void attachConsole().then((detach) => {
+        detachConsole = detach
+      })
+    }
+
+    return () => {
+      detachConsole?.()
+      window.console.log = originalConsole.log
+      window.console.info = originalConsole.info
+      window.console.warn = originalConsole.warn
+      window.console.error = originalConsole.error
+      window.console.debug = originalConsole.debug
+    }
+  }, [tauriReady])
+
+  React.useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.defaultPrevented || event.repeat) {
+        return
+      }
+
+      if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) {
+        return
+      }
+
+      if (event.key.toLowerCase() !== "d") {
+        return
+      }
+
+      if (isTypingTarget(event.target)) {
+        return
+      }
+
+      event.preventDefault()
+      setOpen((current) => !current)
+    }
+
+    window.addEventListener("keydown", onKeyDown)
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    const mainElement = document.querySelector("main")
+
+    if (!(mainElement instanceof HTMLElement)) {
+      return
+    }
+
+    mainElement.style.paddingLeft = ""
+    mainElement.style.paddingRight = ""
+    mainElement.style.paddingBottom = ""
+
+    if (open && attached) {
+      if (panelSide === "left") {
+        mainElement.style.paddingLeft = `${SIDE_PANEL_WIDTH}px`
+      }
+
+      if (panelSide === "right") {
+        mainElement.style.paddingRight = `${SIDE_PANEL_WIDTH}px`
+      }
+
+      if (panelSide === "bottom") {
+        mainElement.style.paddingBottom = `${BOTTOM_PANEL_HEIGHT}px`
+      }
+    }
+
+    return () => {
+      mainElement.style.paddingLeft = ""
+      mainElement.style.paddingRight = ""
+      mainElement.style.paddingBottom = ""
+    }
+  }, [attached, open, panelSide])
+
+  async function handleCopyText(value: string) {
+    await navigator.clipboard.writeText(value)
+  }
+
+  async function handleCopySnapshot() {
+    const snapshot = {
+      tauriReady,
+      panelSide,
+      attached,
+      appInfo,
+      locationState,
+      windowInfo,
+      themeInfo,
+      pathInfo,
+      externalLinks,
+      invokeLogs,
+      runtimeEvents,
+      logEntries,
+      errors,
+      capturedAt: new Date().toISOString(),
+    }
+
+    await navigator.clipboard.writeText(JSON.stringify(snapshot, null, 2))
+    setCopied(true)
+    window.setTimeout(() => {
+      setCopied(false)
+    }, 1200)
+  }
+
+  const panelContent = (
+    <>
+      <SheetHeader className="gap-3 border-b p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-1">
+            {!attached && panelSide !== "bottom" ? (
+              <SheetTitle className="sr-only">Development Debug Panel</SheetTitle>
+            ) : null}
+            <h2 className="flex items-center gap-2 text-base font-medium text-foreground">
+              <TerminalSquareIcon className="size-4" />
+              Development Debug Panel
+            </h2>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="inline-flex items-center rounded-md border bg-muted/40 px-2 py-1 text-xs">
+              <span
+                className={cn(
+                  "font-medium transition-colors",
+                  tauriReady ? "text-foreground" : "text-muted-foreground"
+                )}
+              >
+                Tauri
+              </span>
+              <span className="px-1 text-muted-foreground">/</span>
+              <span
+                className={cn(
+                  "font-medium transition-colors",
+                  tauriReady ? "text-muted-foreground" : "text-foreground"
+                )}
+              >
+                Web
+              </span>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => setOpen(false)}
+              aria-label="Close debug panel"
+            >
+              <XIcon className="size-4" />
+            </Button>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <span className="rounded-md border px-1.5 py-0.5 font-mono">Cmd/Ctrl + D</span>
+            <span>toggle panel</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant={attached ? "secondary" : "outline"}
+              size="icon-sm"
+              onClick={() => setAttached((current) => !current)}
+              aria-pressed={attached}
+              aria-label={attached ? "Detach debug panel" : "Attach debug panel"}
+              title={attached ? "Detach debug panel" : "Attach debug panel"}
+            >
+              <PinIcon className="size-4" />
+            </Button>
+            <ToggleGroup
+              type="single"
+              value={panelSide}
+              onValueChange={(value) => {
+                if (isDebugPanelSide(value)) {
+                  setPanelSide(value)
+                }
+              }}
+              variant="outline"
+              size="sm"
+            >
+              <ToggleGroupItem value="left" aria-label="Dock panel left">
+                Left
+              </ToggleGroupItem>
+              <ToggleGroupItem value="right" aria-label="Dock panel right">
+                Right
+              </ToggleGroupItem>
+              <ToggleGroupItem value="bottom" aria-label="Dock panel bottom">
+                Bottom
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+        </div>
+      </SheetHeader>
+
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => {
+          if (isDebugPanelTab(value)) {
+            setActiveTab(value)
+          }
+        }}
+        className="min-h-0 flex-1 gap-0 px-4"
+      >
+        <TabsList className="w-full justify-start">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="runtime">
+            Runtime
+            {invokeLogs.length || externalLinks.length || runtimeEvents.length || logEntries.length ? (
+              <Badge variant="secondary" className="ml-1 h-5 min-w-5 px-1.5">
+                {invokeLogs.length + externalLinks.length + runtimeEvents.length + logEntries.length}
+              </Badge>
+            ) : null}
+          </TabsTrigger>
+          <TabsTrigger value="system">System</TabsTrigger>
+          <TabsTrigger value="errors">
+            Errors
+            {errors.length ? (
+              <Badge variant="destructive" className="ml-1 h-5 min-w-5 px-1.5">
+                {errors.length}
+              </Badge>
+            ) : null}
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="min-h-0 flex-1 overflow-hidden pt-2">
+          <div className="h-full space-y-4 overflow-y-auto pr-1">
+            <DebugSection
+              title="App"
+              description="Static application metadata from Tauri v2."
+            >
+              <KeyValueGrid
+                entries={[
+                  ["Route", locationState.pathname || "/"],
+                  ["URL", locationState.href || "Unavailable"],
+                  ["Search", locationState.search || "(none)"],
+                  ["Hash", locationState.hash || "(none)"],
+                  ["Name", appInfo.name ?? "Unavailable"],
+                  ["Version", appInfo.version ?? "Unavailable"],
+                  ["Identifier", appInfo.identifier ?? "Unavailable"],
+                  ["Tauri", appInfo.tauriVersion ?? "Unavailable"],
+                ]}
+              />
+            </DebugSection>
+
+            <DebugSection
+              title="Window"
+              description="Current Tauri window and monitor state."
+            >
+              <KeyValueGrid
+                entries={[
+                  ["Label", windowInfo.label],
+                  ["Title", windowInfo.title ?? "Unavailable"],
+                  [
+                    "Viewport",
+                    windowInfo.viewportSize
+                      ? `${windowInfo.viewportSize.width} × ${windowInfo.viewportSize.height}`
+                      : "Unavailable",
+                  ],
+                  [
+                    "Tauri inner",
+                    windowInfo.tauriInnerSize
+                      ? `${windowInfo.tauriInnerSize.width} × ${windowInfo.tauriInnerSize.height}`
+                      : "Unavailable",
+                  ],
+                  [
+                    "Window outer",
+                    windowInfo.outerSize
+                      ? `${windowInfo.outerSize.width} × ${windowInfo.outerSize.height}`
+                      : "Unavailable",
+                  ],
+                  [
+                    "Position",
+                    windowInfo.outerPosition
+                      ? `${windowInfo.outerPosition.x}, ${windowInfo.outerPosition.y}`
+                      : "Unavailable",
+                  ],
+                  ["Scale", windowInfo.scaleFactor ?? "Unavailable"],
+                  ["Focused", String(windowInfo.focused)],
+                  ["Visible", String(windowInfo.visible)],
+                  ["Maximized", String(windowInfo.maximized)],
+                  ["Fullscreen", String(windowInfo.fullscreen)],
+                  ["Decorated", String(windowInfo.decorated)],
+                  [
+                    "Monitor",
+                    windowInfo.monitor
+                      ? `${windowInfo.monitor.name ?? "Unknown"} (${windowInfo.monitor.size.width} × ${windowInfo.monitor.size.height})`
+                      : "Unavailable",
+                  ],
+                ]}
+              />
+            </DebugSection>
+
+            <DebugSection
+              title="Theme"
+              description="Theme state from the root HTML element and system media query."
+            >
+              <KeyValueGrid
+                entries={[
+                  ["Current", themeInfo.current],
+                  ["System", themeInfo.system],
+                  ["HTML class", themeInfo.htmlClass || "(none)"],
+                ]}
+              />
+            </DebugSection>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="runtime" className="min-h-0 flex-1 overflow-hidden pt-2">
+          <div className="h-full space-y-4 overflow-y-auto pr-1">
+            <DebugSection
+              title="Recent invoke() calls"
+              description="Calls captured through the tracked Tauri helper."
+            >
+              {invokeLogs.length ? (
+                <div className="max-h-72 space-y-2 overflow-y-auto pr-1">
+                  {invokeLogs.map((entry) => {
+                    if (entry.kind !== "invoke") {
+                      return null
+                    }
+
+                    return (
+                      <div key={entry.id} className="rounded-lg border bg-background/70 p-3">
+                        <div className="mb-2 flex items-center justify-between gap-3">
+                          <div className="font-mono text-xs">{entry.command}</div>
+                          <div className="flex items-center gap-2">
+                            <Badge
+                              variant={entry.status === "success" ? "secondary" : "destructive"}
+                            >
+                              {entry.status}
+                            </Badge>
+                            <span className="text-[11px] text-muted-foreground">
+                              {entry.durationMs} ms
+                            </span>
+                          </div>
+                        </div>
+                        <pre className="overflow-x-auto rounded-md bg-muted/60 p-2 text-[11px] leading-relaxed break-words whitespace-pre-wrap">
+                          {JSON.stringify(
+                            {
+                              args: entry.args,
+                              result: entry.result,
+                              error: entry.error,
+                            },
+                            null,
+                            2
+                          )}
+                        </pre>
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  No tracked Tauri invocations yet.
+                </p>
+              )}
+            </DebugSection>
+
+            <DebugSection
+              title="External links"
+              description="URLs intercepted by the external-link guard."
+            >
+              {externalLinks.length ? (
+                <ul className="max-h-56 space-y-2 overflow-y-auto pr-1 text-xs">
+                  {externalLinks.map((href, index) => (
+                    <li key={`${href}-${index}`} className="flex gap-2">
+                      <ExternalLinkIcon className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
+                      <span className="font-mono break-all">{href}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  No external links opened yet.
+                </p>
+              )}
+            </DebugSection>
+
+            <DebugSection
+              title="Runtime events"
+              description="Recent Tauri window and emitted event activity."
+            >
+              {runtimeEvents.length ? (
+                <ul className="max-h-72 space-y-2 overflow-y-auto pr-1 text-xs">
+                  {newestFirst(runtimeEvents).map((entry) => (
+                    <li key={entry.id} className="relative rounded-lg border bg-background/70 p-3">
+                      {highlightedRuntimeEventIds.includes(entry.id) ? <EntryHighlight /> : null}
+                      <div className="mb-1 flex items-center justify-between gap-3">
+                        <span className="font-mono">{entry.name}</span>
+                        <Badge variant="outline">{entry.source}</Badge>
+                      </div>
+                      <div className="mb-2 text-[11px] text-muted-foreground">
+                        {formatTimestamp(entry.timestamp)}
+                      </div>
+                      {entry.payload !== undefined ? (
+                        <pre className="overflow-x-auto rounded-md bg-muted/60 p-2 text-[11px] leading-relaxed break-words whitespace-pre-wrap">
+                          {JSON.stringify(entry.payload, null, 2)}
+                        </pre>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  No captured runtime events yet.
+                </p>
+              )}
+            </DebugSection>
+
+            <DebugSection
+              title="Plugin logs"
+              description="Recent logs surfaced through the browser console and Tauri log plugin."
+            >
+              {logEntries.length ? (
+                <ul className="max-h-72 space-y-2 overflow-y-auto pr-1 text-xs">
+                  {newestFirst(logEntries).map((entry) => {
+                    const parsed = parsePluginLogMessage(entry.message)
+
+                    return (
+                      <li key={entry.id} className="relative rounded-lg border bg-background/70 p-3">
+                        {highlightedLogIds.includes(entry.id) ? <EntryHighlight /> : null}
+                        {parsed ? (
+                          <div className="space-y-2">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0 space-y-1">
+                                <div className="flex min-w-0 items-center gap-2">
+                                  <span
+                                    className={cn(
+                                      "inline-flex rounded-md border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide",
+                                      getLogLevelClasses(parsed.level)
+                                    )}
+                                  >
+                                    {parsed.level}
+                                  </span>
+                                  <span className="truncate font-mono text-[11px] text-muted-foreground">
+                                    {parsed.target}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="shrink-0 text-right text-[11px] text-muted-foreground">
+                                <div>{parsed.time}</div>
+                                <div>{parsed.date}</div>
+                              </div>
+                            </div>
+                            <p className="font-mono break-words text-foreground">{parsed.text}</p>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="mb-1 flex items-center justify-between gap-3">
+                              <Badge variant="outline">{entry.level}</Badge>
+                              <span className="text-[11px] text-muted-foreground">
+                                {formatTimestamp(entry.timestamp)}
+                              </span>
+                            </div>
+                            <p className="font-mono break-words text-foreground">
+                              {entry.message}
+                            </p>
+                          </>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ul>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  No captured plugin logs yet.
+                </p>
+              )}
+            </DebugSection>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="system" className="min-h-0 flex-1 overflow-hidden pt-2">
+          <div className="h-full space-y-4 overflow-y-auto pr-1">
+            <DebugSection
+              title="Paths"
+              description="Resolved Tauri application directories."
+            >
+              <div className="space-y-2">
+                {[
+                  ["App data", pathInfo.appDataDir],
+                  ["App config", pathInfo.appConfigDir],
+                  ["Resources", pathInfo.resourceDir],
+                ].map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="grid grid-cols-[110px_minmax(0,1fr)_auto] items-start gap-3 text-xs"
+                  >
+                    <div className="text-muted-foreground">{label}</div>
+                    <div className="font-mono break-all text-foreground">
+                      {value ?? "Unavailable"}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      disabled={!value}
+                      onClick={() => value && void handleCopyText(value)}
+                    >
+                      <CopyIcon className="size-3.5" />
+                      Copy
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </DebugSection>
+
+            <DebugSection title="Webview" description="Current webview identity.">
+              <KeyValueGrid entries={[["Current label", windowInfo.label]]} />
+            </DebugSection>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="errors" className="min-h-0 flex-1 overflow-hidden pt-2">
+          <div className="h-full space-y-4 overflow-y-auto pr-1">
+            <DebugSection
+              title="Recent errors"
+              description="Uncaught runtime errors and unhandled promise rejections."
+            >
+              {errors.length ? (
+                <ul className="space-y-2 text-xs">
+                  {errors.map((entry) => (
+                    <li
+                      key={entry.id}
+                      className="rounded-lg border bg-background/70 p-3"
+                    >
+                      <div className="mb-1 flex items-center gap-2">
+                        <AlertTriangleIcon className="size-3.5 text-destructive" />
+                        <span className="font-medium">{entry.source}</span>
+                        <span className="text-muted-foreground">
+                          {formatTimestamp(entry.timestamp)}
+                        </span>
+                      </div>
+                      <p className="break-words text-muted-foreground">
+                        {entry.message}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  No captured runtime errors.
+                </p>
+              )}
+            </DebugSection>
+          </div>
+        </TabsContent>
+
+        <div className="mt-4 flex shrink-0 flex-wrap gap-2 border-t py-3">
+          <Button onClick={handleCopySnapshot} variant="outline" size="sm">
+            <CopyIcon className="size-4" />
+            {copied ? "Copied" : "Copy snapshot"}
+          </Button>
+          <Button onClick={() => window.location.reload()} variant="outline" size="sm">
+            <RefreshCwIcon className="size-4" />
+            Reload app
+          </Button>
+        </div>
+      </Tabs>
+    </>
+  )
+
+  const attachedPanelClassName = cn(
+    "ui-selectable fixed z-50 flex overflow-hidden bg-popover text-sm text-popover-foreground shadow-lg",
+    panelSide === "bottom"
+      ? "inset-x-0 bottom-0 flex-col border-t"
+      : panelSide === "left"
+        ? "top-0 left-0 h-full flex-col border-r"
+        : "top-0 right-0 h-full flex-col border-l"
+  )
+
+  return (
+    <>
+      {attached ? (
+        open ? (
+          <div
+            className={attachedPanelClassName}
+            style={
+              panelSide === "bottom"
+                ? { height: `${BOTTOM_PANEL_HEIGHT}px` }
+                : { width: `${SIDE_PANEL_WIDTH}px` }
+            }
+          >
+            {panelContent}
+          </div>
+        ) : null
+      ) : panelSide === "bottom" ? (
+        open ? (
+          <div
+            className="ui-selectable fixed inset-x-0 bottom-0 z-50 flex flex-col overflow-hidden border-t bg-popover text-sm text-popover-foreground shadow-lg"
+            style={{ height: `${BOTTOM_PANEL_HEIGHT}px` }}
+          >
+            {panelContent}
+          </div>
+        ) : null
+      ) : (
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetContent
+            side={panelSide}
+            showCloseButton={false}
+            className="ui-selectable flex h-full max-w-[92vw] flex-col gap-0 overflow-hidden p-0"
+            style={{ width: `${SIDE_PANEL_WIDTH}px` }}
+          >
+            {panelContent}
+          </SheetContent>
+        </Sheet>
+      )}
+    </>
+  )
+}

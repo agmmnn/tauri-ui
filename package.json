@@ -1,24 +1,31 @@
 {
   "name": "tauri-ui",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "lint": "oxlint .",
+    "format": "oxfmt --write .",
+    "check-types": "turbo run check-types",
+    "test:create-tauri-ui": "node scripts/test-create-tauri-ui-simple.mjs",
+    "test:create-tauri-ui:simple": "node scripts/test-create-tauri-ui-simple.mjs",
+    "test:create-tauri-ui:full": "node scripts/test-create-tauri-ui-full.mjs",
+    "taze": "taze minor -r -w -i false -I",
+    "taze:major": "taze major -r -w -i false -I"
   },
   "devDependencies": {
-    "prettier": "^3.5.0",
-    "turbo": "^2.4.4",
-    "typescript": "5.7.3"
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
+    "taze": "^19.10.0",
+    "turbo": "^2.8.21",
+    "typescript": "6.0.2"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "bun@1.2.3",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "packageManager": "bun@1.3.11"
 }

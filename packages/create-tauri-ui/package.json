@@ -1,0 +1,50 @@
+{
+  "name": "create-tauri-ui",
+  "version": "1.0.0",
+  "description": "🦀 Create modern Tauri desktop apps in just a few simple steps.",
+  "homepage": "https://github.com/agmmnn/tauri-ui",
+  "bugs": {
+    "url": "https://github.com/agmmnn/tauri-ui/issues"
+  },
+  "license": "MIT",
+  "author": "agmmnn",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agmmnn/tauri-ui.git"
+  },
+  "bin": {
+    "create-tauri-ui": "index.js"
+  },
+  "files": [
+    "index.js",
+    "dist",
+    "assets"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "unbuild",
+    "start": "unbuild --stub && node index.js",
+    "typecheck": "tsgo --noEmit",
+    "check-types": "tsgo --noEmit",
+    "prepublishOnly": "npm run build",
+    "lint": "oxlint .",
+    "format": "oxfmt --write .",
+    "taze": "taze minor -r -w -i false -I",
+    "taze:major": "taze major -r -w -i false -I",
+    "updatesub": "git submodule update --init --recursive --remote"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.1.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@typescript/native-preview": "7.0.0-dev.20260329.1",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
+    "typescript": "^6.0.2",
+    "unbuild": "^3.6.1"
+  }
+}
