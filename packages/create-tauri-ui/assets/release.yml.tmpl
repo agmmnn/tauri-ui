@@ -13,7 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: {{PLATFORMS}}
+        include:
+{{PLATFORMS}}
     runs-on: ${{ matrix.platform }}
 
     steps:
@@ -22,6 +23,8 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
       - name: Rust cache
         uses: Swatinem/rust-cache@v2
@@ -32,7 +35,7 @@ jobs:
           bun-version: latest
 
       - name: Install Linux system dependencies
-        if: matrix.platform == 'ubuntu-latest'
+        if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev patchelf
@@ -41,7 +44,8 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build and publish
-        uses: tauri-apps/tauri-action@v0
+        id: tauri
+        uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -50,3 +54,21 @@ jobs:
           releaseBody: See the assets to download this version.
           releaseDraft: true
           prerelease: false
+          generateReleaseNotes: true
+          retryAttempts: 2
+          args: ${{ matrix.args }}
+          releaseAssetNamePattern: "[name]-[version]-[platform]-[arch][ext]"
+          uploadUpdaterJson: false
+          uploadUpdaterSignatures: false
+
+      - name: Release summary
+        if: steps.tauri.outputs.releaseHtmlUrl != ''
+        run: |
+          {
+            echo "## Tauri Release"
+            echo ""
+            echo "- Platform: \`${{ matrix.name }}\`"
+            echo "- Version: \`${{ steps.tauri.outputs.appVersion }}\`"
+            echo "- Release: ${{ steps.tauri.outputs.releaseHtmlUrl }}"
+            echo "- Artifacts: \`${{ steps.tauri.outputs.artifactPaths }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -104,6 +104,7 @@ function printSummary(mode, results) {
 export async function runCreateTauriUiMatrix({
   mode,
   includeWorkflow,
+  includeStarterUI = true,
   runTauriBuild,
   selectedTemplates = [],
 }) {
@@ -133,6 +134,10 @@ export async function runCreateTauriUiMatrix({
     await fs.rm(targetDir, { recursive: true, force: true });
 
     const scaffoldArgs = [cliEntry, targetDir, "--template", template, "--yes", "--force"];
+
+    if (!includeStarterUI) {
+      scaffoldArgs.push("--no-starter");
+    }
 
     if (!includeWorkflow) {
       scaffoldArgs.push("--no-workflow");

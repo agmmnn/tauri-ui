@@ -22,6 +22,9 @@
   ],
   "type": "module",
   "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "unbuild --stub",
     "build": "unbuild",

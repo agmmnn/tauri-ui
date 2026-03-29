@@ -1,0 +1,106 @@
+name: Release smoke app
+
+on:
+  release:
+    types:
+      - published
+
+concurrency: ${{ github.workflow }}-${{ github.event.release.id }}
+
+jobs:
+  publish-smoke-app:
+    name: Upload generated Vite app
+    if: startsWith(github.event.release.tag_name, 'create-tauri-ui@')
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            platform: windows-latest
+            args: ""
+          - name: macOS Apple Silicon
+            platform: macos-latest
+            args: --target aarch64-apple-darwin
+          - name: macOS Intel
+            platform: macos-latest
+            args: --target x86_64-apple-darwin
+          - name: Linux
+            platform: ubuntu-22.04
+            args: ""
+
+    runs-on: ${{ matrix.platform }}
+    env:
+      APP_DIR: ${{ runner.temp }}/create-tauri-ui-release-smoke
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Linux system dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+
+      - name: Install workspace dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build create-tauri-ui
+        run: bun run --cwd packages/create-tauri-ui build
+
+      - name: Generate release smoke app
+        run: |
+          rm -rf "$APP_DIR"
+          node packages/create-tauri-ui/index.js "$APP_DIR" \
+            --template vite \
+            --identifier com.agm.create_tauri_ui_release_smoke \
+            --yes \
+            --no-workflow \
+            --no-starter
+
+      - name: Install smoke app dependencies
+        working-directory: ${{ env.APP_DIR }}
+        run: bun install --frozen-lockfile
+
+      - name: Build and upload smoke app
+        id: tauri
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ github.event.release.id }}
+          projectPath: ${{ env.APP_DIR }}
+          args: ${{ matrix.args }}
+          retryAttempts: 2
+          releaseAssetNamePattern: "[name]-smoke-[version]-[platform]-[arch][ext]"
+          uploadUpdaterJson: false
+          uploadUpdaterSignatures: false
+
+      - name: Smoke app summary
+        if: steps.tauri.outputs.releaseHtmlUrl != ''
+        run: |
+          {
+            echo "## Generated Vite smoke app"
+            echo ""
+            echo "- Package release: ${{ github.event.release.html_url }}"
+            echo "- Platform: \`${{ matrix.name }}\`"
+            echo "- App version: \`${{ steps.tauri.outputs.appVersion }}\`"
+            echo "- Artifacts: \`${{ steps.tauri.outputs.artifactPaths }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

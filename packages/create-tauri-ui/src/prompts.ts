@@ -141,22 +141,22 @@ export async function runPrompts(args: CliArgs, cwd = process.cwd()): Promise<Pr
     : args.yes
       ? getDefaultIdentifier(packageName)
       : unwrapPrompt(
-        await text({
-          message: "App identifier",
-          ...withTextDefault(getDefaultIdentifier(packageName)),
-        }),
-      );
+          await text({
+            message: "App identifier",
+            ...withTextDefault(getDefaultIdentifier(packageName)),
+          }),
+        );
 
   const preset = args.preset
     ? args.preset
     : args.yes
       ? DEFAULT_PRESET
       : unwrapPrompt(
-        await text({
-          message: "shadcn preset",
-          ...withTextDefault(DEFAULT_PRESET),
-        }),
-      );
+          await text({
+            message: "shadcn preset",
+            ...withTextDefault(DEFAULT_PRESET),
+          }),
+        );
 
   const includeStarterUI =
     args.includeStarterUI ??
