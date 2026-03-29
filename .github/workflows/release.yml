@@ -64,11 +64,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Ensure GitHub release exists
+        id: release_meta
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION=$(node -p "require('./packages/create-tauri-ui/package.json').version")
           TAG="create-tauri-ui@$VERSION"
+          TITLE="v$VERSION"
 
           if ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
             echo "No release tag created in this run. Skipping GitHub release creation."
@@ -76,8 +78,21 @@ jobs:
           fi
 
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "GitHub release already exists for $TAG"
-            exit 0
+            gh release edit "$TAG" --title "$TITLE"
+          else
+            gh release create "$TAG" --title "$TITLE" --generate-notes
           fi
 
-          gh release create "$TAG" --title "$TAG" --generate-notes
+          RELEASE_ID=$(gh api "repos/${{ github.repository }}/releases/tags/$TAG" --jq '.id')
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "release_id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger smoke app workflow
+        if: steps.release_meta.outputs.release_id != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run release-smoke-app.yml \
+            --ref master \
+            -f release_tag='${{ steps.release_meta.outputs.tag }}' \
+            -f release_id='${{ steps.release_meta.outputs.release_id }}'

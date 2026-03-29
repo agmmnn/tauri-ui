@@ -1,6 +1,16 @@
 name: Release smoke app
 
 on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Package release tag, for example create-tauri-ui@1.0.1
+        required: true
+        type: string
+      release_id:
+        description: GitHub release numeric id
+        required: true
+        type: string
   release:
     types:
       - created
@@ -12,7 +22,9 @@ concurrency: ${{ github.workflow }}-${{ github.run_id }}
 jobs:
   publish-smoke-app:
     name: Upload generated Vite app
-    if: startsWith(github.event.release.tag_name || '', 'create-tauri-ui@')
+    if: |
+      (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'create-tauri-ui@')) ||
+      (github.event_name == 'workflow_dispatch' && startsWith(inputs.release_tag, 'create-tauri-ui@'))
     permissions:
       contents: write
     strategy:
@@ -37,10 +49,24 @@ jobs:
       APP_DIR: ${{ github.workspace }}/.release-smoke-app
 
     steps:
+      - name: Resolve release metadata
+        id: release
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ inputs.release_tag }}" >> "$GITHUB_OUTPUT"
+            echo "id=${{ inputs.release_id }}" >> "$GITHUB_OUTPUT"
+            echo "url=https://github.com/${{ github.repository }}/releases/tag/${{ inputs.release_tag }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "tag=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          echo "id=${{ github.event.release.id }}" >> "$GITHUB_OUTPUT"
+          echo "url=${{ github.event.release.html_url }}" >> "$GITHUB_OUTPUT"
+
       - name: Checkout release tag
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ steps.release.outputs.tag }}
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -87,7 +113,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          releaseId: ${{ github.event.release.id }}
+          releaseId: ${{ steps.release.outputs.id }}
           projectPath: ${{ env.APP_DIR }}
           args: ${{ matrix.args }}
           retryAttempts: 2
@@ -101,7 +127,7 @@ jobs:
           {
             echo "## Generated Vite smoke app"
             echo ""
-            echo "- Package release: ${{ github.event.release.html_url }}"
+            echo "- Package release: ${{ steps.release.outputs.url }}"
             echo "- Platform: \`${{ matrix.name }}\`"
             echo "- App version: \`${{ steps.tauri.outputs.appVersion }}\`"
             echo "- Artifacts: \`${{ steps.tauri.outputs.artifactPaths }}\`"
