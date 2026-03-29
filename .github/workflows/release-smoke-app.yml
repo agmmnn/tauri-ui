@@ -3,7 +3,9 @@ name: Release smoke app
 on:
   release:
     types:
+      - created
       - published
+      - released
 
 concurrency: ${{ github.workflow }}-${{ github.run_id }}
 
