@@ -1,84 +1,108 @@
-# Turborepo starter
+<div align="center">
+<a href="https://tauriui.vercel.app/"><img src="https://github.com/agmmnn/tauri-ui/assets/16024979/9c694ee2-f2c8-4bec-9c06-c3a6f7d4f901" width="44" height="44" alt="crab"/></a>
 
-This Turborepo starter is maintained by the Turborepo core team.
+# tauri-ui
 
-## Using this example
+</div>
 
-Run the following command:
+Create modern Tauri desktop apps with `shadcn/ui` and a desktop-first default setup.
 
-```sh
-npx create-turbo@latest
+`create-tauri-ui` scaffolds the frontend with the upstream `shadcn` CLI, generates the native shell with `create-tauri-app`, and merges the result into a Tauri-ready project. The goal is to stay close to upstream tools without maintaining a large local template tree.
+
+## Features
+
+- **🧱 Upstream-first scaffolding**: uses the `shadcn` CLI for the frontend and `create-tauri-app` for the native shell
+- **🖥️ Desktop defaults out of the box**: window sizing, startup flash prevention, external link guarding, overscroll prevention, and desktop-style selection behavior
+- **🔋 Built-in batteries**: optional starter dashboard, Rust invoke example, desktop release workflow, and a dev-only debug panel
+- **🧭 Framework-aware adapters**: tuned for `vite`, `next`, `start`, `react-router`, and `astro`
+- **🧹 Low-maintenance generator design**: no large local template tree, just a small asset and patch surface
+
+## Quick Start
+
+Primary commands:
+
+```bash
+bun create tauri-ui my-app
+
+# direct binary command
+
+bunx create-tauri-ui@latest my-app
 ```
 
-## What's inside?
+Then run the generated app:
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+```bash
+cd my-app
+bun install
+bun run tauri dev
 ```
 
-### Develop
+<details>
+<summary>Detailed Commands</summary>
 
-To develop all apps and packages, run the following command:
+Generate a Vite app with defaults:
 
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```bash
+npm create tauri-ui@latest my-app -- --template vite --yes
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+Generate a Next.js app without the starter dashboard or workflow:
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
+```bash
+npm create tauri-ui@latest my-app -- --template next --yes --no-starter --no-workflow
 ```
 
-## Useful Links
+Generate an Astro app with a custom identifier:
 
-Learn more about the power of Turborepo:
+```bash
+bun create tauri-ui my-app --template astro --identifier com.example.astroapp --yes
+```
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+</details>
+
+## Supported Templates
+
+- `vite`
+- `next`
+- `start`
+- `react-router`
+- `astro`
+
+## What You Get
+
+Every generated app includes:
+
+- an upstream `shadcn` frontend scaffold
+- a merged Tauri `src-tauri` native layer
+- framework-specific Tauri adapters for `vite`, `next`, `start`, `react-router`, and `astro`
+- desktop window defaults with a centered `1400x918` main window
+- startup flash prevention by hiding the window until the first page load finishes
+- external link guarding so external URLs open in the system browser
+- a dev-only debug panel with Tauri runtime info, tracked invokes, runtime events, paths, current webview label, and log stream wiring
+- scroll-container defaults that disable overscroll, rubber-band scrolling, and browser-style bounce
+- desktop-style selection defaults with global `select-none`, an intrinsic selectable allowlist, and a `.ui-selectable` utility
+- an included `app-icon.png` source asset
+
+Optional batteries:
+
+- a starter dashboard based on `dashboard-01`
+- a Rust invoke example for frontend-backend communication
+- a GitHub Actions workflow for building and releasing desktop binaries
+
+## How It Works
+
+```text
+prompts -> shadcn init -> create-tauri-app (temp) -> merge src-tauri -> apply framework patches -> add batteries
+```
+
+This project avoids shipping full local project templates. It keeps a small local surface of assets and patch logic, and lets the upstream CLIs do the heavy lifting.
+
+## Monorepo
+
+This repository is a monorepo. The CLI package lives at [packages/create-tauri-ui](/Users/agm/Documents/Github/tauri-ui/packages/create-tauri-ui).
+
+For the full package documentation, examples, CLI options, and development notes, see [packages/create-tauri-ui/README.md](/Users/agm/Documents/Github/tauri-ui/packages/create-tauri-ui/README.md).
+
+## License
+
+MIT
