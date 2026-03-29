@@ -60,34 +60,36 @@ bun create tauri-ui my-app --template astro --identifier com.example.astroapp --
 
 </details>
 
-## Supported Templates
+## Batteries Included 🔋
 
-- `vite`
-- `next`
-- `start`
-- `react-router`
-- `astro`
+**Core setup**
 
-## What You Get
+- `shadcn` frontend (upstream)
+- merged `src-tauri` native layer
+- framework adapters (`vite`, `next`, `start`, `react-router`, `astro`)
 
-Every generated app includes:
+**Desktop defaults**
 
-- an upstream `shadcn` frontend scaffold
-- a merged Tauri `src-tauri` native layer
-- framework-specific Tauri adapters for `vite`, `next`, `start`, `react-router`, and `astro`
-- desktop window defaults with a centered `1400x918` main window
-- startup flash prevention by hiding the window until the first page load finishes
-- external link guarding so external URLs open in the system browser
-- a dev-only debug panel with Tauri runtime info, tracked invokes, runtime events, paths, current webview label, and log stream wiring
-- scroll-container defaults that disable overscroll, rubber-band scrolling, and browser-style bounce
-- desktop-style selection defaults with global `select-none`, an intrinsic selectable allowlist, and a `.ui-selectable` utility
-- an included `app-icon.png` source asset
+- centered `1400x918` window
+- no startup flash (delayed show)
+- external links open in system browser
+- no overscroll / rubber-band scrolling
+- desktop-style selection (`select-none` + opt-in)
 
-Optional batteries:
+**Dev tools**
 
-- a starter dashboard based on `dashboard-01`
-- a Rust invoke example for frontend-backend communication
-- a GitHub Actions workflow for building and releasing desktop binaries
+- built-in debug panel  
+  (invokes, events, logs, paths, webview info)
+
+**Assets**
+
+- included `app-icon.png`
+
+**Optional**
+
+- starter dashboard (`dashboard-01`)
+- Rust `invoke` example
+- GitHub Actions release workflow
 
 ## How It Works
 
@@ -99,9 +101,8 @@ This project avoids shipping full local project templates. It keeps a small loca
 
 ## Monorepo
 
-This repository is a monorepo. The CLI package lives at [packages/create-tauri-ui](/Users/agm/Documents/Github/tauri-ui/packages/create-tauri-ui).
-
-For the full package documentation, examples, CLI options, and development notes, see [packages/create-tauri-ui/README.md](/Users/agm/Documents/Github/tauri-ui/packages/create-tauri-ui/README.md).
+This repository is a monorepo. The CLI package lives at [packages/create-tauri-ui](packages/create-tauri-ui).
+For the full package documentation, examples, CLI options, and development notes, see [packages/create-tauri-ui/README.md](packages/create-tauri-ui/README.md).
 
 ## License
 
