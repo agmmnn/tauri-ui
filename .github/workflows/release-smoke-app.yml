@@ -101,7 +101,7 @@ jobs:
           rm -rf "$APP_DIR"
           node packages/create-tauri-ui/index.js "$APP_DIR" \
             --template vite \
-            --identifier com.agm.create_tauri_ui_release_smoke \
+            --identifier com.agm.create-tauri-ui-release-smoke \
             --yes \
             --no-workflow \
             --no-starter
@@ -120,9 +120,8 @@ jobs:
           projectPath: ${{ env.APP_DIR }}
           args: ${{ matrix.args }}
           retryAttempts: 2
-          releaseAssetNamePattern: "[name]-smoke-[version]-[platform]-[arch][ext]"
-          uploadUpdaterJson: false
-          uploadUpdaterSignatures: false
+          assetNamePattern: "[name]-smoke-[version]-[platform]-[arch][ext]"
+          includeUpdaterJson: false
 
       - name: Smoke app summary
         if: steps.tauri.outputs.releaseHtmlUrl != ''
