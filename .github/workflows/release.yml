@@ -62,3 +62,22 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Ensure GitHub release exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(node -p "require('./packages/create-tauri-ui/package.json').version")
+          TAG="create-tauri-ui@$VERSION"
+
+          if ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "No release tag created in this run. Skipping GitHub release creation."
+            exit 0
+          fi
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "GitHub release already exists for $TAG"
+            exit 0
+          fi
+
+          gh release create "$TAG" --title "$TAG" --generate-notes

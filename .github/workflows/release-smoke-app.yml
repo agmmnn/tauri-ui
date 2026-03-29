@@ -5,12 +5,12 @@ on:
     types:
       - published
 
-concurrency: ${{ github.workflow }}-${{ github.event.release.id }}
+concurrency: ${{ github.workflow }}-${{ github.run_id }}
 
 jobs:
   publish-smoke-app:
     name: Upload generated Vite app
-    if: startsWith(github.event.release.tag_name, 'create-tauri-ui@')
+    if: startsWith(github.event.release.tag_name || '', 'create-tauri-ui@')
     permissions:
       contents: write
     strategy:
@@ -22,10 +22,10 @@ jobs:
             args: ""
           - name: macOS Apple Silicon
             platform: macos-latest
-            args: --target aarch64-apple-darwin
+            args: "--target aarch64-apple-darwin"
           - name: macOS Intel
             platform: macos-latest
-            args: --target x86_64-apple-darwin
+            args: "--target x86_64-apple-darwin"
           - name: Linux
             platform: ubuntu-22.04
             args: ""
