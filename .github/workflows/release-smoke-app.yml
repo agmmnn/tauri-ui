@@ -49,7 +49,7 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     env:
-      APP_DIR: .release-smoke-app
+      APP_DIR: release-smoke-app
 
     steps:
       - name: Resolve release metadata
@@ -103,8 +103,7 @@ jobs:
             --template vite \
             --identifier com.agm.create-tauri-ui-release-smoke \
             --yes \
-            --no-workflow \
-            --no-starter
+            --no-workflow
 
       - name: Install smoke app dependencies
         working-directory: ${{ env.APP_DIR }}
