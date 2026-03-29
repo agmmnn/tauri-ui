@@ -1,5 +1,6 @@
 <div align="center">
-<a href="https://tauriui.vercel.app/"><img src="https://github.com/agmmnn/tauri-ui/assets/16024979/9c694ee2-f2c8-4bec-9c06-c3a6f7d4f901" width="44" height="44" alt="crab"/></a>
+<a href="https://tauriui.vercel.app/"><img src="https://github.com/agmmnn/tauri-ui/assets/16024979/9c694ee2-f2c8-4bec-9c06-c3a6f7d4f901" width="44" height="44" alt="crab"/></a> 
+<img src="https://github.com/user-attachments/assets/8e46eca9-458e-49f6-85c4-19d3834c16e3" alt="tauri-ui"/>
 
 # tauri-ui
 
