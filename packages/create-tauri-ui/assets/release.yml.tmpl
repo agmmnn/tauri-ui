@@ -57,9 +57,8 @@ jobs:
           generateReleaseNotes: true
           retryAttempts: 2
           args: ${{ matrix.args }}
-          releaseAssetNamePattern: "[name]-[version]-[platform]-[arch][ext]"
-          uploadUpdaterJson: false
-          uploadUpdaterSignatures: false
+          assetNamePattern: "[name]-[version]-[platform]-[arch][ext]"
+          includeUpdaterJson: false
 
       - name: Release summary
         if: steps.tauri.outputs.releaseHtmlUrl != ''

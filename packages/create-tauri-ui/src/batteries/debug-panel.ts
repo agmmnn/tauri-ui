@@ -252,7 +252,7 @@ function patchVite(projectDir: string, options: ProjectOptions) {
 
     if (!nextContent.includes(`import { DebugPanel } from "${importPath}"`)) {
       nextContent = nextContent.replace(
-        'import { ExternalLinkGuard } from "./components/external-link-guard.tsx"\n',
+        /import { ExternalLinkGuard } from "\.\/components\/external-link-guard\.tsx"\r?\n/,
         `import { ExternalLinkGuard } from "./components/external-link-guard.tsx"\nimport { DebugPanel } from "${importPath}"\n`,
       );
     }
@@ -262,8 +262,8 @@ function patchVite(projectDir: string, options: ProjectOptions) {
     }
 
     const patchedContent = nextContent.replace(
-      "<ExternalLinkGuard />\n      <main><App /></main>",
-      "<ExternalLinkGuard />\n      {import.meta.env.DEV ? <DebugPanel /> : null}\n      <main><App /></main>",
+      /<ExternalLinkGuard \/>\r?\n(\s*)<main><App \/><\/main>/,
+      "<ExternalLinkGuard />\n$1{import.meta.env.DEV ? <DebugPanel /> : null}\n$1<main><App /></main>",
     );
 
     if (patchedContent === nextContent) {

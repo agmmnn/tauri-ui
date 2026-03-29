@@ -206,7 +206,7 @@ function patchVite(projectDir: string) {
       )
     ) {
       nextContent = nextContent.replace(
-        'import { ThemeProvider } from "@/components/theme-provider.tsx"\n',
+        /import { ThemeProvider } from "@\/components\/theme-provider\.tsx"\r?\n/,
         'import { ThemeProvider } from "@/components/theme-provider.tsx"\nimport { ExternalLinkGuard } from "./components/external-link-guard.tsx"\n',
       );
     }
@@ -216,8 +216,8 @@ function patchVite(projectDir: string) {
     }
 
     const patchedContent = nextContent.replace(
-      "<ThemeProvider>\n      <main><App /></main>",
-      "<ThemeProvider>\n      <ExternalLinkGuard />\n      <main><App /></main>",
+      /<ThemeProvider>\r?\n(\s*)<main><App \/><\/main>/,
+      "<ThemeProvider>\n$1<ExternalLinkGuard />\n$1<main><App /></main>",
     );
 
     if (patchedContent === nextContent) {
