@@ -239,12 +239,6 @@ async function main() {
     step.message("Applying the external link guard battery");
     await applyExternalLinkGuard(options.targetDir, options);
 
-    step.message("Applying the development debug panel battery");
-    await applyDebugPanel(options.targetDir, options);
-
-    step.message("Applying the desktop selection-behavior battery");
-    await applySelectionBehavior(options.targetDir, options);
-
     if (options.includeStarterUI) {
       step.message("Installing the starter dashboard");
 
@@ -261,6 +255,12 @@ async function main() {
         }
       }
     }
+
+    step.message("Applying the development debug panel battery");
+    await applyDebugPanel(options.targetDir, options);
+
+    step.message("Applying the desktop selection-behavior battery");
+    await applySelectionBehavior(options.targetDir, options);
 
     if (options.includeInvokeExample) {
       step.message("Adding the Rust invoke example");

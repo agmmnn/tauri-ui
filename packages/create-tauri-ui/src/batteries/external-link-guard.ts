@@ -216,8 +216,8 @@ function patchVite(projectDir: string) {
     }
 
     const patchedContent = nextContent.replace(
-      /<ThemeProvider>\r?\n(\s*)<main><App \/><\/main>/,
-      "<ThemeProvider>\n$1<ExternalLinkGuard />\n$1<main><App /></main>",
+      /<ThemeProvider>\r?\n(\s*)<main(?:\s+data-ui-scroll-container)?><App \/><\/main>/,
+      '<ThemeProvider>\n$1<ExternalLinkGuard />\n$1<main data-ui-scroll-container><App /></main>',
     );
 
     if (patchedContent === nextContent) {
@@ -258,8 +258,8 @@ function patchNext(projectDir: string) {
     }
 
     const patchedContent = nextContent.replace(
-      "<main>{children}</main>",
-      "<main><ExternalLinkGuard />{children}</main>",
+      /<main(?:\s+data-ui-scroll-container)?>\{children\}<\/main>/,
+      "<main data-ui-scroll-container><ExternalLinkGuard />{children}</main>",
     );
 
     if (patchedContent === nextContent) {
@@ -293,8 +293,8 @@ function patchStart(projectDir: string) {
     }
 
     const patchedContent = nextContent.replace(
-      "<main>{children}</main>",
-      "<main><ExternalLinkGuard />{children}</main>",
+      /<main(?:\s+data-ui-scroll-container)?>\{children\}<\/main>/,
+      "<main data-ui-scroll-container><ExternalLinkGuard />{children}</main>",
     );
 
     if (patchedContent === nextContent) {
@@ -369,8 +369,8 @@ function patchAstro(projectDir: string) {
     }
 
     const patchedContent = nextContent.replace(
-      "  <body>\n    <main><slot /></main>\n  </body>",
-      "  <body>\n    <main><ExternalLinkGuard client:load /><slot /></main>\n  </body>",
+      /  <body>\n    <main(?:\s+data-ui-scroll-container)?><slot \/><\/main>\n  <\/body>/,
+      "  <body>\n    <main data-ui-scroll-container><ExternalLinkGuard client:load /><slot /></main>\n  </body>",
     );
 
     if (patchedContent === nextContent) {

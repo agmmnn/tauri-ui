@@ -18,6 +18,13 @@ const TEMPLATE_LABELS: Record<TemplateName, string> = {
   astro: "Astro",
 };
 
+const TARGET_OS_LABELS: Record<string, string> = {
+  "windows-latest": "Windows",
+  "macos-latest": "macOS (Apple Silicon, Intel)",
+  "ubuntu-22.04": "Linux",
+  "ubuntu-latest": "Linux",
+};
+
 function unwrapPrompt<T>(value: T | symbol, message = "Operation cancelled") {
   if (isCancel(value)) {
     throw new Error(message);
@@ -50,6 +57,13 @@ function withTextDefault(value: string) {
     placeholder: value,
     defaultValue: value,
   };
+}
+
+function normalizePreset(value: string) {
+  const trimmed = value.trim().replace(/^['"]|['"]$/g, "");
+  const match = trimmed.match(/^(?:--preset(?:=|\s+))?(.+)$/);
+
+  return (match?.[1] ?? trimmed).trim();
 }
 
 export async function runPrompts(args: CliArgs, cwd = process.cwd()): Promise<ProjectOptions> {
@@ -148,14 +162,16 @@ export async function runPrompts(args: CliArgs, cwd = process.cwd()): Promise<Pr
         );
 
   const preset = args.preset
-    ? args.preset
+    ? normalizePreset(args.preset)
     : args.yes
       ? DEFAULT_PRESET
-      : unwrapPrompt(
-          await text({
-            message: "shadcn preset",
-            ...withTextDefault(DEFAULT_PRESET),
-          }),
+      : normalizePreset(
+          unwrapPrompt(
+            await text({
+              message: "shadcn preset",
+              ...withTextDefault(DEFAULT_PRESET),
+            }),
+          ),
         );
 
   const includeStarterUI =
@@ -194,14 +210,14 @@ export async function runPrompts(args: CliArgs, cwd = process.cwd()): Promise<Pr
   const targetOS = includeWorkflow
     ? args.yes
       ? [...TARGET_OS]
-      : unwrapPrompt(
+        : unwrapPrompt(
           await multiselect<string>({
-            message: "Target operating systems",
+            message: "GitHub workflow target operating systems",
             initialValues: [...TARGET_OS],
             required: true,
             options: TARGET_OS.map((value) => ({
               value,
-              label: value,
+              label: TARGET_OS_LABELS[value] ?? value,
             })),
           }),
         )

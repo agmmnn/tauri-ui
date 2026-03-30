@@ -14,6 +14,7 @@ import { attachConsole } from "@tauri-apps/plugin-log"
 import {
   AlertTriangleIcon,
   CopyIcon,
+  EllipsisIcon,
   ExternalLinkIcon,
   PinIcon,
   RefreshCwIcon,
@@ -24,13 +25,17 @@ import {
 import { Badge } from "__ALIAS_PREFIX__components/ui/badge"
 import { Button } from "__ALIAS_PREFIX__components/ui/button"
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "__ALIAS_PREFIX__components/ui/sheet"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "__ALIAS_PREFIX__components/ui/dropdown-menu"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "__ALIAS_PREFIX__components/ui/tabs"
-import { ToggleGroup, ToggleGroupItem } from "__ALIAS_PREFIX__components/ui/toggle-group"
 import {
   DEBUG_EVENT_NAME,
   type DebugEvent,
@@ -104,7 +109,54 @@ const DEBUG_PANEL_SIDE_KEY = "ctui-debug-panel-side"
 const DEBUG_PANEL_TAB_KEY = "ctui-debug-panel-tab"
 const DEBUG_PANEL_ATTACH_KEY = "ctui-debug-panel-attach"
 const SIDE_PANEL_WIDTH = 480
-const BOTTOM_PANEL_HEIGHT = 320
+const BOTTOM_PANEL_HEIGHT = 360
+const DEBUG_PANEL_THEME_STYLE_LIGHT = {
+  colorScheme: "light",
+  "--background": "oklch(0.955 0.006 250)",
+  "--foreground": "oklch(0.255 0.015 250)",
+  "--card": "oklch(0.985 0.004 250)",
+  "--card-foreground": "oklch(0.255 0.015 250)",
+  "--popover": "oklch(0.955 0.006 250)",
+  "--popover-foreground": "oklch(0.255 0.015 250)",
+  "--primary": "oklch(0.56 0.1 235)",
+  "--primary-foreground": "oklch(0.985 0 0)",
+  "--secondary": "oklch(0.925 0.008 250)",
+  "--secondary-foreground": "oklch(0.31 0.015 250)",
+  "--muted": "oklch(0.935 0.006 250)",
+  "--muted-foreground": "oklch(0.52 0.014 250)",
+  "--accent": "oklch(0.925 0.01 250)",
+  "--accent-foreground": "oklch(0.255 0.015 250)",
+  "--destructive": "oklch(0.63 0.20 24)",
+  "--destructive-foreground": "oklch(0.985 0 0)",
+  "--border": "oklch(0.86 0.008 250)",
+  "--input": "oklch(0.86 0.008 250)",
+  "--ring": "oklch(0.62 0.08 235)",
+  "--radius": "0.5rem",
+} as React.CSSProperties
+
+const DEBUG_PANEL_THEME_STYLE_DARK = {
+  colorScheme: "dark",
+  "--background": "oklch(0.205 0.012 250)",
+  "--foreground": "oklch(0.92 0.008 250)",
+  "--card": "oklch(0.235 0.012 250)",
+  "--card-foreground": "oklch(0.92 0.008 250)",
+  "--popover": "oklch(0.205 0.012 250)",
+  "--popover-foreground": "oklch(0.92 0.008 250)",
+  "--primary": "oklch(0.74 0.085 230)",
+  "--primary-foreground": "oklch(0.19 0.01 250)",
+  "--secondary": "oklch(0.28 0.012 250)",
+  "--secondary-foreground": "oklch(0.9 0.008 250)",
+  "--muted": "oklch(0.255 0.012 250)",
+  "--muted-foreground": "oklch(0.7 0.012 250)",
+  "--accent": "oklch(0.28 0.012 250)",
+  "--accent-foreground": "oklch(0.92 0.008 250)",
+  "--destructive": "oklch(0.66 0.19 24)",
+  "--destructive-foreground": "oklch(0.98 0 0)",
+  "--border": "oklch(0.36 0.01 250)",
+  "--input": "oklch(0.36 0.01 250)",
+  "--ring": "oklch(0.68 0.07 230)",
+  "--radius": "0.5rem",
+} as React.CSSProperties
 
 function isDebugPanelSide(value: string): value is DebugPanelSide {
   return value === "left" || value === "right" || value === "bottom"
@@ -176,17 +228,17 @@ function parsePluginLogMessage(message: string) {
 function getLogLevelClasses(level: string) {
   switch (level) {
     case "error":
-      return "border-destructive/40 bg-destructive/10 text-destructive"
+      return "border-destructive/25 bg-destructive/15 text-destructive"
     case "warn":
-      return "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+      return "border-amber-500/25 bg-amber-500/15 text-amber-600 dark:text-amber-400"
     case "info":
-      return "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+      return "border-emerald-500/25 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
     case "debug":
-      return "border-sky-500/40 bg-sky-500/10 text-sky-600 dark:text-sky-400"
+      return "border-sky-500/25 bg-sky-500/15 text-sky-600 dark:text-sky-400"
     case "trace":
-      return "border-border bg-muted/60 text-muted-foreground"
+      return "border-border/25 bg-muted text-muted-foreground"
     default:
-      return "border-border bg-muted/60 text-foreground"
+      return "border-border/25 bg-muted text-foreground"
   }
 }
 
@@ -205,20 +257,33 @@ function DebugSection({
   title,
   description,
   children,
+  className,
+  bodyClassName,
 }: {
   title: string
   description?: string
   children: React.ReactNode
+  className?: string
+  bodyClassName?: string
 }) {
   return (
-    <section className="space-y-3 rounded-xl border bg-card/60 p-4">
-      <div className="space-y-1">
-        <h3 className="text-sm font-medium">{title}</h3>
+    <section
+      className={cn(
+        "min-h-0 overflow-hidden rounded-lg border border-border/25 bg-card",
+        className
+      )}
+    >
+      <div className="border-b border-border/20 px-3 py-2">
+        <h3 className="text-[12px] font-semibold tracking-tight text-foreground">
+          {title}
+        </h3>
         {description ? (
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <p className="mt-0.5 text-[11px] leading-4 text-muted-foreground">
+            {description}
+          </p>
         ) : null}
       </div>
-      {children}
+      <div className={cn("min-h-0 p-3", bodyClassName)}>{children}</div>
     </section>
   )
 }
@@ -229,13 +294,16 @@ function KeyValueGrid({
   entries: Array<[label: string, value: React.ReactNode]>
 }) {
   return (
-    <dl className="grid gap-2 text-xs">
-      {entries.map(([label, value]) => (
+    <dl className="grid text-[11px] leading-5">
+      {entries.map(([label, value], index) => (
         <div
           key={label}
-          className="grid grid-cols-[110px_minmax(0,1fr)] items-start gap-3"
+          className={cn(
+            "grid grid-cols-[92px_minmax(0,1fr)] items-start gap-3 py-1",
+            index > 0 && "border-t border-border/20"
+          )}
         >
-          <dt className="text-muted-foreground">{label}</dt>
+          <dt className="text-muted-foreground/90">{label}</dt>
           <dd className="font-mono break-all text-foreground">{value}</dd>
         </div>
       ))}
@@ -391,14 +459,22 @@ export function DebugPanel() {
     updateThemeInfo()
 
     const mediaQuery = window.matchMedia(COLOR_SCHEME_QUERY)
+    const observer = new MutationObserver(() => {
+      updateThemeInfo()
+    })
     const handleMediaChange = () => {
       updateThemeInfo()
     }
 
     mediaQuery.addEventListener("change", handleMediaChange)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    })
 
     return () => {
       mediaQuery.removeEventListener("change", handleMediaChange)
+      observer.disconnect()
     }
   }, [])
 
@@ -794,7 +870,7 @@ export function DebugPanel() {
   }, [])
 
   React.useEffect(() => {
-    const mainElement = document.querySelector("main")
+    const mainElement = document.querySelector("[data-ui-scroll-container]")
 
     if (!(mainElement instanceof HTMLElement)) {
       return
@@ -854,89 +930,93 @@ export function DebugPanel() {
     }, 1200)
   }
 
+  const isBottomDock = panelSide === "bottom"
+  const runtimeCount =
+    invokeLogs.length + externalLinks.length + runtimeEvents.length + logEntries.length
+  const overviewLayoutClassName = isBottomDock
+    ? "grid min-h-full content-start gap-3 pr-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,0.9fr)]"
+    : "h-full space-y-3 overflow-y-auto pr-1"
+  const runtimeLayoutClassName = isBottomDock
+    ? "grid min-h-full content-start gap-3 pr-1 xl:grid-cols-2"
+    : "h-full space-y-3 overflow-y-auto pr-1"
+  const systemLayoutClassName = isBottomDock
+    ? "grid min-h-full content-start gap-3 pr-1 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]"
+    : "h-full space-y-3 overflow-y-auto pr-1"
+  const debugPanelThemeStyle =
+    themeInfo.current === "light"
+      ? DEBUG_PANEL_THEME_STYLE_LIGHT
+      : DEBUG_PANEL_THEME_STYLE_DARK
+
   const panelContent = (
     <>
-      <SheetHeader className="gap-3 border-b p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1">
-            {!attached && panelSide !== "bottom" ? (
-              <SheetTitle className="sr-only">Development Debug Panel</SheetTitle>
-            ) : null}
-            <h2 className="flex items-center gap-2 text-base font-medium text-foreground">
-              <TerminalSquareIcon className="size-4" />
+      <div className="border-b px-3 py-2">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <h2 className="flex items-center gap-2 text-[13px] font-semibold tracking-tight text-foreground">
+              <TerminalSquareIcon className="size-3.5" />
               Development Debug Panel
             </h2>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="inline-flex items-center rounded-md border bg-muted/40 px-2 py-1 text-xs">
-              <span
-                className={cn(
-                  "font-medium transition-colors",
-                  tauriReady ? "text-foreground" : "text-muted-foreground"
-                )}
-              >
-                Tauri
-              </span>
-              <span className="px-1 text-muted-foreground">/</span>
-              <span
-                className={cn(
-                  "font-medium transition-colors",
-                  tauriReady ? "text-muted-foreground" : "text-foreground"
-                )}
-              >
-                Web
-              </span>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => setOpen(false)}
-              aria-label="Close debug panel"
-            >
-              <XIcon className="size-4" />
-            </Button>
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span className="rounded-md border px-1.5 py-0.5 font-mono">Cmd/Ctrl + D</span>
-            <span>toggle panel</span>
-          </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <Button
               variant={attached ? "secondary" : "outline"}
               size="icon-sm"
+              className="size-7"
               onClick={() => setAttached((current) => !current)}
               aria-pressed={attached}
               aria-label={attached ? "Detach debug panel" : "Attach debug panel"}
               title={attached ? "Detach debug panel" : "Attach debug panel"}
             >
-              <PinIcon className="size-4" />
+              <PinIcon className="size-3.5" />
             </Button>
-            <ToggleGroup
-              type="single"
-              value={panelSide}
-              onValueChange={(value) => {
-                if (isDebugPanelSide(value)) {
-                  setPanelSide(value)
-                }
-              }}
-              variant="outline"
-              size="sm"
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon-sm" className="size-7" aria-label="Debug panel options">
+                  <EllipsisIcon className="size-3.5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuItem onClick={() => void handleCopySnapshot()}>
+                  <CopyIcon className="size-3.5" />
+                  {copied ? "Copied snapshot" : "Copy snapshot"}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => window.location.reload()}>
+                  <RefreshCwIcon className="size-3.5" />
+                  Reload app
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Dock</DropdownMenuLabel>
+                <DropdownMenuRadioGroup
+                  value={panelSide}
+                  onValueChange={(value) => {
+                    if (isDebugPanelSide(value)) {
+                      setPanelSide(value)
+                    }
+                  }}
+                >
+                  <DropdownMenuRadioItem value="left">Left</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem disabled>
+                  Toggle panel
+                <DropdownMenuShortcut>⌘/Ctrl+D</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="size-7"
+              onClick={() => setOpen(false)}
+              aria-label="Close debug panel"
             >
-              <ToggleGroupItem value="left" aria-label="Dock panel left">
-                Left
-              </ToggleGroupItem>
-              <ToggleGroupItem value="right" aria-label="Dock panel right">
-                Right
-              </ToggleGroupItem>
-              <ToggleGroupItem value="bottom" aria-label="Dock panel bottom">
-                Bottom
-              </ToggleGroupItem>
-            </ToggleGroup>
+              <XIcon className="size-3.5" />
+            </Button>
           </div>
         </div>
-      </SheetHeader>
+      </div>
 
       <Tabs
         value={activeTab}
@@ -945,31 +1025,38 @@ export function DebugPanel() {
             setActiveTab(value)
           }
         }}
-        className="min-h-0 flex-1 gap-0 px-4"
+        className="min-h-0 flex-1 gap-0 px-3"
       >
-        <TabsList className="w-full justify-start">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="runtime">
+        <TabsList className="-mx-3 grid h-9 w-[calc(100%+1.5rem)] grid-cols-4 justify-start border-y border-border/20 bg-muted p-0">
+          <TabsTrigger value="overview" className="h-9 rounded-none border-r border-border/20 px-2 text-[12px] font-medium">
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="runtime" className="h-9 rounded-none border-r border-border/20 px-2 text-[12px] font-medium">
             Runtime
-            {invokeLogs.length || externalLinks.length || runtimeEvents.length || logEntries.length ? (
-              <Badge variant="secondary" className="ml-1 h-5 min-w-5 px-1.5">
-                {invokeLogs.length + externalLinks.length + runtimeEvents.length + logEntries.length}
+            {runtimeCount ? (
+              <Badge variant="secondary" className="ml-1 h-4 min-w-4 rounded-sm px-1 text-[10px]">
+                {runtimeCount}
               </Badge>
             ) : null}
           </TabsTrigger>
-          <TabsTrigger value="system">System</TabsTrigger>
-          <TabsTrigger value="errors">
+          <TabsTrigger value="system" className="h-9 rounded-none border-r border-border/20 px-2 text-[12px] font-medium">
+            System
+          </TabsTrigger>
+          <TabsTrigger value="errors" className="h-9 rounded-none px-2 text-[12px] font-medium">
             Errors
             {errors.length ? (
-              <Badge variant="destructive" className="ml-1 h-5 min-w-5 px-1.5">
+              <Badge variant="destructive" className="ml-1 h-4 min-w-4 rounded-sm px-1 text-[10px]">
                 {errors.length}
               </Badge>
             ) : null}
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="min-h-0 flex-1 overflow-hidden pt-2">
-          <div className="h-full space-y-4 overflow-y-auto pr-1">
+        <TabsContent
+          value="overview"
+          className={cn("min-h-0 flex-1 pt-2", isBottomDock ? "overflow-y-auto" : "overflow-hidden")}
+        >
+          <div className={overviewLayoutClassName}>
             <DebugSection
               title="App"
               description="Static application metadata from Tauri v2."
@@ -980,10 +1067,12 @@ export function DebugPanel() {
                   ["URL", locationState.href || "Unavailable"],
                   ["Search", locationState.search || "(none)"],
                   ["Hash", locationState.hash || "(none)"],
+                  ["Bridge", tauriReady ? "Tauri" : "Web"],
                   ["Name", appInfo.name ?? "Unavailable"],
                   ["Version", appInfo.version ?? "Unavailable"],
                   ["Identifier", appInfo.identifier ?? "Unavailable"],
                   ["Tauri", appInfo.tauriVersion ?? "Unavailable"],
+                  ["Shortcut", "Cmd/Ctrl + D"],
                 ]}
               />
             </DebugSection>
@@ -1051,35 +1140,45 @@ export function DebugPanel() {
           </div>
         </TabsContent>
 
-        <TabsContent value="runtime" className="min-h-0 flex-1 overflow-hidden pt-2">
-          <div className="h-full space-y-4 overflow-y-auto pr-1">
+        <TabsContent
+          value="runtime"
+          className={cn("min-h-0 flex-1 pt-2", isBottomDock ? "overflow-y-auto" : "overflow-hidden")}
+        >
+          <div className={runtimeLayoutClassName}>
             <DebugSection
               title="Recent invoke() calls"
               description="Calls captured through the tracked Tauri helper."
+              bodyClassName="min-h-0"
             >
               {invokeLogs.length ? (
-                <div className="max-h-72 space-y-2 overflow-y-auto pr-1">
+                <div
+                  className={cn(
+                    "space-y-1.5 overflow-y-auto pr-1",
+                    isBottomDock ? "h-full" : "max-h-72"
+                  )}
+                >
                   {invokeLogs.map((entry) => {
                     if (entry.kind !== "invoke") {
                       return null
                     }
 
                     return (
-                      <div key={entry.id} className="rounded-lg border bg-background/70 p-3">
-                        <div className="mb-2 flex items-center justify-between gap-3">
-                          <div className="font-mono text-xs">{entry.command}</div>
+                      <div key={entry.id} className="rounded-md border border-border/20 bg-card p-2.5">
+                        <div className="mb-1.5 flex items-center justify-between gap-3">
+                          <div className="font-mono text-[11px]">{entry.command}</div>
                           <div className="flex items-center gap-2">
                             <Badge
                               variant={entry.status === "success" ? "secondary" : "destructive"}
+                              className="h-4 rounded-sm px-1 text-[10px]"
                             >
                               {entry.status}
                             </Badge>
-                            <span className="text-[11px] text-muted-foreground">
+                            <span className="text-[10px] text-muted-foreground">
                               {entry.durationMs} ms
                             </span>
                           </div>
                         </div>
-                        <pre className="overflow-x-auto rounded-md bg-muted/60 p-2 text-[11px] leading-relaxed break-words whitespace-pre-wrap">
+                        <pre className="overflow-x-auto rounded-md bg-muted p-2 text-[10px] leading-4 break-words whitespace-pre-wrap">
                           {JSON.stringify(
                             {
                               args: entry.args,
@@ -1102,43 +1201,31 @@ export function DebugPanel() {
             </DebugSection>
 
             <DebugSection
-              title="External links"
-              description="URLs intercepted by the external-link guard."
-            >
-              {externalLinks.length ? (
-                <ul className="max-h-56 space-y-2 overflow-y-auto pr-1 text-xs">
-                  {externalLinks.map((href, index) => (
-                    <li key={`${href}-${index}`} className="flex gap-2">
-                      <ExternalLinkIcon className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
-                      <span className="font-mono break-all">{href}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-xs text-muted-foreground">
-                  No external links opened yet.
-                </p>
-              )}
-            </DebugSection>
-
-            <DebugSection
               title="Runtime events"
               description="Recent Tauri window and emitted event activity."
+              bodyClassName="min-h-0"
             >
               {runtimeEvents.length ? (
-                <ul className="max-h-72 space-y-2 overflow-y-auto pr-1 text-xs">
+                <ul
+                  className={cn(
+                    "space-y-1.5 overflow-y-auto pr-1 text-[11px]",
+                    isBottomDock ? "h-full" : "max-h-72"
+                  )}
+                >
                   {newestFirst(runtimeEvents).map((entry) => (
-                    <li key={entry.id} className="relative rounded-lg border bg-background/70 p-3">
+                    <li key={entry.id} className="relative rounded-md border border-border/20 bg-card p-2.5">
                       {highlightedRuntimeEventIds.includes(entry.id) ? <EntryHighlight /> : null}
                       <div className="mb-1 flex items-center justify-between gap-3">
                         <span className="font-mono">{entry.name}</span>
-                        <Badge variant="outline">{entry.source}</Badge>
+                        <Badge variant="outline" className="h-4 rounded-sm px-1 text-[10px]">
+                          {entry.source}
+                        </Badge>
                       </div>
-                      <div className="mb-2 text-[11px] text-muted-foreground">
+                      <div className="mb-1.5 text-[10px] text-muted-foreground">
                         {formatTimestamp(entry.timestamp)}
                       </div>
                       {entry.payload !== undefined ? (
-                        <pre className="overflow-x-auto rounded-md bg-muted/60 p-2 text-[11px] leading-relaxed break-words whitespace-pre-wrap">
+                        <pre className="overflow-x-auto rounded-md bg-muted p-2 text-[10px] leading-4 break-words whitespace-pre-wrap">
                           {JSON.stringify(entry.payload, null, 2)}
                         </pre>
                       ) : null}
@@ -1155,14 +1242,20 @@ export function DebugPanel() {
             <DebugSection
               title="Plugin logs"
               description="Recent logs surfaced through the browser console and Tauri log plugin."
+              bodyClassName="min-h-0"
             >
               {logEntries.length ? (
-                <ul className="max-h-72 space-y-2 overflow-y-auto pr-1 text-xs">
+                <ul
+                  className={cn(
+                    "space-y-1.5 overflow-y-auto pr-1 text-[11px]",
+                    isBottomDock ? "h-full" : "max-h-72"
+                  )}
+                >
                   {newestFirst(logEntries).map((entry) => {
                     const parsed = parsePluginLogMessage(entry.message)
 
                     return (
-                      <li key={entry.id} className="relative rounded-lg border bg-background/70 p-3">
+                      <li key={entry.id} className="relative rounded-md border border-border/20 bg-card p-2.5">
                         {highlightedLogIds.includes(entry.id) ? <EntryHighlight /> : null}
                         {parsed ? (
                           <div className="space-y-2">
@@ -1171,33 +1264,35 @@ export function DebugPanel() {
                                 <div className="flex min-w-0 items-center gap-2">
                                   <span
                                     className={cn(
-                                      "inline-flex rounded-md border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide",
+                                      "inline-flex rounded-sm border px-1 py-0.5 text-[10px] font-medium uppercase tracking-wide",
                                       getLogLevelClasses(parsed.level)
                                     )}
                                   >
                                     {parsed.level}
                                   </span>
-                                  <span className="truncate font-mono text-[11px] text-muted-foreground">
+                                  <span className="truncate font-mono text-[10px] text-muted-foreground">
                                     {parsed.target}
                                   </span>
                                 </div>
                               </div>
-                              <div className="shrink-0 text-right text-[11px] text-muted-foreground">
+                              <div className="shrink-0 text-right text-[10px] text-muted-foreground">
                                 <div>{parsed.time}</div>
                                 <div>{parsed.date}</div>
                               </div>
                             </div>
-                            <p className="font-mono break-words text-foreground">{parsed.text}</p>
+                            <p className="font-mono break-words text-[11px] text-foreground">{parsed.text}</p>
                           </div>
                         ) : (
                           <>
                             <div className="mb-1 flex items-center justify-between gap-3">
-                              <Badge variant="outline">{entry.level}</Badge>
-                              <span className="text-[11px] text-muted-foreground">
+                              <Badge variant="outline" className="h-4 rounded-sm px-1 text-[10px]">
+                                {entry.level}
+                              </Badge>
+                              <span className="text-[10px] text-muted-foreground">
                                 {formatTimestamp(entry.timestamp)}
                               </span>
                             </div>
-                            <p className="font-mono break-words text-foreground">
+                            <p className="font-mono break-words text-[11px] text-foreground">
                               {entry.message}
                             </p>
                           </>
@@ -1212,16 +1307,45 @@ export function DebugPanel() {
                 </p>
               )}
             </DebugSection>
+
+            <DebugSection
+              title="External links"
+              description="URLs intercepted by the external-link guard."
+              bodyClassName="min-h-0"
+            >
+              {externalLinks.length ? (
+                <ul
+                  className={cn(
+                    "space-y-1.5 overflow-y-auto pr-1 text-[11px]",
+                    isBottomDock ? "h-full" : "max-h-56"
+                  )}
+                >
+                  {externalLinks.map((href, index) => (
+                    <li key={`${href}-${index}`} className="flex gap-2 rounded-md border border-border/20 bg-card p-2">
+                      <ExternalLinkIcon className="mt-0.5 size-3 shrink-0 text-muted-foreground" />
+                      <span className="font-mono break-all">{href}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  No external links opened yet.
+                </p>
+              )}
+            </DebugSection>
           </div>
         </TabsContent>
 
-        <TabsContent value="system" className="min-h-0 flex-1 overflow-hidden pt-2">
-          <div className="h-full space-y-4 overflow-y-auto pr-1">
+        <TabsContent
+          value="system"
+          className={cn("min-h-0 flex-1 pt-2", isBottomDock ? "overflow-y-auto" : "overflow-hidden")}
+        >
+          <div className={systemLayoutClassName}>
             <DebugSection
               title="Paths"
               description="Resolved Tauri application directories."
             >
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {[
                   ["App data", pathInfo.appDataDir],
                   ["App config", pathInfo.appConfigDir],
@@ -1229,18 +1353,13 @@ export function DebugPanel() {
                 ].map(([label, value]) => (
                   <div
                     key={label}
-                    className="grid grid-cols-[110px_minmax(0,1fr)_auto] items-start gap-3 text-xs"
+                    className="grid grid-cols-[92px_minmax(0,1fr)_auto] items-start gap-3 border-t border-border/20 py-1 text-[11px] first:border-t-0 first:pt-0"
                   >
                     <div className="text-muted-foreground">{label}</div>
                     <div className="font-mono break-all text-foreground">
                       {value ?? "Unavailable"}
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      disabled={!value}
-                      onClick={() => value && void handleCopyText(value)}
-                    >
+                    <Button variant="ghost" size="sm" disabled={!value} onClick={() => value && void handleCopyText(value)}>
                       <CopyIcon className="size-3.5" />
                       Copy
                     </Button>
@@ -1249,24 +1368,27 @@ export function DebugPanel() {
               </div>
             </DebugSection>
 
-            <DebugSection title="Webview" description="Current webview identity.">
+            <DebugSection
+              title="Webview"
+              description="Current webview identity."
+            >
               <KeyValueGrid entries={[["Current label", windowInfo.label]]} />
             </DebugSection>
           </div>
         </TabsContent>
 
         <TabsContent value="errors" className="min-h-0 flex-1 overflow-hidden pt-2">
-          <div className="h-full space-y-4 overflow-y-auto pr-1">
+          <div className="h-full overflow-y-auto pr-1">
             <DebugSection
               title="Recent errors"
               description="Uncaught runtime errors and unhandled promise rejections."
             >
               {errors.length ? (
-                <ul className="space-y-2 text-xs">
+                <ul className="space-y-1.5 text-[11px]">
                   {errors.map((entry) => (
                     <li
                       key={entry.id}
-                      className="rounded-lg border bg-background/70 p-3"
+                      className="rounded-md border border-border/20 bg-card p-2.5"
                     >
                       <div className="mb-1 flex items-center gap-2">
                         <AlertTriangleIcon className="size-3.5 text-destructive" />
@@ -1290,22 +1412,12 @@ export function DebugPanel() {
           </div>
         </TabsContent>
 
-        <div className="mt-4 flex shrink-0 flex-wrap gap-2 border-t py-3">
-          <Button onClick={handleCopySnapshot} variant="outline" size="sm">
-            <CopyIcon className="size-4" />
-            {copied ? "Copied" : "Copy snapshot"}
-          </Button>
-          <Button onClick={() => window.location.reload()} variant="outline" size="sm">
-            <RefreshCwIcon className="size-4" />
-            Reload app
-          </Button>
-        </div>
       </Tabs>
     </>
   )
 
-  const attachedPanelClassName = cn(
-    "ui-selectable fixed z-50 flex overflow-hidden bg-popover text-sm text-popover-foreground shadow-lg",
+  const panelFrameClassName = cn(
+    "ui-selectable fixed z-50 flex overflow-hidden border border-border/25 bg-background text-[12px] text-foreground",
     panelSide === "bottom"
       ? "inset-x-0 bottom-0 flex-col border-t"
       : panelSide === "left"
@@ -1315,40 +1427,18 @@ export function DebugPanel() {
 
   return (
     <>
-      {attached ? (
-        open ? (
-          <div
-            className={attachedPanelClassName}
-            style={
-              panelSide === "bottom"
-                ? { height: `${BOTTOM_PANEL_HEIGHT}px` }
-                : { width: `${SIDE_PANEL_WIDTH}px` }
-            }
-          >
-            {panelContent}
-          </div>
-        ) : null
-      ) : panelSide === "bottom" ? (
-        open ? (
-          <div
-            className="ui-selectable fixed inset-x-0 bottom-0 z-50 flex flex-col overflow-hidden border-t bg-popover text-sm text-popover-foreground shadow-lg"
-            style={{ height: `${BOTTOM_PANEL_HEIGHT}px` }}
-          >
-            {panelContent}
-          </div>
-        ) : null
-      ) : (
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetContent
-            side={panelSide}
-            showCloseButton={false}
-            className="ui-selectable flex h-full max-w-[92vw] flex-col gap-0 overflow-hidden p-0"
-            style={{ width: `${SIDE_PANEL_WIDTH}px` }}
-          >
-            {panelContent}
-          </SheetContent>
-        </Sheet>
-      )}
+      {open ? (
+        <div
+          className={panelFrameClassName}
+          style={
+            panelSide === "bottom"
+              ? { ...debugPanelThemeStyle, height: `${BOTTOM_PANEL_HEIGHT}px` }
+              : { ...debugPanelThemeStyle, width: `${SIDE_PANEL_WIDTH}px` }
+          }
+        >
+          {panelContent}
+        </div>
+      ) : null}
     </>
   )
 }

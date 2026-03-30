@@ -85,7 +85,7 @@ function componentImportPath(options: ProjectOptions) {
 }
 
 async function ensureUiComponents(projectDir: string, options: ProjectOptions) {
-  for (const component of ["button", "badge", "sheet", "tabs", "toggle-group"]) {
+  for (const component of ["button", "badge", "dropdown-menu", "tabs"]) {
     const componentPath = path.join(uiDir(projectDir, options), `${component}.tsx`);
 
     if (fs.existsSync(componentPath)) {
@@ -264,8 +264,8 @@ function patchVite(projectDir: string, options: ProjectOptions) {
     }
 
     const patchedContent = nextContent.replace(
-      /<ExternalLinkGuard \/>\r?\n(\s*)<main><App \/><\/main>/,
-      "<ExternalLinkGuard />\n$1{import.meta.env.DEV ? <DebugPanel /> : null}\n$1<main><App /></main>",
+      /<ExternalLinkGuard \/>\r?\n(\s*)<main(?:\s+data-ui-scroll-container)?><App \/><\/main>/,
+      '<ExternalLinkGuard />\n$1{import.meta.env.DEV ? <DebugPanel /> : null}\n$1<main data-ui-scroll-container><App /></main>',
     );
 
     if (patchedContent === nextContent) {
@@ -308,7 +308,7 @@ function patchNext(projectDir: string, options: ProjectOptions) {
     }
 
     const patchedContent = nextContent.replace(
-      "<ExternalLinkGuard />{children}",
+      /<ExternalLinkGuard \/>\{children\}/,
       '<ExternalLinkGuard />{process.env.NODE_ENV === "development" ? <DebugPanel /> : null}{children}',
     );
 
@@ -339,8 +339,8 @@ function patchStart(projectDir: string, options: ProjectOptions) {
     }
 
     const patchedContent = nextContent.replace(
-      "<main><ExternalLinkGuard />{children}</main>",
-      "<main><ExternalLinkGuard />{import.meta.env.DEV ? <DebugPanel /> : null}{children}</main>",
+      /<main(?:\s+data-ui-scroll-container)?><ExternalLinkGuard \/>\{children\}<\/main>/,
+      "<main data-ui-scroll-container><ExternalLinkGuard />{import.meta.env.DEV ? <DebugPanel /> : null}{children}</main>",
     );
 
     if (patchedContent === nextContent) {
@@ -404,8 +404,8 @@ function patchAstro(projectDir: string, options: ProjectOptions) {
     }
 
     const patchedContent = nextContent.replace(
-      "<main><ExternalLinkGuard client:load /><slot /></main>",
-      "<main><ExternalLinkGuard client:load />{import.meta.env.DEV ? <DebugPanel client:load /> : null}<slot /></main>",
+      /<main(?:\s+data-ui-scroll-container)?><ExternalLinkGuard client:load \/><slot \/><\/main>/,
+      "<main data-ui-scroll-container><ExternalLinkGuard client:load />{import.meta.env.DEV ? <DebugPanel client:load /> : null}<slot /></main>",
     );
 
     if (patchedContent === nextContent) {

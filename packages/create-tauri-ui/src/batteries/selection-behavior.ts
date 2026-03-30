@@ -5,10 +5,12 @@ import { PatchError, editFile } from "../utils";
 
 const SELECTION_BEHAVIOR_CSS = `
 @layer base {
+  /* Desktop UIs often feel cleaner with accidental text selection disabled by default. */
   body {
     @apply select-none;
   }
 
+  /* Keep editing and code surfaces selectable so inputs and diagnostics still work normally. */
   input,
   textarea,
   [contenteditable="true"],
@@ -19,6 +21,7 @@ const SELECTION_BEHAVIOR_CSS = `
 }
 
 @layer utilities {
+  /* Opt back into selection for any generated UI surface that should behave like regular text. */
   .ui-selectable {
     @apply select-text;
   }
