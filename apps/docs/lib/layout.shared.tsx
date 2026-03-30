@@ -13,41 +13,41 @@ function GithubIcon() {
 
 export const homeLinks: LinkItemType[] = [
   {
-    text: "Docs",
+    text: "Documentation",
     url: "/docs",
     active: "nested-url",
   },
-  {
-    text: "Getting started",
-    url: "/docs/getting-started",
-    active: "nested-url",
-  },
-  {
-    text: "CLI",
-    url: "/docs/cli",
-    active: "nested-url",
-  },
+  // {
+  //   text: "Getting started",
+  //   url: "/docs/getting-started",
+  //   active: "nested-url",
+  // },
+  // {
+  //   text: "CLI",
+  //   url: "/docs/cli",
+  //   active: "nested-url",
+  // },
 ];
 
 export const docsLinks: LinkItemType[] = [
-  {
-    text: "Get started",
-    url: "/docs/getting-started",
-    icon: <Rocket className="size-4" />,
-    active: "nested-url",
-  },
-  {
-    text: "CLI",
-    url: "/docs/cli",
-    icon: <TerminalSquare className="size-4" />,
-    active: "nested-url",
-  },
-  {
-    text: "Examples",
-    url: "/docs/guides/examples",
-    icon: <BookOpen className="size-4" />,
-    active: "nested-url",
-  },
+  // {
+  //   text: "Get started",
+  //   url: "/docs/getting-started",
+  //   icon: <Rocket className="size-4" />,
+  //   active: "nested-url",
+  // },
+  // {
+  //   text: "CLI",
+  //   url: "/docs/cli",
+  //   icon: <TerminalSquare className="size-4" />,
+  //   active: "nested-url",
+  // },
+  // {
+  //   text: "Examples",
+  //   url: "/docs/guides/examples",
+  //   icon: <BookOpen className="size-4" />,
+  //   active: "nested-url",
+  // },
   {
     type: "icon",
     url: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,

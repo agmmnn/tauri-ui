@@ -1,7 +1,0 @@
-{
-  "root": true,
-  "title": "Batteries",
-  "description": "Desktop defaults and optional extras.",
-  "icon": "BatteryCharging",
-  "pages": ["index", "debug-panel", "size-optimization", "release-workflow"]
-}

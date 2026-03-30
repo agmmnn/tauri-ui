@@ -1,3 +1,20 @@
 {
-  "pages": ["index", "getting-started", "cli", "templates", "batteries", "guides"]
+  "pages": [
+    "index",
+    "getting-started",
+    "installation",
+    "first-app",
+    "cli",
+    "cli-options",
+    "cli-presets",
+    "templates",
+    "framework-support",
+    "batteries",
+    "debug-panel",
+    "release-workflow",
+    "size-optimization",
+    "examples",
+    "release-demos",
+    "faq"
+  ]
 }

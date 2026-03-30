@@ -1,7 +1,0 @@
-{
-  "root": true,
-  "title": "CLI",
-  "description": "Commands, flags, presets, and prompts.",
-  "icon": "Terminal",
-  "pages": ["index", "options", "presets"]
-}

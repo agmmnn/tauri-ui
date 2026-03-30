@@ -1,7 +1,0 @@
-{
-  "root": true,
-  "title": "Templates",
-  "description": "Framework support and template notes.",
-  "icon": "PanelsTopLeft",
-  "pages": ["index", "framework-support"]
-}

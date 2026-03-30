@@ -1,7 +1,0 @@
-{
-  "root": true,
-  "title": "Guides",
-  "description": "Examples, release notes, and FAQ.",
-  "icon": "Sparkles",
-  "pages": ["examples", "release-demo", "faq"]
-}

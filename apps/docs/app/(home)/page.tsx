@@ -3,19 +3,14 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import PixelBlast from "@/components/pixel-blast";
 import {
-  AppWindow,
   BatteryCharging,
-  BookOpen,
   Boxes,
   Command,
   Gauge,
-  Rocket,
   TerminalIcon,
-  TerminalSquare,
 } from "lucide-react";
 import { CopyToClipboardButton, CreateAppAnimation } from "./page.client";
 import { ServerCodeBlock } from "fumadocs-ui/components/codeblock.rsc";
-import { Button } from "@base-ui/react";
 
 type FeatureTone = "brand";
 
