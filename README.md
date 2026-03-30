@@ -1,9 +1,9 @@
 <div align="center">
 
-# tauri-ui
-
 <a href="https://tauriui.vercel.app/"><img src="https://github.com/agmmnn/tauri-ui/assets/16024979/9c694ee2-f2c8-4bec-9c06-c3a6f7d4f901" width="44" height="44" alt="crab"/></a>
 <img alt="tauri-ui" src="https://github.com/user-attachments/assets/522ae78b-77d9-4cc2-b63f-41adafae4aaa" />
+
+# tauri-ui
 
 [![npm](https://img.shields.io/npm/v/create-tauri-ui?style=flat&color=18181b)](https://npmjs.com/package/create-tauri-ui)
 [![release](https://img.shields.io/github/v/release/agmmnn/tauri-ui?style=flat&color=18181b)](https://github.com/agmmnn/tauri-ui/releases/latest)
