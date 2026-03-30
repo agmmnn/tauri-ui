@@ -217,7 +217,7 @@ function patchVite(projectDir: string) {
 
     const patchedContent = nextContent.replace(
       /<ThemeProvider>\r?\n(\s*)<main(?:\s+data-ui-scroll-container)?><App \/><\/main>/,
-      '<ThemeProvider>\n$1<ExternalLinkGuard />\n$1<main data-ui-scroll-container><App /></main>',
+      "<ThemeProvider>\n$1<ExternalLinkGuard />\n$1<main data-ui-scroll-container><App /></main>",
     );
 
     if (patchedContent === nextContent) {

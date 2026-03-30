@@ -12,6 +12,7 @@ import { applyIcon } from "./batteries/icon";
 import { applyInvokeExample } from "./batteries/invoke-example";
 import { applyScrollContainer } from "./batteries/scroll-container";
 import { applySelectionBehavior } from "./batteries/selection-behavior";
+import { applySizeOptimization } from "./batteries/size-optimization";
 import { applyWorkflow } from "./batteries/workflow";
 import { applyTauriConfig, mergeTauri } from "./merge";
 import { runPrompts } from "./prompts";
@@ -27,6 +28,15 @@ import {
   unregisterCleanupPath,
 } from "./utils";
 
+function getCliVersion() {
+  const packageJsonPath = new URL("../package.json", import.meta.url);
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8")) as {
+    version?: string;
+  };
+
+  return packageJson.version ?? "0.0.0";
+}
+
 function printHelp() {
   console.log(`Usage: create-tauri-ui [target-dir] [options]
 
@@ -34,6 +44,8 @@ Options:
   -t, --template <name>         vite | next | start | react-router | astro
       --identifier <value>      set the Tauri app identifier
       --preset <value>          set the shadcn preset (default: b0)
+      --size-optimize           optimize the Tauri app for smaller release binaries
+      --no-size-optimize        skip size optimization
       --starter                 include the starter dashboard
       --no-starter              skip the starter dashboard
       --invoke-example          include the Rust invoke example
@@ -42,6 +54,7 @@ Options:
       --no-workflow             skip the GitHub release workflow
   -f, --force                   overwrite an existing target directory
   -y, --yes                     accept defaults
+  -v, --version                 display version
   -h, --help                    display help`);
 }
 
@@ -67,6 +80,10 @@ function parseArgs(argv: string[]): CliArgs {
       case "--help":
         args.help = true;
         break;
+      case "-v":
+      case "--version":
+        args.version = true;
+        break;
       case "-t":
       case "--template":
         args.template = readValue(index, token) as CliArgs["template"];
@@ -79,6 +96,12 @@ function parseArgs(argv: string[]): CliArgs {
       case "--preset":
         args.preset = readValue(index, token);
         index += 1;
+        break;
+      case "--size-optimize":
+        args.includeSizeOptimization = true;
+        break;
+      case "--no-size-optimize":
+        args.includeSizeOptimization = false;
         break;
       case "--starter":
         args.includeStarterUI = true;
@@ -195,6 +218,11 @@ async function main() {
     return;
   }
 
+  if (args.version) {
+    console.log(getCliVersion());
+    return;
+  }
+
   intro(pc.bold("create-tauri-ui"));
   await ensureBun();
 
@@ -229,6 +257,11 @@ async function main() {
     }
 
     await applyTauriConfig(options.targetDir, options, adapter.tauriConfig());
+
+    if (options.includeSizeOptimization) {
+      step.message("Applying the app size optimization battery");
+      await applySizeOptimization(options.targetDir, options);
+    }
 
     step.message("Applying the startup flash-prevention battery");
     await applyFlashPrevention(options.targetDir);

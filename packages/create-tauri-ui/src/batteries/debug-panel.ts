@@ -265,7 +265,7 @@ function patchVite(projectDir: string, options: ProjectOptions) {
 
     const patchedContent = nextContent.replace(
       /<ExternalLinkGuard \/>\r?\n(\s*)<main(?:\s+data-ui-scroll-container)?><App \/><\/main>/,
-      '<ExternalLinkGuard />\n$1{import.meta.env.DEV ? <DebugPanel /> : null}\n$1<main data-ui-scroll-container><App /></main>',
+      "<ExternalLinkGuard />\n$1{import.meta.env.DEV ? <DebugPanel /> : null}\n$1<main data-ui-scroll-container><App /></main>",
     );
 
     if (patchedContent === nextContent) {

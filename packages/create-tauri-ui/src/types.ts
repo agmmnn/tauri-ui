@@ -11,11 +11,13 @@ export interface CliArgs {
   template?: TemplateName;
   identifier?: string;
   preset?: string;
+  includeSizeOptimization?: boolean;
   includeStarterUI?: boolean;
   includeInvokeExample?: boolean;
   includeWorkflow?: boolean;
   yes?: boolean;
   force?: boolean;
+  version?: boolean;
   help?: boolean;
 }
 
@@ -25,6 +27,7 @@ export interface ProjectOptions {
   template: TemplateName;
   identifier: string;
   preset: string;
+  includeSizeOptimization: boolean;
   includeStarterUI: boolean;
   includeInvokeExample: boolean;
   includeWorkflow: boolean;

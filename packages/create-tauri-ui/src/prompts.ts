@@ -185,6 +185,17 @@ export async function runPrompts(args: CliArgs, cwd = process.cwd()): Promise<Pr
           }),
         ));
 
+  const includeSizeOptimization =
+    args.includeSizeOptimization ??
+    (args.yes
+      ? false
+      : unwrapPrompt(
+          await confirm({
+            message: "Optimize app size?",
+            initialValue: true,
+          }),
+        ));
+
   const includeInvokeExample =
     args.includeInvokeExample ??
     (args.yes
@@ -210,7 +221,7 @@ export async function runPrompts(args: CliArgs, cwd = process.cwd()): Promise<Pr
   const targetOS = includeWorkflow
     ? args.yes
       ? [...TARGET_OS]
-        : unwrapPrompt(
+      : unwrapPrompt(
           await multiselect<string>({
             message: "GitHub workflow target operating systems",
             initialValues: [...TARGET_OS],
@@ -229,6 +240,7 @@ export async function runPrompts(args: CliArgs, cwd = process.cwd()): Promise<Pr
     template,
     identifier,
     preset,
+    includeSizeOptimization,
     includeStarterUI,
     includeInvokeExample,
     includeWorkflow,

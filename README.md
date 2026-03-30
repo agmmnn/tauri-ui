@@ -1,109 +1,84 @@
 <div align="center">
-<a href="https://tauriui.vercel.app/"><img src="https://github.com/agmmnn/tauri-ui/assets/16024979/9c694ee2-f2c8-4bec-9c06-c3a6f7d4f901" width="44" height="44" alt="crab"/></a> 
-<img src="https://github.com/user-attachments/assets/8e46eca9-458e-49f6-85c4-19d3834c16e3" alt="tauri-ui"/>
 
 # tauri-ui
 
+<a href="https://tauriui.vercel.app/"><img src="https://github.com/agmmnn/tauri-ui/assets/16024979/9c694ee2-f2c8-4bec-9c06-c3a6f7d4f901" width="44" height="44" alt="crab"/></a>
+<img alt="tauri-ui" src="https://github.com/user-attachments/assets/522ae78b-77d9-4cc2-b63f-41adafae4aaa" />
+
+[![npm](https://img.shields.io/npm/v/create-tauri-ui?style=flat&color=18181b)](https://npmjs.com/package/create-tauri-ui)
+[![release](https://img.shields.io/github/v/release/agmmnn/tauri-ui?style=flat&color=18181b)](https://github.com/agmmnn/tauri-ui/releases/latest)
+[![tauri](https://img.shields.io/badge/tauri-v2-black?style=flat&logo=tauri&color=18181b)](https://tauri.app)
+[![shadcn/ui](https://img.shields.io/badge/shadcn/ui-black?style=flat&logo=shadcnuit&color=18181b)](https://ui.shadcn.com)
+[![license](https://img.shields.io/github/license/agmmnn/tauri-ui?style=flat&color=18181b)](LICENSE)
+
 </div>
 
-Create modern Tauri desktop apps with `shadcn/ui` and a desktop-first default setup.
+> ⚡ The fastest way to build a Tauri desktop app with [shadcn/ui](https://ui.shadcn.com/).
 
-`create-tauri-ui` scaffolds the frontend with the upstream `shadcn` CLI, generates the native shell with `create-tauri-app`, and merges the result into a Tauri-ready project. The goal is to stay close to upstream tools without maintaining a large local template tree.
+One command → shadcn frontend + native shell + desktop-ready defaults.  
+No template to maintenance.
 
-## Features
-
-- **🧱 Upstream-first scaffolding**: uses the `shadcn` CLI for the frontend and `create-tauri-app` for the native shell
-- **🖥️ Desktop defaults out of the box**: window sizing, startup flash prevention, external link guarding, overscroll prevention, and desktop-style selection behavior
-- **🔋 Built-in batteries**: optional starter dashboard, Rust invoke example, desktop release workflow, and a dev-only debug panel
-- **🧭 Framework-aware adapters**: tuned for `vite`, `next`, `start`, `react-router`, and `astro`
-- **🧹 Low-maintenance generator design**: no large local template tree, just a small asset and patch surface
-
-## Quick Start
-
-Primary commands:
+## Get started
 
 ```bash
-bun create tauri-ui my-app
-
-# direct binary command
-
-bunx create-tauri-ui@latest my-app
+bunx create-tauri-ui@latest
 ```
 
-Then run the generated app:
+> Each release includes a demo build showing the expected output — available in [Releases](https://github.com/agmmnn/tauri-ui/releases/latest).
 
-```bash
-cd my-app
-bun install
-bun run tauri dev
-```
+## 🔋 Batteries Included
 
-<details>
-<summary>Detailed Commands</summary>
+**👩‍💻 Desktop defaults**
 
-Generate a Vite app with defaults:
-
-```bash
-npm create tauri-ui@latest my-app -- --template vite --yes
-```
-
-Generate a Next.js app without the starter dashboard or workflow:
-
-```bash
-npm create tauri-ui@latest my-app -- --template next --yes --no-starter --no-workflow
-```
-
-Generate an Astro app with a custom identifier:
-
-```bash
-bun create tauri-ui my-app --template astro --identifier com.example.astroapp --yes
-```
-
-</details>
-
-## Batteries Included 🔋
-
-**Core setup**
-
-- `shadcn` frontend (upstream)
-- merged `src-tauri` native layer
-- framework adapters (`vite`, `next`, `start`, `react-router`, `astro`)
-
-**Desktop defaults**
-
-- centered `1400x918` window
-- no startup flash (delayed show)
+- no startup flash (hidden until first paint)
 - external links open in system browser
 - no overscroll / rubber-band scrolling
-- desktop-style selection (`select-none` + opt-in)
+- desktop-style selection behavior
+- sensible default window size and position
 
-**Dev tools**
-
-- built-in debug panel  
-  (invokes, events, logs, paths, webview info)
-
-**Assets**
-
-- included `app-icon.png`
-
-**Optional**
+**➕ Extras (optional)**
 
 - starter dashboard (`dashboard-01`)
 - Rust `invoke` example
+- smaller binary output (~65% smaller binary in our test)
 - GitHub Actions release workflow
 
-## How It Works
+**🛠 Debug Panel**
 
-```text
-prompts -> shadcn init -> create-tauri-app (temp) -> merge src-tauri -> apply framework patches -> add batteries
+- built-in debug panel for inspecting app state, invokes, events, logs, and system paths
+- dev-only, zero production impact
+- dockable and remembers its layout
+
+**🧱 Upstream UI**
+
+- `shadcn` frontend generated via official CLI
+- no forks, always up to date
+- adapters for `vite`, `next`, `react-router`, `astro`, `start`
+
+## Why tauri-ui
+
+A Tauri app isn’t desktop-ready by default.
+
+You still need to fix window behavior, startup flash, links, scrolling, and selection otherwise it feels like a wrapped website.
+
+`tauri-ui` handles this out of the box, while staying close to upstream.
+
+## How it works
+
+```
+prompts
+  → official shadcn/ui init
+  → official create-tauri-app setup
+  → combine frontend + native shell
+  → apply desktop-ready defaults
+  → add optional batteries
 ```
 
-This project avoids shipping full local project templates. It keeps a small local surface of assets and patch logic, and lets the upstream CLIs do the heavy lifting.
+No full local templates. Just a small asset and patch surface on top of the upstream CLIs.
 
-## Monorepo
+---
 
-This repository is a monorepo. The CLI package lives at [packages/create-tauri-ui](packages/create-tauri-ui).
-For the full package documentation, examples, CLI options, and development notes, see [packages/create-tauri-ui/README.md](packages/create-tauri-ui/README.md).
+📖 CLI reference and full options → [packages/create-tauri-ui](packages/create-tauri-ui/README.md)
 
 ## License
 
