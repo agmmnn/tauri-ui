@@ -1,0 +1,50 @@
+---
+title: CLI options
+description: Flags you can pass to create-tauri-ui.
+---
+
+## Core flags
+
+```bash
+-t, --template <name>
+    vite | next | start | react-router | astro
+
+--identifier <value>
+    set the Tauri app identifier
+
+--preset <value>
+    set the shadcn preset
+
+-y, --yes
+    accept defaults
+
+-f, --force
+    overwrite an existing target directory
+
+-v, --version
+    display version
+
+-h, --help
+    display help
+```
+
+## Optional batteries
+
+```bash
+--starter / --no-starter
+--invoke-example / --no-invoke-example
+--workflow / --no-workflow
+--size-optimize / --no-size-optimize
+```
+
+## Example
+
+```bash
+bunx create-tauri-ui@latest my-app \
+  --template vite \
+  --preset b0 \
+  --starter \
+  --workflow \
+  --size-optimize \
+  --yes
+```

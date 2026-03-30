@@ -1,0 +1,40 @@
+---
+title: Installation
+description: Requirements and the quickest install path.
+---
+
+## Requirements
+
+- [Bun](https://bun.sh)
+- Node.js 18+
+- Rust toolchain
+- Tauri system dependencies for your platform
+
+If you already have Bun and Rust installed, the simplest path is:
+
+```bash
+bunx create-tauri-ui@latest
+```
+
+## Generate into a new folder
+
+```bash
+bunx create-tauri-ui@latest my-app
+```
+
+## Generate with a specific template
+
+```bash
+bunx create-tauri-ui@latest my-app --template vite --yes
+```
+
+## Notes
+
+- Generated apps assume Bun in the project.
+- `apps/docs` in this repo documents the CLI itself, not a generated app.
+- Scaffolding into `.` is still not supported.
+
+<PreviewBlock
+  title="CLI prompt flow"
+  note="TODO: add a clean screenshot of the interactive prompt sequence."
+/>

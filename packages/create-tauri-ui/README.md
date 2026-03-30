@@ -56,21 +56,25 @@ Options:
 ## Examples
 
 **Vite app with all defaults:**
+
 ```bash
 npm create tauri-ui@latest my-app -- --template vite --yes
 ```
 
 **Next.js app, no dashboard, no workflow:**
+
 ```bash
 npm create tauri-ui@latest my-app -- --template next --yes --no-starter --no-workflow
 ```
 
 **Astro app with a custom bundle identifier:**
+
 ```bash
 bun create tauri-ui my-app --template astro --identifier com.example.astroapp --yes
 ```
 
 **Vite app with size-optimized release binary:**
+
 ```bash
 bun create tauri-ui my-app --template vite --size-optimize --yes
 ```
@@ -93,21 +97,21 @@ Every generated project gets:
 
 **Optional** (prompted during scaffolding, or passed as flags):
 
-| Battery | Flag | Notes |
-|---|---|---|
-| Starter dashboard | `--starter` / `--no-starter` | based on `dashboard-01` |
-| Rust invoke example | `--invoke-example` / `--no-invoke-example` | |
-| Size optimization | `--size-optimize` / `--no-size-optimize` | ~65% smaller release binary (9 MB → 3.1 MB) |
-| GitHub release workflow | `--workflow` / `--no-workflow` | |
+| Battery                 | Flag                                       | Notes                                       |
+| ----------------------- | ------------------------------------------ | ------------------------------------------- |
+| Starter dashboard       | `--starter` / `--no-starter`               | based on `dashboard-01`                     |
+| Rust invoke example     | `--invoke-example` / `--no-invoke-example` |                                             |
+| Size optimization       | `--size-optimize` / `--no-size-optimize`   | ~65% smaller release binary (9 MB → 3.1 MB) |
+| GitHub release workflow | `--workflow` / `--no-workflow`             |                                             |
 
 ## Template status
 
-| Template | Status |
-|---|---|
-| `vite` | smoke-tested end to end |
-| `next` | stable |
-| `react-router` | stable |
-| `astro` | stable |
+| Template           | Status                                          |
+| ------------------ | ----------------------------------------------- |
+| `vite`             | smoke-tested end to end                         |
+| `next`             | stable                                          |
+| `react-router`     | stable                                          |
+| `astro`            | stable                                          |
 | `start` (TanStack) | experimental — validate carefully after changes |
 
 Scaffolding into `.` (current directory) is not supported yet.
@@ -145,12 +149,14 @@ bun run --cwd packages/create-tauri-ui start -- --help
 ## Testing
 
 **Type check + build:**
+
 ```bash
 bun run --cwd packages/create-tauri-ui check-types
 bun run --cwd packages/create-tauri-ui build
 ```
 
 **Single template smoke test:**
+
 ```bash
 rm -rf /tmp/ctui-vite
 node packages/create-tauri-ui/index.js /tmp/ctui-vite --template vite --yes --no-workflow
@@ -158,6 +164,7 @@ cd /tmp/ctui-vite && bun install && bun run build
 ```
 
 **All templates:**
+
 ```bash
 for template in vite next start react-router astro; do
   dir="/tmp/create-tauri-ui-$template"

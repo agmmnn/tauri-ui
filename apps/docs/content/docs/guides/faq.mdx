@@ -1,0 +1,36 @@
+---
+title: FAQ
+description: Answers to the most common tauri-ui questions.
+---
+
+## Does tauri-ui ship full templates?
+
+No. It uses upstream tools, then applies a small patch and asset layer on top.
+
+## Is the debug panel included in production?
+
+No. It is development-only.
+
+## Can I skip the starter dashboard?
+
+Yes.
+
+```bash
+--no-starter
+```
+
+## Can I optimize binary size?
+
+Yes.
+
+```bash
+--size-optimize
+```
+
+## Which template is the safest default?
+
+Vite is the cleanest baseline and the best reference path.
+
+## Why is Linux AppImage much larger than the other artifacts?
+
+AppImage is a more self-contained portable Linux bundle. It usually ends up much larger than `.deb` or `.rpm`.

@@ -19,14 +19,15 @@
     "test:create-tauri-ui:full": "node scripts/test-create-tauri-ui-full.mjs",
     "taze": "taze minor -r -w -i false -I",
     "taze:major": "taze major -r -w -i false -I",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "dev:docs": "bun run --cwd apps/docs dev"
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",
     "oxfmt": "^0.42.0",
     "oxlint": "^1.57.0",
     "taze": "^19.10.0",
-    "turbo": "^2.8.21",
+    "turbo": "^2.9.0",
     "typescript": "6.0.2"
   },
   "engines": {

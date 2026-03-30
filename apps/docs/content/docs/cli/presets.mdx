@@ -1,0 +1,28 @@
+---
+title: Presets
+description: How shadcn presets work in tauri-ui.
+---
+
+`tauri-ui` passes the shadcn preset through to the upstream CLI.
+
+Accepted forms include:
+
+- `b0`
+- `--preset b0`
+- `--preset=b0`
+
+That means users can paste directly from preset sites without cleaning the value first.
+
+## Default
+
+The current default preset is:
+
+```bash
+b0
+```
+
+## Example
+
+```bash
+bunx create-tauri-ui@latest my-app --preset b6GOPH2Zu --yes
+```

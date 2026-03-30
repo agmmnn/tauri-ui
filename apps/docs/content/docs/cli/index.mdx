@@ -1,0 +1,37 @@
+---
+title: CLI
+description: What the create-tauri-ui CLI does and how to drive it.
+---
+
+`create-tauri-ui` is intentionally small.
+
+It orchestrates:
+
+- the official shadcn/ui CLI
+- create-tauri-app
+- a small patch/battery layer on top
+
+## Basic usage
+
+```bash
+create-tauri-ui [target-dir] [options]
+```
+
+## Common commands
+
+```bash
+bunx create-tauri-ui@latest
+bunx create-tauri-ui@latest my-app --template vite --yes
+bunx create-tauri-ui@latest my-app --template next --no-starter
+```
+
+## Quick links
+
+<Cards>
+  <Card title="CLI options" href="/docs/cli/options">
+    Review the supported flags and what each one changes.
+  </Card>
+  <Card title="Presets" href="/docs/cli/presets">
+    Learn how shadcn presets are passed through and normalized.
+  </Card>
+</Cards>

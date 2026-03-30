@@ -1,0 +1,38 @@
+---
+title: First app
+description: What the generated project contains and what to run first.
+---
+
+After scaffolding:
+
+```bash
+cd my-app
+bun install
+bun run tauri dev
+```
+
+## What gets generated
+
+- frontend scaffold from the official shadcn/ui CLI
+- `src-tauri` native shell from create-tauri-app
+- desktop defaults and batteries layered on top
+
+## Common first checks
+
+- confirm the window opens without startup flash
+- click an external link and verify it opens in the system browser
+- toggle the development debug panel with `Cmd/Ctrl + D`
+- run a production build once before committing the project structure
+
+## Recommended first edits
+
+- set your real Tauri identifier
+- replace the default app icon
+- remove starter/example batteries you do not want to keep
+
+<PreviewBlock
+  title="Starter app reference"
+  note="The current light-mode starter screenshot. Replace later with a dedicated getting-started screenshot if needed."
+  src="/light.png"
+  alt="tauri-ui generated app light mode"
+/>

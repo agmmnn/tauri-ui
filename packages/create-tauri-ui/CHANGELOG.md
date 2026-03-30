@@ -5,7 +5,6 @@
 ### Patch Changes
 
 - 080a981: Add an optional size optimization battery and improve the CLI/docs polish.
-
   - add `--size-optimize` / `--no-size-optimize` to apply smaller Tauri release profile settings and enable `removeUnusedCommands`
   - add `-v` / `--version`
   - refresh the root and package READMEs with clearer battery, workflow, and CLI documentation
@@ -15,7 +14,6 @@
 ### Patch Changes
 
 - af26d08: Improve the generated desktop shell and debug tooling.
-
   - scope the generated scroll container to a dedicated root shell so starter layouts do not create nested `main` scrollbars
   - refresh the development debug panel with a denser inspector-style layout, improved docking behavior, and a dedicated tool palette
   - polish the workflow setup prompts with clearer target OS labels and document generated CSS battery behavior more clearly
@@ -25,7 +23,6 @@
 ### Patch Changes
 
 - 59d46a3: Fix Windows release scaffolding and smoke workflow compatibility.
-
   - normalize edited files before patching so generated Windows files patch reliably
   - harden Vite and Cargo patch steps used by the debug panel and external link guard
   - improve the release smoke workflow app naming and dashboard setup
@@ -35,7 +32,6 @@
 ### Patch Changes
 
 - 6226a01: Fix Windows Vite scaffolding and release workflow compatibility.
-
   - make Vite battery patching tolerant of Windows line endings
   - update generated release workflows for the current `tauri-action` input names
   - relax generated app Bun installs in CI so smoke builds are reproducible

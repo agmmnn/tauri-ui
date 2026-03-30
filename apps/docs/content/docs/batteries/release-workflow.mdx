@@ -1,0 +1,27 @@
+---
+title: Release workflow
+description: Optional GitHub Actions workflow for shipping tauri-ui-generated apps.
+---
+
+The workflow battery generates a GitHub Actions release workflow for the scaffolded app.
+
+## What it covers
+
+- platform matrix for desktop builds
+- Tauri Action wiring
+- release asset uploads
+- smoke-build friendly defaults
+
+## Repo-level release flow
+
+This `tauri-ui` repo also uses a separate smoke workflow to build a generated app and attach it to package releases.
+
+That flow is intentionally different from the generated app workflow:
+
+- generated apps ship their own release workflow
+- the repo smoke workflow validates the current CLI output
+
+<PreviewBlock
+  title="Release assets"
+  note="TODO: add a release-page screenshot showing smoke artifacts and naming."
+/>

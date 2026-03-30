@@ -1,0 +1,7 @@
+{
+  "root": true,
+  "title": "Getting started",
+  "description": "Install the CLI and scaffold your first app.",
+  "icon": "Rocket",
+  "pages": ["index", "installation", "first-app"]
+}

@@ -1,0 +1,28 @@
+---
+title: Framework support
+description: What changes between the supported template adapters.
+---
+
+## What stays the same
+
+- shadcn/ui setup comes from the official CLI
+- the native shell comes from create-tauri-app
+- batteries are applied after scaffolding
+
+## What changes per template
+
+- mount points
+- root layout patching
+- route/app shell integration
+- how development-only helpers are mounted
+
+## Notes
+
+- Vite is the simplest reference path.
+- Next.js needs extra care around client-only helpers and prerender-safe behavior.
+- Start is still the highest-risk adapter when generator changes land.
+
+<PreviewBlock
+  title="Template comparison visual"
+  note="TODO: add a compact diagram of the template-specific mount points."
+/>

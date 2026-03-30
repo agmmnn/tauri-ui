@@ -1,0 +1,42 @@
+---
+title: Size optimization
+description: Optional release-profile tuning for smaller Tauri binaries.
+---
+
+Enable it with:
+
+```bash
+--size-optimize
+```
+
+## What it changes
+
+### Cargo profiles
+
+```toml
+[profile.dev]
+incremental = true
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
+```
+
+### Tauri config
+
+```json
+{
+  "build": {
+    "removeUnusedCommands": true
+  }
+}
+```
+
+## Why it exists
+
+In our test build, the optimized release executable dropped from roughly `9 MB` to `3.1 MB`, or about `65%` smaller.
+
+This is optional because it changes release tradeoffs, not just output size.
