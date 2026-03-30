@@ -1,5 +1,15 @@
 # create-tauri-ui
 
+## 1.0.6
+
+### Patch Changes
+
+- 080a981: Add an optional size optimization battery and improve the CLI/docs polish.
+
+  - add `--size-optimize` / `--no-size-optimize` to apply smaller Tauri release profile settings and enable `removeUnusedCommands`
+  - add `-v` / `--version`
+  - refresh the root and package READMEs with clearer battery, workflow, and CLI documentation
+
 ## 1.0.5
 
 ### Patch Changes
