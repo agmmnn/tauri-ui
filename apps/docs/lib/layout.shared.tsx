@@ -14,7 +14,7 @@ function GithubIcon() {
 export const homeLinks: LinkItemType[] = [
   {
     text: "Documentation",
-    url: "/docs",
+    url: "/docs/getting-started",
     active: "nested-url",
   },
   // {
@@ -48,14 +48,6 @@ export const docsLinks: LinkItemType[] = [
   //   icon: <BookOpen className="size-4" />,
   //   active: "nested-url",
   // },
-  {
-    type: "icon",
-    url: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
-    label: "GitHub",
-    text: "GitHub",
-    external: true,
-    icon: <GithubIcon />,
-  },
 ];
 
 export function baseOptions(): BaseLayoutProps {

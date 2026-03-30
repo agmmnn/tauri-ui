@@ -2,13 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import PixelBlast from "@/components/pixel-blast";
-import {
-  BatteryCharging,
-  Boxes,
-  Command,
-  Gauge,
-  TerminalIcon,
-} from "lucide-react";
+import { BatteryCharging, Boxes, Command, Gauge, TerminalIcon } from "lucide-react";
 import { CopyToClipboardButton, CreateAppAnimation } from "./page.client";
 import { ServerCodeBlock } from "fumadocs-ui/components/codeblock.rsc";
 
@@ -141,12 +135,10 @@ export default function HomePage() {
 
       <section className="mx-auto mt-1 max-w-[1400px] px-2 md:px-6">
         <p className="text-2xl tracking-tight leading-snug font-light text-fd-foreground md:text-3xl xl:text-4xl">
-          <span className="text-[color:var(--color-brand)]">tauri-ui</span> is a
-          Tauri scaffolding workflow for{" "}
-          <span className="text-[color:var(--color-brand)]">desktop apps</span>,
-          built around upstream tools and a small layer of practical defaults.
-          It stays close to the source while still fixing the parts that make a
-          wrapped website feel unfinished.
+          <span className="text-[color:var(--color-brand)]">tauri-ui</span> is a Tauri scaffolding
+          workflow for <span className="text-[color:var(--color-brand)]">desktop apps</span>, built
+          around upstream tools and a small layer of practical defaults. It stays close to the
+          source while still fixing the parts that make a wrapped website feel unfinished.
         </p>
       </section>
 
@@ -233,12 +225,8 @@ function CenteredSection({
 }) {
   return (
     <section className="mx-auto flex max-w-[980px] flex-col items-center text-center">
-      <p className="text-sm font-medium text-[color:var(--color-brand)]">
-        {eyebrow}
-      </p>
-      <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
-        {title}
-      </h2>
+      <p className="text-sm font-medium text-[color:var(--color-brand)]">{eyebrow}</p>
+      <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">{title}</h2>
       <p className="mt-5 max-w-[760px] text-sm leading-7 text-fd-muted-foreground md:text-base">
         {description}
       </p>
@@ -264,9 +252,7 @@ function VisualPanel({
       <div className="relative z-10">
         <div className="mb-5">
           <p className="text-sm font-semibold">{title}</p>
-          <p className="mt-1 text-xs leading-5 text-fd-muted-foreground">
-            {note}
-          </p>
+          <p className="mt-1 text-xs leading-5 text-fd-muted-foreground">{note}</p>
         </div>
         {children}
       </div>
@@ -304,15 +290,7 @@ function FeatureCard({
   );
 }
 
-function SmallInfoCard({
-  icon,
-  title,
-  body,
-}: {
-  icon: ReactNode;
-  title: string;
-  body: string;
-}) {
+function SmallInfoCard({ icon, title, body }: { icon: ReactNode; title: string; body: string }) {
   return (
     <div className="rounded-[24px] border border-fd-border bg-fd-card px-5 py-5">
       <div className="mb-3 inline-flex rounded-lg border border-fd-border bg-fd-background p-2 text-[color:var(--color-brand)]">
@@ -324,13 +302,7 @@ function SmallInfoCard({
   );
 }
 
-function TerminalPanel({
-  command,
-  lines,
-}: {
-  command: string;
-  lines: string[];
-}) {
+function TerminalPanel({ command, lines }: { command: string; lines: string[] }) {
   return (
     <div className="mx-auto max-w-[880px] overflow-hidden rounded-[22px] border border-white/10 bg-[color:var(--landing-surface)] shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
       <div className="flex items-center gap-2 border-b border-white/8 px-4 py-3 text-xs text-white/55">
@@ -367,15 +339,7 @@ function CodePanel({ title, code }: { title: string; code: string }) {
   );
 }
 
-function TextPanel({
-  title,
-  body,
-  bullets,
-}: {
-  title: string;
-  body: string;
-  bullets: string[];
-}) {
+function TextPanel({ title, body, bullets }: { title: string; body: string; bullets: string[] }) {
   return (
     <div className="rounded-[24px] border border-fd-border bg-fd-card p-6">
       <h3 className="text-3xl font-semibold tracking-tight">{title}</h3>
