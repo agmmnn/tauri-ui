@@ -110,6 +110,7 @@ jobs:
           node packages/create-tauri-ui/index.js "$APP_DIR" \
             --template vite \
             --identifier com.agm.create-tauri-ui-release-smoke \
+            --size-optimize \
             --yes \
             --no-workflow
 
@@ -141,5 +142,6 @@ jobs:
             echo "- Package release: ${{ steps.release.outputs.url }}"
             echo "- Platform: \`${{ matrix.name }}\`"
             echo "- App version: \`${{ steps.tauri.outputs.appVersion }}\`"
+            echo "- Size optimization: \`enabled\`"
             echo "- Artifacts: \`${{ steps.tauri.outputs.artifactPaths }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
