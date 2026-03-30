@@ -37,15 +37,19 @@ jobs:
           - name: Windows
             platform: windows-latest
             args: ""
+            asset_suffix: windows-x64
           - name: macOS Apple Silicon
             platform: macos-latest
             args: "--target aarch64-apple-darwin"
+            asset_suffix: macos-apple-silicon
           - name: macOS Intel
             platform: macos-latest
             args: "--target x86_64-apple-darwin"
+            asset_suffix: macos-intel
           - name: Linux
             platform: ubuntu-22.04
             args: ""
+            asset_suffix: linux-x64
 
     runs-on: ${{ matrix.platform }}
     env:
@@ -56,15 +60,19 @@ jobs:
         id: release
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="$(printf '%s' '${{ inputs.release_tag }}' | sed 's/^.*@//')"
             echo "tag=${{ inputs.release_tag }}" >> "$GITHUB_OUTPUT"
             echo "id=${{ inputs.release_id }}" >> "$GITHUB_OUTPUT"
             echo "url=https://github.com/${{ github.repository }}/releases/tag/${{ inputs.release_tag }}" >> "$GITHUB_OUTPUT"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
+          VERSION="$(printf '%s' '${{ github.event.release.tag_name }}' | sed 's/^.*@//')"
           echo "tag=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
           echo "id=${{ github.event.release.id }}" >> "$GITHUB_OUTPUT"
           echo "url=${{ github.event.release.html_url }}" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Checkout release tag
         uses: actions/checkout@v4
@@ -117,9 +125,11 @@ jobs:
         with:
           releaseId: ${{ steps.release.outputs.id }}
           projectPath: ${{ env.APP_DIR }}
+          appName: tauri-ui-smoke
+          appVersion: ${{ steps.release.outputs.version }}
           args: ${{ matrix.args }}
           retryAttempts: 2
-          assetNamePattern: "[name]-smoke-[version]-[platform]-[arch][ext]"
+          assetNamePattern: "tauri-ui-smoke-v${{ steps.release.outputs.version }}-${{ matrix.asset_suffix }}[ext]"
           includeUpdaterJson: false
 
       - name: Smoke app summary
