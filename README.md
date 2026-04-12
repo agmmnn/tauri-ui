@@ -63,6 +63,8 @@ You still need to fix window behavior, startup flash, links, scrolling, and sele
 
 `tauri-ui` handles this out of the box, while staying close to upstream.
 
+<img alt="tauri-ui" src="https://github.com/user-attachments/assets/0b26c74b-204d-41f5-ad75-585f79af2c15" />
+
 ## How it works
 
 ```
