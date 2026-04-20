@@ -85,7 +85,7 @@ function componentImportPath(options: ProjectOptions) {
 }
 
 async function ensureUiComponents(projectDir: string, options: ProjectOptions) {
-  for (const component of ["button", "badge", "dropdown-menu", "tabs"]) {
+  for (const component of ["button", "badge", "dropdown-menu", "tabs", "tooltip"]) {
     const componentPath = path.join(uiDir(projectDir, options), `${component}.tsx`);
 
     if (fs.existsSync(componentPath)) {
