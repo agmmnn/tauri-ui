@@ -1,10 +1,17 @@
+<div align="center">
+
+<a href="https://tauriui.vercel.app/"><img src="https://github.com/agmmnn/tauri-ui/assets/16024979/9c694ee2-f2c8-4bec-9c06-c3a6f7d4f901" width="44" height="44" alt="crab"/></a>
+<img alt="tauri-ui" src="https://github.com/user-attachments/assets/522ae78b-77d9-4cc2-b63f-41adafae4aaa" />
+
 # tauri-ui
 
-[npm](https://npmjs.com/package/create-tauri-ui)
-[release](https://github.com/agmmnn/tauri-ui/releases/latest)
-[tauri](https://tauri.app)
-[shadcn/ui](https://ui.shadcn.com)
-[license](LICENSE)
+[![npm](https://img.shields.io/npm/v/create-tauri-ui?style=flat&color=18181b)](https://npmjs.com/package/create-tauri-ui)
+[![release](https://img.shields.io/github/v/release/agmmnn/tauri-ui?style=flat&color=18181b)](https://github.com/agmmnn/tauri-ui/releases/latest)
+[![tauri](https://img.shields.io/badge/tauri-v2-black?style=flat&logo=tauri&color=18181b)](https://tauri.app)
+[![shadcn/ui](https://img.shields.io/badge/shadcn/ui-black?style=flat&logo=shadcnuit&color=18181b)](https://ui.shadcn.com)
+[![license](https://img.shields.io/github/license/agmmnn/tauri-ui?style=flat&color=18181b)](LICENSE)
+
+</div>
 
 > ⚡ The fastest way to build a Tauri desktop app with [shadcn/ui](https://ui.shadcn.com/).
 
@@ -66,11 +73,13 @@ bun run tauri dev
 
 ## Why tauri-ui
 
-A fresh Tauri app feels like a wrapped website. Window state, startup flash, link routing, overscroll, native selection — chores you hit on every project.
+A fresh Tauri app feels like a wrapped website. Window state, startup flash, link routing, overscroll, native selection: chores you hit on every project.
 
-`tauri-ui` handles them by default and stays close to upstream `shadcn` and `create-tauri-app` — nothing forks, nothing drifts from the docs.
+`tauri-ui` handles them by default and stays close to upstream `shadcn` and `create-tauri-app`. Nothing forks, nothing drifts from the docs.
 
 **🦾 Better with AI coding agents:** one command lands a familiar `shadcn` + Tauri layout your agent already knows. No custom wrappers, no forked libraries, just the upstream APIs the agent was trained on. No tokens burned debating the stack.
+
+<img alt="tauri-ui" src="https://github.com/user-attachments/assets/0b26c74b-204d-41f5-ad75-585f79af2c15" />
 
 ## How it works
 
