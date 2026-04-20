@@ -39,15 +39,15 @@
     "updatesub": "git submodule update --init --recursive --remote"
   },
   "dependencies": {
-    "@clack/prompts": "^1.1.0",
+    "@clack/prompts": "^1.2.0",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
-    "@typescript/native-preview": "7.0.0-dev.20260329.1",
-    "oxfmt": "^0.42.0",
-    "oxlint": "^1.57.0",
-    "typescript": "^6.0.2",
+    "@types/node": "^25.6.0",
+    "@typescript/native-preview": "7.0.0-dev.20260420.1",
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
+    "typescript": "^6.0.3",
     "unbuild": "^3.6.1"
   }
 }
