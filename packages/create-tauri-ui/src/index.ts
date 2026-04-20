@@ -14,10 +14,12 @@ import { applyScrollContainer } from "./batteries/scroll-container";
 import { applySelectionBehavior } from "./batteries/selection-behavior";
 import { applySizeOptimization } from "./batteries/size-optimization";
 import { applyWorkflow } from "./batteries/workflow";
+import { type ManageAction, type ManageArgs, runManageCommand } from "./commands/manage";
 import { applyTauriConfig, mergeTauri } from "./merge";
 import { runPrompts } from "./prompts";
 import { addStarterUI, scaffoldFrontend, scaffoldTauri } from "./scaffold";
-import type { CliArgs } from "./types";
+import type { CliArgs, TargetOs } from "./types";
+import { TARGET_OS } from "./types";
 import {
   PatchError,
   ScaffoldError,
@@ -37,10 +39,15 @@ function getCliVersion() {
   return packageJson.version ?? "0.0.0";
 }
 
-function printHelp() {
-  console.log(`Usage: create-tauri-ui [target-dir] [options]
+const MANAGE_ACTIONS = new Set<ManageAction>(["add", "update", "remove", "list"]);
 
-Options:
+function printHelp() {
+  console.log(`Usage:
+  create-tauri-ui [target-dir] [options]              scaffold a new project
+  create-tauri-ui <add|update|remove> <battery>       manage batteries in an existing project
+  create-tauri-ui list                                list available batteries + install status
+
+Scaffold options:
   -t, --template <name>         vite | next | start | react-router | astro
       --identifier <value>      set the Tauri app identifier
       --preset <value>          set the shadcn preset (default: b0)
@@ -52,10 +59,90 @@ Options:
       --no-invoke-example       skip the Rust invoke example
       --workflow                include the GitHub release workflow
       --no-workflow             skip the GitHub release workflow
-  -f, --force                   overwrite an existing target directory
-  -y, --yes                     accept defaults
+
+Manage options:
+      --dir <path>              project directory (default: current working dir)
+      --target-os <list>        comma-separated platforms for workflow (windows-latest,macos-latest,ubuntu-latest)
+  -f, --force                   overwrite an existing target directory / battery
+  -y, --yes                     accept defaults / skip confirmations
   -v, --version                 display version
-  -h, --help                    display help`);
+  -h, --help                    display help
+
+Batteries: debug-panel, workflow`);
+}
+
+function parseManageArgs(argv: string[]): ManageArgs {
+  const [actionToken, ...rest] = argv;
+  const action = actionToken as ManageAction;
+  const args: ManageArgs = { action };
+  const positional: string[] = [];
+
+  const readValue = (index: number, flag: string) => {
+    const value = rest[index + 1];
+    if (!value || value.startsWith("-")) {
+      throw new Error(`Missing value for ${flag}`);
+    }
+    return value;
+  };
+
+  for (let index = 0; index < rest.length; index += 1) {
+    const token = rest[index];
+
+    switch (token) {
+      case "-h":
+      case "--help":
+        printHelp();
+        process.exit(0);
+        break;
+      case "-f":
+      case "--force":
+        args.force = true;
+        break;
+      case "-y":
+      case "--yes":
+        args.yes = true;
+        break;
+      case "--dir":
+        args.targetDir = readValue(index, token);
+        index += 1;
+        break;
+      case "--target-os": {
+        const raw = readValue(index, token);
+        const values = raw.split(",").map((entry) => entry.trim()).filter(Boolean);
+        for (const value of values) {
+          if (!TARGET_OS.includes(value as TargetOs)) {
+            throw new Error(
+              `Unknown target OS "${value}". Allowed: ${TARGET_OS.join(", ")}`,
+            );
+          }
+        }
+        args.targetOS = values as TargetOs[];
+        index += 1;
+        break;
+      }
+      default:
+        if (token.startsWith("-")) {
+          throw new Error(`Unknown flag: ${token}`);
+        }
+        positional.push(token);
+    }
+  }
+
+  if (action !== "list" && positional.length === 0) {
+    throw new Error(
+      `Missing battery name. Usage: create-tauri-ui ${action} <battery>`,
+    );
+  }
+
+  if (positional.length > 1) {
+    throw new Error("Only one battery may be provided per command.");
+  }
+
+  if (positional[0]) {
+    args.batteryId = positional[0];
+  }
+
+  return args;
 }
 
 function parseArgs(argv: string[]): CliArgs {
@@ -211,7 +298,16 @@ function describeError(error: unknown) {
 }
 
 async function main() {
-  const args = parseArgs(process.argv.slice(2));
+  const argv = process.argv.slice(2);
+  const firstToken = argv[0];
+
+  if (firstToken && MANAGE_ACTIONS.has(firstToken as ManageAction)) {
+    const manageArgs = parseManageArgs(argv);
+    await runManageCommand(manageArgs);
+    return;
+  }
+
+  const args = parseArgs(argv);
 
   if (args.help) {
     printHelp();

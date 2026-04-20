@@ -12,6 +12,18 @@ The workflow battery generates a GitHub Actions release workflow for the scaffol
 - release asset uploads
 - smoke-build friendly defaults
 
+## Add or update later
+
+If you scaffolded without `--workflow`, or want to pull in workflow improvements:
+
+```bash
+bunx create-tauri-ui@latest add workflow --target-os macos-latest,ubuntu-latest,windows-latest
+bunx create-tauri-ui@latest update workflow
+bunx create-tauri-ui@latest remove workflow
+```
+
+Pick the platforms you want to build on with `--target-os`. See [Manage batteries](/docs/manage-batteries) for full reference.
+
 ## Repo-level release flow
 
 This `tauri-ui` repo also uses a separate smoke workflow to build a generated app and attach it to package releases.

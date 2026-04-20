@@ -20,7 +20,23 @@ description: The defaults and optional extras layered onto generated apps.
 
 The goal is to keep batteries focused and composable instead of turning the generator into a rigid framework.
 
+## Add, update, or remove later
+
+You don't have to decide everything at scaffold time. Run inside an existing project to manage batteries after the fact:
+
+```bash
+bunx create-tauri-ui@latest list
+bunx create-tauri-ui@latest update debug-panel
+bunx create-tauri-ui@latest add workflow
+bunx create-tauri-ui@latest remove workflow
+```
+
+The CLI auto-detects your template — no manifest file is written. See [Manage batteries](/docs/manage-batteries) for the full reference.
+
 <Cards>
+  <Card title="Manage batteries" href="/docs/manage-batteries">
+    Add, update, or remove batteries in an existing project.
+  </Card>
   <Card title="Debug panel" href="/docs/debug-panel">
     Development-only desktop inspector for runtime state, logs, invokes, and paths.
   </Card>

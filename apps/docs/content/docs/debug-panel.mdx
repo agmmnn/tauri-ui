@@ -30,3 +30,15 @@ The debug panel is enabled in development only and has zero production impact.
   src="/dark.png"
   alt="tauri-ui debug panel"
 />
+
+## Manage in an existing project
+
+If you scaffolded without the debug panel, or want to pull in the latest version on an older project:
+
+```bash
+bunx create-tauri-ui@latest add debug-panel       # install
+bunx create-tauri-ui@latest update debug-panel    # upgrade in place
+bunx create-tauri-ui@latest remove debug-panel    # uninstall
+```
+
+`update` is idempotent — existing wiring (mount, plugin registration, log permission) is preserved. See [Manage batteries](/docs/manage-batteries) for the full workflow.

@@ -48,3 +48,17 @@ bunx create-tauri-ui@latest my-app \
   --size-optimize \
   --yes
 ```
+
+## Manage subcommands
+
+For `add`, `update`, `remove`, and `list` (run inside an existing project):
+
+```bash
+--dir <path>           project directory (default: current working dir)
+--target-os <list>     comma-separated platforms for the workflow battery
+                       (windows-latest,macos-latest,ubuntu-latest)
+-f, --force            overwrite an existing battery / skip safety checks
+-y, --yes              accept defaults and skip confirmations
+```
+
+See [Manage batteries](/docs/manage-batteries) for full reference and recipes.

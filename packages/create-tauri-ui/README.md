@@ -33,9 +33,12 @@ bunx tauri icon app-icon.png
 ## CLI reference
 
 ```
-Usage: create-tauri-ui [target-dir] [options]
+Usage:
+  create-tauri-ui [target-dir] [options]              scaffold a new project
+  create-tauri-ui <add|update|remove> <battery>       manage batteries in an existing project
+  create-tauri-ui list                                list batteries + install status
 
-Options:
+Scaffold options:
   -t, --template <name>     vite | next | start | react-router | astro
       --identifier <value>  Tauri app identifier (e.g. com.example.myapp)
       --preset <value>      shadcn preset (default: b0)
@@ -47,11 +50,42 @@ Options:
       --no-invoke-example   skip the Rust invoke example
       --workflow            include the GitHub release workflow
       --no-workflow         skip the GitHub release workflow
-  -f, --force               overwrite an existing target directory
-  -y, --yes                 accept all defaults
+
+Manage options:
+      --dir <path>          project directory (default: current working dir)
+      --target-os <list>    comma-separated platforms for workflow
+                            (windows-latest,macos-latest,ubuntu-latest)
+  -f, --force               overwrite an existing target directory / battery
+  -y, --yes                 accept defaults / skip confirmations
   -v, --version             display version
   -h, --help                display help
+
+Batteries: debug-panel, workflow
 ```
+
+## Managing batteries in an existing project
+
+Run inside a scaffolded project to install, update, or remove a battery after the fact.
+
+```bash
+# see which batteries are installed
+bunx create-tauri-ui@latest list
+
+# upgrade the debug panel to the latest template
+bunx create-tauri-ui@latest update debug-panel
+
+# add the release workflow later
+bunx create-tauri-ui@latest add workflow --target-os macos-latest,ubuntu-latest
+
+# remove it
+bunx create-tauri-ui@latest remove workflow
+```
+
+`update` re-applies the battery using the latest CLI templates. Patches are idempotent — existing mounts, imports, and plugin registrations are preserved. Commit first, then run `update` and inspect the diff.
+
+`remove` deletes the battery's owned files and best-effort reverts any wiring. For batteries with external dependencies (like the debug panel's `tauri-plugin-log` + `@tauri-apps/plugin-log`), the CLI prints a manual cleanup checklist.
+
+The template is auto-detected from `package.json` and project structure — no manifest file is written to your repo.
 
 ## Examples
 

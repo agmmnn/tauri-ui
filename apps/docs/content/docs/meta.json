@@ -10,6 +10,7 @@
     "templates",
     "framework-support",
     "batteries",
+    "manage-batteries",
     "debug-panel",
     "release-workflow",
     "size-optimization",

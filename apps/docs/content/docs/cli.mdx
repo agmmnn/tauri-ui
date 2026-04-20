@@ -14,7 +14,9 @@ It orchestrates:
 ## Basic usage
 
 ```bash
-create-tauri-ui [target-dir] [options]
+create-tauri-ui [target-dir] [options]              # scaffold a new project
+create-tauri-ui <add|update|remove> <battery>       # manage batteries in an existing project
+create-tauri-ui list                                # list batteries + install status
 ```
 
 ## Common commands
@@ -23,6 +25,11 @@ create-tauri-ui [target-dir] [options]
 bunx create-tauri-ui@latest
 bunx create-tauri-ui@latest my-app --template vite --yes
 bunx create-tauri-ui@latest my-app --template next --no-starter
+
+# inside an existing tauri-ui project
+bunx create-tauri-ui@latest list
+bunx create-tauri-ui@latest update debug-panel
+bunx create-tauri-ui@latest add workflow
 ```
 
 ## Quick links
@@ -33,5 +40,8 @@ bunx create-tauri-ui@latest my-app --template next --no-starter
   </Card>
   <Card title="Presets" href="/docs/cli-presets">
     Learn how shadcn presets are passed through and normalized.
+  </Card>
+  <Card title="Manage batteries" href="/docs/manage-batteries">
+    Add, update, or remove batteries in an existing project without re-scaffolding.
   </Card>
 </Cards>

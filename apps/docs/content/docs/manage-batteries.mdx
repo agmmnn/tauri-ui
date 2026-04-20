@@ -1,0 +1,117 @@
+---
+title: Manage batteries
+description: Add, update, and remove batteries in an existing tauri-ui project.
+---
+
+After scaffolding, you can manage batteries directly with the same CLI — no re-scaffold required.
+
+```bash
+create-tauri-ui list                       # show installed + available batteries
+create-tauri-ui add <battery>              # install a battery
+create-tauri-ui update <battery>           # pull the latest template
+create-tauri-ui remove <battery>           # delete the battery's owned files
+```
+
+The CLI auto-detects your frontend template from `package.json` and project structure. **No manifest file** is written to your repo.
+
+## Supported batteries
+
+| ID            | What it does                                                                          |
+| ------------- | ------------------------------------------------------------------------------------- |
+| `debug-panel` | Dev-only inspector for state, host diagnostics, invokes, runtime events, plugin logs. |
+| `workflow`    | GitHub Actions release workflow that builds and publishes per platform.               |
+
+More batteries (size optimization, invoke example, etc.) will land in future releases.
+
+## list
+
+Show install status for every supported battery.
+
+```bash
+bunx create-tauri-ui@latest list
+```
+
+```
+● debug-panel     installed
+○ workflow        not installed
+```
+
+Use `--dir <path>` to inspect a project other than the current working directory.
+
+## add
+
+Install a battery into an existing project. Errors out if the battery's files are already present — pass `--force` to overwrite.
+
+```bash
+bunx create-tauri-ui@latest add debug-panel
+bunx create-tauri-ui@latest add workflow --target-os macos-latest,ubuntu-latest
+```
+
+The CLI runs the same install logic used during scaffolding, including:
+
+- writing the battery's owned files
+- adding any required shadcn primitives (`button`, `tooltip`, etc.)
+- patching the framework entrypoint to mount the component
+- adding Tauri plugin registrations and Cargo dependencies where needed
+
+## update
+
+Re-apply the battery using the templates bundled with your installed CLI version.
+
+```bash
+bunx create-tauri-ui@latest update debug-panel
+```
+
+Updates are **idempotent**:
+
+- owned files are overwritten with the latest template
+- existing imports, mounts, and plugin registrations are preserved (won't be duplicated)
+- shadcn dependencies are installed only if missing
+
+Commit before running and review the diff after.
+
+## remove
+
+Delete the battery's owned files and best-effort revert the framework wiring.
+
+```bash
+bunx create-tauri-ui@latest remove debug-panel
+```
+
+`remove` only deletes files **owned by the battery**. Shared infrastructure used by other batteries (for example `src/lib/tauri.ts` and `src/lib/debug-events.ts`, which are also used by the invoke example) is left in place.
+
+For batteries with native or npm dependencies (like `debug-panel`'s `tauri-plugin-log` registration), the CLI prints a manual cleanup checklist. The app keeps building either way — those entries only matter if you want a smaller binary or cleaner dependency graph.
+
+## Flags
+
+```bash
+--dir <path>           project directory (default: current working dir)
+--target-os <list>     comma-separated platforms for the workflow battery
+                       (windows-latest,macos-latest,ubuntu-latest)
+-f, --force            overwrite an existing battery / skip safety checks
+-y, --yes              accept defaults and skip confirmations
+```
+
+## Recipes
+
+**Bump an existing project to the latest debug panel:**
+
+```bash
+cd my-app
+git status                                  # ensure clean tree
+bunx create-tauri-ui@latest update debug-panel --yes
+git diff                                    # review changes
+```
+
+**Add the release workflow to a project that scaffolded without it:**
+
+```bash
+bunx create-tauri-ui@latest add workflow --target-os macos-latest,ubuntu-latest,windows-latest --yes
+```
+
+**Strip the debug panel before publishing a minimal demo:**
+
+```bash
+bunx create-tauri-ui@latest remove debug-panel --yes
+# then follow the printed manual-cleanup checklist if you also want the deps gone
+```

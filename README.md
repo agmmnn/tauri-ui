@@ -1,17 +1,10 @@
-<div align="center">
-
-<a href="https://tauriui.vercel.app/"><img src="https://github.com/agmmnn/tauri-ui/assets/16024979/9c694ee2-f2c8-4bec-9c06-c3a6f7d4f901" width="44" height="44" alt="crab"/></a>
-<img alt="tauri-ui" src="https://github.com/user-attachments/assets/522ae78b-77d9-4cc2-b63f-41adafae4aaa" />
-
 # tauri-ui
 
-[![npm](https://img.shields.io/npm/v/create-tauri-ui?style=flat&color=18181b)](https://npmjs.com/package/create-tauri-ui)
-[![release](https://img.shields.io/github/v/release/agmmnn/tauri-ui?style=flat&color=18181b)](https://github.com/agmmnn/tauri-ui/releases/latest)
-[![tauri](https://img.shields.io/badge/tauri-v2-black?style=flat&logo=tauri&color=18181b)](https://tauri.app)
-[![shadcn/ui](https://img.shields.io/badge/shadcn/ui-black?style=flat&logo=shadcnuit&color=18181b)](https://ui.shadcn.com)
-[![license](https://img.shields.io/github/license/agmmnn/tauri-ui?style=flat&color=18181b)](LICENSE)
-
-</div>
+[npm](https://npmjs.com/package/create-tauri-ui)
+[release](https://github.com/agmmnn/tauri-ui/releases/latest)
+[tauri](https://tauri.app)
+[shadcn/ui](https://ui.shadcn.com)
+[license](LICENSE)
 
 > ⚡ The fastest way to build a Tauri desktop app with [shadcn/ui](https://ui.shadcn.com/).
 
@@ -73,13 +66,11 @@ bun run tauri dev
 
 ## Why tauri-ui
 
-A Tauri app isn’t desktop-ready by default.
+A fresh Tauri app feels like a wrapped website. Window state, startup flash, link routing, overscroll, native selection — chores you hit on every project.
 
-You still need to fix window behavior, startup flash, links, scrolling, and selection otherwise it feels like a wrapped website.
+`tauri-ui` handles them by default and stays close to upstream `shadcn` and `create-tauri-app` — nothing forks, nothing drifts from the docs.
 
-`tauri-ui` handles this out of the box, while staying close to upstream.
-
-<img alt="tauri-ui" src="https://github.com/user-attachments/assets/0b26c74b-204d-41f5-ad75-585f79af2c15" />
+**🦾 Better with AI coding agents:** one command lands a familiar `shadcn` + Tauri layout your agent already knows. No custom wrappers, no forked libraries, just the upstream APIs the agent was trained on. No tokens burned debating the stack.
 
 ## How it works
 
@@ -94,15 +85,28 @@ cli prompts
 
 No full local templates. Just a small asset and patch surface on top of the upstream CLIs.
 
----
+## Manage batteries after scaffold
 
-📖 CLI reference and full options → [packages/create-tauri-ui](packages/create-tauri-ui/README.md)
+Run inside an existing tauri-ui project to add, update, or remove batteries without re-scaffolding:
 
-## Built with tauri-ui
+> *Template auto-detected (no manifest file written to your repo), updates are idempotent; commit first and review the diff.*
+
+```bash
+bunx create-tauri-ui@latest list                  # show install status
+bunx create-tauri-ui@latest update debug-panel    # pull the latest template
+bunx create-tauri-ui@latest add workflow          # add the release workflow later
+bunx create-tauri-ui@latest remove workflow
+```
+
+## 🧑‍🍳 Built with **tauri-ui**
 
 - **[speedbox](https://github.com/agmmnn/speedbox)** — internet and DNS speed test desktop app.
 
-> _Built something with `tauri-ui`? [Open a PR](https://github.com/agmmnn/tauri-ui/pulls) adding it to this list — one line with a link and a short description._
+> *Built something with `tauri-ui`? [Open a PR](https://github.com/agmmnn/tauri-ui/pulls) adding it to this list — one line with a link and a short description.*
+
+---
+
+📖 CLI reference and full options → [packages/create-tauri-ui](packages/create-tauri-ui/README.md)
 
 ## License
 
