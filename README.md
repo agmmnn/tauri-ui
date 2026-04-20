@@ -16,7 +16,7 @@
 > ⚡ The fastest way to build a Tauri desktop app with [shadcn/ui](https://ui.shadcn.com/).
 
 One command → shadcn frontend + native shell + desktop-ready defaults.  
-No template to maintenance.
+No templates to maintain — upstream CLIs do the heavy lifting.
 
 ## Get started
 
@@ -25,6 +25,21 @@ bunx create-tauri-ui@latest
 ```
 
 > Each release includes a demo build showing the expected output — available in [Releases](https://github.com/agmmnn/tauri-ui/releases/latest).
+
+## After scaffold
+
+```bash
+cd my-app
+bun install
+bun run tauri dev
+```
+
+- swap icons: `bunx tauri icon ./app-icon.png`
+- add shadcn components: `bunx shadcn@latest add dialog sonner`
+- add tauri plugins: `bun run tauri add store` ([plugin list](https://tauri.app/plugin/))
+- batteries live in `src/components/` (debug-panel, external-link-guard, theme-provider)
+- tweak window defaults in `src-tauri/tauri.conf.json`
+- CLI flags + opt-outs → [packages/create-tauri-ui](packages/create-tauri-ui/README.md)
 
 ## 🔋 Batteries Included
 
@@ -43,11 +58,12 @@ bunx create-tauri-ui@latest
 - smaller binary output (~65% smaller binary in our test)
 - GitHub Actions release workflow
 
-**🛠 Debug Panel**
+**🛠 Debug Panel**  ·  Cmd / Ctrl + D
 
-- built-in debug panel for inspecting app state, invokes, events, logs, and system paths
-- dev-only, zero production impact
-- dockable and remembers its layout
+- inspects app state, route, window, tracked invokes, runtime events, plugin logs, and system paths
+- live host diagnostics: theme & a11y, locale, display, input, network
+- hover any field for the source snippet with a web / tauri origin chip — click to copy
+- dev-only, zero production impact — dockable and remembers its layout
 
 **🧱 Upstream UI**
 
@@ -68,7 +84,7 @@ You still need to fix window behavior, startup flash, links, scrolling, and sele
 ## How it works
 
 ```
-prompts
+cli prompts
   → official shadcn/ui init
   → official create-tauri-app setup
   → combine frontend + native shell
@@ -81,6 +97,12 @@ No full local templates. Just a small asset and patch surface on top of the upst
 ---
 
 📖 CLI reference and full options → [packages/create-tauri-ui](packages/create-tauri-ui/README.md)
+
+## Built with tauri-ui
+
+- **[speedbox](https://github.com/agmmnn/speedbox)** — internet and DNS speed test desktop app.
+
+> _Built something with `tauri-ui`? [Open a PR](https://github.com/agmmnn/tauri-ui/pulls) adding it to this list — one line with a link and a short description._
 
 ## License
 
