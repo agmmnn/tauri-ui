@@ -43,14 +43,22 @@ function ensureCssSnippet(filePath: string, snippet: string) {
   });
 }
 
-function ensureMainWrapper(filePath: string, matcher: string | RegExp, replacement: string) {
+function ensureMainWrapper(
+  filePath: string,
+  innerAnchor: string,
+  matcher: string | RegExp,
+  replacement: string,
+) {
   editFile(filePath, (content) => {
-    if (content.includes(`<main ${SCROLL_CONTAINER_ATTRIBUTE}>`)) {
+    if (content.includes(SCROLL_CONTAINER_ATTRIBUTE)) {
       return content;
     }
 
+    // Only upgrade a <main> that directly wraps the route content. Templates can
+    // contain unrelated <main> elements (e.g. the TanStack Start notFoundComponent),
+    // which must not become the desktop scroll container.
     const upgradedContent = content.replace(
-      new RegExp(`<main(?![^>]*${SCROLL_CONTAINER_ATTRIBUTE})([^>]*)>`),
+      new RegExp(`<main(?![^>]*${SCROLL_CONTAINER_ATTRIBUTE})([^>]*)>(?=\\s*${innerAnchor})`),
       `<main ${SCROLL_CONTAINER_ATTRIBUTE}$1>`,
     );
 
@@ -74,6 +82,7 @@ export async function applyScrollContainer(projectDir: string, options: ProjectO
       ensureCssSnippet(path.join(projectDir, "app/globals.css"), BASE_SCROLL_CSS);
       ensureMainWrapper(
         path.join(projectDir, "app/layout.tsx"),
+        "\\{children\\}",
         /\{children\}/,
         `<main ${SCROLL_CONTAINER_ATTRIBUTE}>{children}</main>`,
       );
@@ -85,6 +94,7 @@ export async function applyScrollContainer(projectDir: string, options: ProjectO
       );
       ensureMainWrapper(
         path.join(projectDir, "src/main.tsx"),
+        "<App \\/>",
         /<App \/>/,
         `<main ${SCROLL_CONTAINER_ATTRIBUTE}><App /></main>`,
       );
@@ -93,6 +103,7 @@ export async function applyScrollContainer(projectDir: string, options: ProjectO
       ensureCssSnippet(path.join(projectDir, "src/styles.css"), BASE_SCROLL_CSS);
       ensureMainWrapper(
         path.join(projectDir, "src/routes/__root.tsx"),
+        "\\{children\\}",
         /\{children\}/,
         `<main ${SCROLL_CONTAINER_ATTRIBUTE}>{children}</main>`,
       );
@@ -101,6 +112,7 @@ export async function applyScrollContainer(projectDir: string, options: ProjectO
       ensureCssSnippet(path.join(projectDir, "app/app.css"), BASE_SCROLL_CSS);
       ensureMainWrapper(
         path.join(projectDir, "app/root.tsx"),
+        "<Outlet \\/>",
         /return <Outlet \/>/,
         `return <main ${SCROLL_CONTAINER_ATTRIBUTE}><Outlet /></main>`,
       );
@@ -109,6 +121,7 @@ export async function applyScrollContainer(projectDir: string, options: ProjectO
       ensureCssSnippet(path.join(projectDir, "src/styles/global.css"), BASE_SCROLL_CSS);
       ensureMainWrapper(
         path.join(projectDir, "src/layouts/main.astro"),
+        "<slot \\/>",
         /<slot \/>/,
         `<main ${SCROLL_CONTAINER_ATTRIBUTE}><slot /></main>`,
       );
