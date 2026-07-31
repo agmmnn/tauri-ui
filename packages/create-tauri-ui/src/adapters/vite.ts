@@ -16,7 +16,7 @@ function insertServerBlock(content: string) {
 
   return `${content.slice(0, closingIndex)}
   server: {
-    port: 1420,
+    port: 3000,
     strictPort: true,
   },${content.slice(closingIndex)}`;
 }
@@ -29,7 +29,7 @@ export const viteAdapter: TemplateAdapter = {
   tauriConfig() {
     return {
       frontendDist: "../dist",
-      devUrl: "http://localhost:1420",
+      devUrl: "http://localhost:3000",
       beforeDevCommand: "bun run dev",
       beforeBuildCommand: "bun run build",
     };

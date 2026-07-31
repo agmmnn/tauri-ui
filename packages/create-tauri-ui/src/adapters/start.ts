@@ -19,7 +19,7 @@ function insertStartServerBlock(content: string) {
 
   return `${content.slice(0, closingIndex)}
   server: {
-    port: 1420,
+    port: 3000,
     strictPort: true,
   },${content.slice(closingIndex)}`;
 }
@@ -49,7 +49,7 @@ export const startAdapter: TemplateAdapter = {
 
     editJson<Record<string, any>>(path.join(projectDir, "package.json"), (pkg) => {
       if (pkg.scripts?.dev) {
-        pkg.scripts.dev = pkg.scripts.dev.replace("--port 3000", "--port 1420");
+        pkg.scripts.dev = pkg.scripts.dev.replace("--port 3000", "--port 3000");
       }
 
       return pkg;
@@ -58,7 +58,7 @@ export const startAdapter: TemplateAdapter = {
   tauriConfig() {
     return {
       frontendDist: "../.output/public",
-      devUrl: "http://localhost:1420",
+      devUrl: "http://localhost:3000",
       beforeDevCommand: "bun run dev",
       beforeBuildCommand: "bun run build",
     };

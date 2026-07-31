@@ -505,7 +505,7 @@ function GridLabel({ label, meta }: { label: string; meta?: GridEntryMeta }) {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
+      <TooltipTrigger>
         <span className="cursor-help underline decoration-dotted decoration-muted-foreground/40 underline-offset-4">
           {label}
         </span>
@@ -1434,7 +1434,7 @@ export function DebugPanel() {
               <PinIcon className="size-3.5" />
             </Button>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger>
                 <Button variant="ghost" size="icon-sm" className="size-7" aria-label="Debug panel options">
                   <EllipsisIcon className="size-3.5" />
                 </Button>
@@ -2012,7 +2012,7 @@ export function DebugPanel() {
   )
 
   return (
-    <TooltipProvider delayDuration={200}>
+    <TooltipProvider delay={200}>
       <DebugPanelThemeContext.Provider value={debugPanelThemeStyle}>
         {open ? (
           <div

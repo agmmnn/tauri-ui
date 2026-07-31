@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "declaration": false,
     "sourceMap": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["node"],
   }
 }
