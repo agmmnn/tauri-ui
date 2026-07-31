@@ -1,5 +1,11 @@
 # create-tauri-ui
 
+## 1.1.1
+
+### Patch Changes
+
+- 2b5016b: Support all Next.js configuration file formats and updated development ports.
+
 ## 1.1.0
 
 ### Minor Changes
