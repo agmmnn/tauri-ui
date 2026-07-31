@@ -19,14 +19,14 @@ export const astroAdapter: TemplateAdapter = {
 
       return `${content.slice(0, closingIndex)}
   server: {
-    port: 1420,
+    port: 3000,
   },${content.slice(closingIndex)}`;
     });
   },
   tauriConfig() {
     return {
       frontendDist: "../dist",
-      devUrl: "http://localhost:1420",
+      devUrl: "http://localhost:3000",
       beforeDevCommand: "bun run dev",
       beforeBuildCommand: "bun run build",
     };

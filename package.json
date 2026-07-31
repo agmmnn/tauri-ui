@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
+    "@types/node": "^26.1.2",
     "oxfmt": "^0.45.0",
     "oxlint": "^1.60.0",
     "taze": "^19.11.0",
