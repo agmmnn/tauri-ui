@@ -13,10 +13,10 @@
 
 </div>
 
-> ⚡ The fastest way to build a Tauri desktop app with [shadcn/ui](https://ui.shadcn.com/).
+> ⚡ Scaffold Tauri desktop apps with [shadcn/ui](https://ui.shadcn.com/) and desktop-ready defaults.
 
-One command → shadcn frontend + native shell + desktop-ready defaults.  
-No templates to maintain — upstream CLIs do the heavy lifting.
+Choose Vite, Next.js, React Router, Astro, or TanStack Start.
+Upstream CLIs build the foundation; `tauri-ui` adds the native shell and optional batteries.
 
 ## Get started
 
