@@ -11,6 +11,11 @@ on:
         description: GitHub release numeric id
         required: true
         type: string
+      portable_only:
+        description: Build and upload only the Windows portable executable
+        required: false
+        default: false
+        type: boolean
   release:
     types:
       - created
@@ -20,8 +25,26 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.run_id }}
 
 jobs:
+  prepare-matrix:
+    name: Prepare smoke matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.value }}
+    steps:
+      - name: Select artifacts
+        id: matrix
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.portable_only }}" = "true" ]; then
+            value='{"include":[{"name":"Windows Portable","platform":"windows-latest","args":"--no-bundle","asset_suffix":"windows-x64-portable","upload_plain_binary":true}]}'
+          else
+            value='{"include":[{"name":"Windows","platform":"windows-latest","args":"","asset_suffix":"windows-x64","upload_plain_binary":false},{"name":"Windows Portable","platform":"windows-latest","args":"--no-bundle","asset_suffix":"windows-x64-portable","upload_plain_binary":true},{"name":"macOS Apple Silicon","platform":"macos-latest","args":"--target aarch64-apple-darwin","asset_suffix":"macos-apple-silicon","upload_plain_binary":false},{"name":"macOS Intel","platform":"macos-latest","args":"--target x86_64-apple-darwin","asset_suffix":"macos-intel","upload_plain_binary":false},{"name":"Linux","platform":"ubuntu-22.04","args":"","asset_suffix":"linux-x64","upload_plain_binary":false}]}'
+          fi
+
+          echo "value=$value" >> "$GITHUB_OUTPUT"
+
   publish-smoke-app:
     name: Upload generated Vite app
+    needs: prepare-matrix
     if: |
       (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'create-tauri-ui@')) ||
       (github.event_name == 'workflow_dispatch' && startsWith(inputs.release_tag, 'create-tauri-ui@'))
@@ -32,24 +55,7 @@ jobs:
         shell: bash
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - name: Windows
-            platform: windows-latest
-            args: ""
-            asset_suffix: windows-x64
-          - name: macOS Apple Silicon
-            platform: macos-latest
-            args: "--target aarch64-apple-darwin"
-            asset_suffix: macos-apple-silicon
-          - name: macOS Intel
-            platform: macos-latest
-            args: "--target x86_64-apple-darwin"
-            asset_suffix: macos-intel
-          - name: Linux
-            platform: ubuntu-22.04
-            args: ""
-            asset_suffix: linux-x64
+      matrix: ${{ fromJSON(needs.prepare-matrix.outputs.matrix) }}
 
     runs-on: ${{ matrix.platform }}
     env:
@@ -132,6 +138,7 @@ jobs:
           args: ${{ matrix.args }}
           retryAttempts: 2
           assetNamePattern: "tauri-ui-smoke-v${{ steps.release.outputs.version }}-${{ matrix.asset_suffix }}[ext]"
+          uploadPlainBinary: ${{ matrix.upload_plain_binary }}
           includeUpdaterJson: false
 
       - name: Smoke app summary
