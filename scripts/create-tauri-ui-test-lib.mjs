@@ -94,7 +94,7 @@ async function assertPathExists(targetPath, message) {
 }
 
 async function readText(targetPath) {
-  return fs.readFile(targetPath, "utf8");
+  return (await fs.readFile(targetPath, "utf8")).replace(/\r\n/g, "\n");
 }
 
 async function assertTextIncludes(targetPath, expected, message) {
