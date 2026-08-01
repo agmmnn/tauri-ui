@@ -70,6 +70,8 @@ bun run tauri dev
 - no forks, always up to date
 - adapters for `vite`, `next`, `react-router`, `astro`, `start`
 
+<img alt="tauri-ui cli" src="https://github.com/user-attachments/assets/e8076cfc-94b0-4d8b-80d0-9dd1c5893e87" />
+
 ## Why tauri-ui
 
 A fresh Tauri app feels like a wrapped website. Window state, startup flash, link routing, overscroll, native selection: chores you hit on every project.
@@ -77,8 +79,6 @@ A fresh Tauri app feels like a wrapped website. Window state, startup flash, lin
 `tauri-ui` handles them by default and stays close to upstream `shadcn` and `create-tauri-app`. Nothing forks, nothing drifts from the docs.
 
 **🦾 Better with AI coding agents:** familiar `shadcn` + Tauri structure, built on upstream APIs without custom wrappers or forks.
-
-<img alt="tauri-ui" src="https://github.com/user-attachments/assets/0b26c74b-204d-41f5-ad75-585f79af2c15" />
 
 ## How it works
 
