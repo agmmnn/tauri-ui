@@ -1,5 +1,19 @@
 # create-tauri-ui
 
+## 1.2.0
+
+### Minor Changes
+
+- 62be517: Let users choose grouped Windows, macOS, and Linux release artifacts during setup, generate only the selected Tauri bundles, and support a clearly named Windows portable executable alongside installers or by itself.
+
+### Patch Changes
+
+- 62be517: Streamline the interactive setup with concise feature and release summaries, grouped artifact selection, animated phase progress, boxed next steps, and an elapsed-time outro.
+- 62be517: Fix Base UI trigger and menu composition in the debug panel, and pin the Next.js Turbopack root to the generated project.
+- 62be517: Keep native WebView scrollbars and controls synchronized with the generated app's light or dark theme.
+- 62be517: Build projects in a sibling staging directory, preserve installed dependencies, and run one final dependency reconciliation before atomically moving the completed project into place. Pin the shadcn CLI used for scaffolding to 4.16.1.
+- 62be517: Update generated Vite configs for the native config loader and exclude Cargo build artifacts from the development file watcher.
+
 ## 1.1.1
 
 ### Patch Changes
