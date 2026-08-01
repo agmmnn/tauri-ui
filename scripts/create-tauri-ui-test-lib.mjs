@@ -148,19 +148,65 @@ async function listFiles(rootDir, currentDir = rootDir) {
 }
 
 async function assertBuildArtifacts(targetDir, patterns, template) {
-  if (patterns.length === 0) return;
+  if (patterns.length === 0) return [];
 
   const files = await listFiles(targetDir);
-  const missing = patterns.filter((pattern) => {
+  const matches = patterns.map((pattern) => {
     const matcher = globPatternToRegExp(pattern);
-    return !files.some((file) => matcher.test(file));
+    return files.find((file) => matcher.test(file));
   });
+  const missing = patterns.filter((_, index) => !matches[index]);
 
   if (missing.length > 0) {
     throw new Error(
       `[${template}] native build did not produce expected artifacts: ${missing.join(", ")}`,
     );
   }
+
+  return matches;
+}
+
+export async function exportBuildArtifacts(
+  targetDir,
+  matches,
+  names,
+  outputDir,
+  version,
+  template,
+) {
+  if (!outputDir) return;
+
+  if (matches.length === 0 || matches.length !== names.length) {
+    throw new Error(
+      `[${template}] CREATE_TAURI_UI_ARTIFACT_NAMES must match CREATE_TAURI_UI_EXPECT_ARTIFACTS.`,
+    );
+  }
+
+  await fs.mkdir(outputDir, { recursive: true });
+
+  for (let index = 0; index < matches.length; index += 1) {
+    const source = matches[index];
+    const outputName = names[index].replaceAll("__VERSION__", version);
+
+    if (!source || path.basename(outputName) !== outputName) {
+      throw new Error(`[${template}] invalid exported artifact name: ${outputName}`);
+    }
+
+    await fs.copyFile(path.join(targetDir, source), path.join(outputDir, outputName));
+    log(`[${template}] exported ${outputName}`);
+  }
+}
+
+export async function applyArtifactMetadata(targetDir, version, appName) {
+  if (!version && !appName) return;
+
+  const configPath = path.join(targetDir, "src-tauri/tauri.conf.json");
+  const config = JSON.parse(await readText(configPath));
+
+  if (version) config.version = version;
+  if (appName) config.productName = appName;
+
+  await fs.writeFile(configPath, `${JSON.stringify(config, null, 2)}\n`, "utf8");
 }
 
 async function findNextConfig(targetDir) {
@@ -344,6 +390,10 @@ export async function runCreateTauriUiMatrix({
   const templates = ensureTemplateList(selectedTemplates);
   const tauriBuildArgs = readStringArrayEnv("CREATE_TAURI_UI_TAURI_BUILD_ARGS");
   const expectedArtifacts = readStringArrayEnv("CREATE_TAURI_UI_EXPECT_ARTIFACTS");
+  const artifactNames = readStringArrayEnv("CREATE_TAURI_UI_ARTIFACT_NAMES");
+  const artifactOutputDir = process.env.CREATE_TAURI_UI_ARTIFACT_OUTPUT_DIR;
+  const artifactVersion = process.env.CREATE_TAURI_UI_ARTIFACT_VERSION;
+  const artifactAppName = process.env.CREATE_TAURI_UI_ARTIFACT_APP_NAME;
   const baseDir = await fs.mkdtemp(path.join(os.tmpdir(), `create-tauri-ui-${mode}-`));
   const results = [];
 
@@ -382,6 +432,7 @@ export async function runCreateTauriUiMatrix({
       log(`[${template}] verifying generated project`);
       await assertGeneratedProject(targetDir, template, includeWorkflow);
       await assertNoStagingDirectories(baseDir, template);
+      await applyArtifactMetadata(targetDir, artifactVersion, artifactAppName);
 
       log(`[${template}] bun run build`);
       await runCommand("bun", ["run", "build"], { cwd: targetDir });
@@ -392,7 +443,15 @@ export async function runCreateTauriUiMatrix({
         await runCommand("bun", ["run", "tauri", "build", ...tauriBuildArgs], {
           cwd: targetDir,
         });
-        await assertBuildArtifacts(targetDir, expectedArtifacts, template);
+        const matches = await assertBuildArtifacts(targetDir, expectedArtifacts, template);
+        await exportBuildArtifacts(
+          targetDir,
+          matches,
+          artifactNames,
+          artifactOutputDir,
+          artifactVersion ?? "0.0.0",
+          template,
+        );
       }
 
       results.push({
