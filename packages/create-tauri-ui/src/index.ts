@@ -1,7 +1,6 @@
 import fs from "node:fs";
-import path from "node:path";
 import process from "node:process";
-import { cancel, intro, log, note, outro, spinner } from "@clack/prompts";
+import { cancel, intro, log, outro } from "@clack/prompts";
 import pc from "picocolors";
 
 import { getAdapter } from "./adapters";
@@ -17,15 +16,29 @@ import { applyWorkflow } from "./batteries/workflow";
 import { type ManageAction, type ManageArgs, runManageCommand } from "./commands/manage";
 import { applyTauriConfig, mergeTauri } from "./merge";
 import { runPrompts } from "./prompts";
-import { addStarterUI, scaffoldFrontend, scaffoldTauri } from "./scaffold";
-import type { CliArgs, TargetOs } from "./types";
+import {
+  addStarterUI,
+  finalizeFrontendScaffold,
+  scaffoldFrontend,
+  scaffoldTauri,
+} from "./scaffold";
+import type { CliArgs, FrontendScaffoldResult, TargetOs } from "./types";
 import { TARGET_OS } from "./types";
 import {
+  ProgressReporter,
+  animationsEnabled,
+  formatDuration,
+  playBrandReveal,
+  playSuccessBurst,
+  printConfiguration,
+  printInstructions,
+} from "./ui";
+import {
+  CommandError,
   PatchError,
   ScaffoldError,
   execSafe,
   installCleanupHandlers,
-  registerCleanupPath,
   removeTempDir,
   unregisterCleanupPath,
 } from "./utils";
@@ -59,6 +72,8 @@ Scaffold options:
       --no-invoke-example       skip the Rust invoke example
       --workflow                include the GitHub release workflow
       --no-workflow             skip the GitHub release workflow
+      --animations              force terminal animations
+      --no-animations           disable terminal animations
 
 Manage options:
       --dir <path>              project directory (default: current working dir)
@@ -108,12 +123,13 @@ function parseManageArgs(argv: string[]): ManageArgs {
         break;
       case "--target-os": {
         const raw = readValue(index, token);
-        const values = raw.split(",").map((entry) => entry.trim()).filter(Boolean);
+        const values = raw
+          .split(",")
+          .map((entry) => entry.trim())
+          .filter(Boolean);
         for (const value of values) {
           if (!TARGET_OS.includes(value as TargetOs)) {
-            throw new Error(
-              `Unknown target OS "${value}". Allowed: ${TARGET_OS.join(", ")}`,
-            );
+            throw new Error(`Unknown target OS "${value}". Allowed: ${TARGET_OS.join(", ")}`);
           }
         }
         args.targetOS = values as TargetOs[];
@@ -129,9 +145,7 @@ function parseManageArgs(argv: string[]): ManageArgs {
   }
 
   if (action !== "list" && positional.length === 0) {
-    throw new Error(
-      `Missing battery name. Usage: create-tauri-ui ${action} <battery>`,
-    );
+    throw new Error(`Missing battery name. Usage: create-tauri-ui ${action} <battery>`);
   }
 
   if (positional.length > 1) {
@@ -210,6 +224,12 @@ function parseArgs(argv: string[]): CliArgs {
       case "--no-workflow":
         args.includeWorkflow = false;
         break;
+      case "--animations":
+        args.animations = true;
+        break;
+      case "--no-animations":
+        args.animations = false;
+        break;
       case "-f":
       case "--force":
         args.force = true;
@@ -238,41 +258,27 @@ function parseArgs(argv: string[]): CliArgs {
   return args;
 }
 
-function formatShellPath(targetPath: string) {
-  const relativePath = path.relative(process.cwd(), targetPath) || ".";
-  return relativePath.includes(" ") ? `"${relativePath}"` : relativePath;
-}
-
-function pruneGeneratedInstallArtifacts(targetDir: string) {
-  fs.rmSync(path.join(targetDir, "node_modules"), {
-    recursive: true,
-    force: true,
-  });
-}
-
-function printInstructions(targetDir: string, includeWorkflow: boolean) {
-  const steps = [
-    `cd ${formatShellPath(targetDir)}`,
-    "bun install",
-    "bun run tauri dev",
-    "bunx tauri icon app-icon.png",
-  ];
-
-  note(steps.join("\n"), "Next steps");
-
-  if (includeWorkflow) {
-    note(
-      "Configure the GitHub release workflow secrets before publishing builds.",
-      "Release workflow",
-    );
-  }
-}
-
 async function ensureBun() {
   try {
     await execSafe("bun", ["--version"]);
   } catch {
     throw new Error("bun is required. Install it from https://bun.sh.");
+  }
+}
+
+async function installDependencies(projectDir: string) {
+  try {
+    await execSafe("bun", ["install"], { cwd: projectDir });
+  } catch (error) {
+    if (error instanceof CommandError) {
+      throw new ScaffoldError(
+        "bun",
+        "bun failed while finalizing project dependencies.",
+        error.stderr || error.stdout,
+      );
+    }
+
+    throw error;
   }
 }
 
@@ -319,100 +325,120 @@ async function main() {
     return;
   }
 
-  intro(pc.bold("create-tauri-ui"));
+  const animate = animationsEnabled(args.animations);
+  await playBrandReveal(animate);
+  intro(`${pc.bold("create-tauri-ui")} ${pc.cyan("🦀")}`);
   await ensureBun();
 
   const options = await runPrompts(args);
+  printConfiguration(options);
   installCleanupHandlers();
-  registerCleanupPath(options.targetDir);
-  const step = spinner();
-  let tempDir: string | undefined;
+  const progress = new ProgressReporter(animate);
+  const startedAt = Date.now();
+  const warnings: string[] = [];
+  let tauriTempDir: string | undefined;
+  let frontendScaffold: FrontendScaffoldResult | undefined;
 
   try {
-    step.start("Creating the shadcn frontend scaffold");
-    await scaffoldFrontend(options);
+    progress.start("Frontend scaffold", [
+      "Resolving the shadcn template",
+      "Installing frontend dependencies",
+      "First run takes longer while Bun warms its cache",
+    ]);
+    frontendScaffold = await scaffoldFrontend(options);
+    const projectDir = frontendScaffold.projectDir;
+    const stagingOptions = { ...options, targetDir: projectDir };
+    progress.complete();
 
-    step.message("Creating the Tauri native scaffold");
+    progress.start("Tauri native layer", [
+      "Generating the native project",
+      "Merging Tauri configuration",
+      "Applying native build settings",
+    ]);
     const tauriScaffold = await scaffoldTauri(options);
-    tempDir = tauriScaffold.tempDir;
+    tauriTempDir = tauriScaffold.tempDir;
 
-    step.message("Merging the native layer into the frontend project");
-    await mergeTauri(options.targetDir, tauriScaffold.projectDir, options);
+    await mergeTauri(projectDir, tauriScaffold.projectDir, stagingOptions);
 
     const adapter = getAdapter(options.template);
-    step.message(`Patching the ${options.template} project for Tauri`);
 
     try {
-      await adapter.apply(options.targetDir, options);
+      await adapter.apply(projectDir, stagingOptions);
     } catch (error) {
       if (error instanceof PatchError) {
-        log.warn(`${error.message} (${error.file})`);
+        warnings.push(`${error.message} (${error.file})`);
       } else {
         throw error;
       }
     }
 
-    await applyTauriConfig(options.targetDir, options, adapter.tauriConfig());
+    await applyTauriConfig(projectDir, stagingOptions, adapter.tauriConfig());
 
     if (options.includeSizeOptimization) {
-      step.message("Applying the app size optimization battery");
-      await applySizeOptimization(options.targetDir, options);
+      await applySizeOptimization(projectDir, stagingOptions);
     }
+    progress.complete();
 
-    step.message("Applying the startup flash-prevention battery");
-    await applyFlashPrevention(options.targetDir);
+    progress.start("Components and batteries", [
+      "Configuring desktop behavior",
+      "Installing dashboard components",
+      "Applying the selected project features",
+    ]);
+    await applyFlashPrevention(projectDir);
 
-    step.message("Applying the desktop scroll container battery");
-    await applyScrollContainer(options.targetDir, options);
+    await applyScrollContainer(projectDir, stagingOptions);
 
-    step.message("Applying the external link guard battery");
-    await applyExternalLinkGuard(options.targetDir, options);
+    await applyExternalLinkGuard(projectDir, stagingOptions);
 
     if (options.includeStarterUI) {
-      step.message("Installing the starter dashboard");
-
       try {
-        await addStarterUI(options.targetDir, options);
+        await addStarterUI(projectDir, stagingOptions);
       } catch (error) {
         if (error instanceof ScaffoldError) {
-          log.warn(error.message);
-          if (error.stderr.trim()) {
-            log.message(error.stderr.trim());
-          }
+          warnings.push([error.message, error.stderr.trim()].filter(Boolean).join("\n"));
         } else {
           throw error;
         }
       }
     }
 
-    step.message("Applying the development debug panel battery");
-    await applyDebugPanel(options.targetDir, options);
+    await applyDebugPanel(projectDir, stagingOptions);
 
-    step.message("Applying the desktop selection-behavior battery");
-    await applySelectionBehavior(options.targetDir, options);
+    await applySelectionBehavior(projectDir, stagingOptions);
 
     if (options.includeInvokeExample) {
-      step.message("Adding the Rust invoke example");
-      await applyInvokeExample(options.targetDir, options);
+      await applyInvokeExample(projectDir, stagingOptions);
     }
 
     if (options.includeWorkflow) {
-      step.message("Writing the GitHub release workflow");
-      await applyWorkflow(options.targetDir, options);
+      await applyWorkflow(projectDir, stagingOptions);
     }
 
-    step.message("Copying the app icon source");
-    await applyIcon(options.targetDir);
+    await applyIcon(projectDir);
+    progress.complete();
 
-    pruneGeneratedInstallArtifacts(options.targetDir);
+    progress.start("Finalizing project", [
+      "Reusing the existing Bun installation",
+      "Reconciling Tauri and frontend dependencies",
+      "Preparing the completed project",
+    ]);
+    await installDependencies(projectDir);
+
+    finalizeFrontendScaffold(frontendScaffold, options.targetDir);
+    frontendScaffold = undefined;
     unregisterCleanupPath(options.targetDir);
+    progress.complete();
 
-    step.stop("Project ready");
-    printInstructions(options.targetDir, options.includeWorkflow);
-    outro(`Scaffolded ${pc.cyan(options.projectName)} in ${pc.dim(options.targetDir)}`);
+    for (const warning of warnings) {
+      log.warn(warning);
+    }
+
+    await playSuccessBurst(animate, `${options.projectName} is ready`);
+    printInstructions(options);
+    outro(`${pc.green("Built 4 phases")} in ${formatDuration(Date.now() - startedAt)}`);
   } catch (error) {
     const details = describeError(error);
-    step.error("Scaffolding failed");
+    progress.error("Scaffolding failed");
     cancel(details.message);
 
     if (details.detail) {
@@ -421,10 +447,17 @@ async function main() {
 
     process.exitCode = 1;
   } finally {
-    if (tempDir) {
-      unregisterCleanupPath(tempDir);
+    if (frontendScaffold) {
+      unregisterCleanupPath(frontendScaffold.stagingDir);
       try {
-        removeTempDir(tempDir);
+        removeTempDir(frontendScaffold.stagingDir);
+      } catch {}
+    }
+
+    if (tauriTempDir) {
+      unregisterCleanupPath(tauriTempDir);
+      try {
+        removeTempDir(tauriTempDir);
       } catch {}
     }
   }

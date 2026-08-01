@@ -2,27 +2,7 @@ import path from "node:path";
 
 import type { ProjectOptions, TemplateAdapter } from "../types";
 import { PatchError, editFile } from "../utils";
-
-function insertServerBlock(content: string) {
-  if (content.includes("strictPort: true")) {
-    return content;
-  }
-
-  const closingIndex = content.lastIndexOf("\n})");
-
-  if (closingIndex === -1) {
-    throw new PatchError(
-      "vite.config.ts",
-      "Could not find the React Router Vite config closing brace.",
-    );
-  }
-
-  return `${content.slice(0, closingIndex)}
-  server: {
-    port: 3000,
-    strictPort: true,
-  },${content.slice(closingIndex)}`;
-}
+import { patchViteConfig } from "./vite-config";
 
 export const reactRouterAdapter: TemplateAdapter = {
   name: "react-router",
@@ -42,7 +22,13 @@ export const reactRouterAdapter: TemplateAdapter = {
       return content.replace("ssr: true", "ssr: false");
     });
 
-    editFile(path.join(projectDir, "vite.config.ts"), insertServerBlock);
+    editFile(path.join(projectDir, "vite.config.ts"), (content) =>
+      patchViteConfig(
+        content,
+        "vite.config.ts",
+        "Could not find the React Router Vite config closing brace.",
+      ),
+    );
   },
   tauriConfig() {
     return {

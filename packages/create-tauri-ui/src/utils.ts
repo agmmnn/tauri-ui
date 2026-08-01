@@ -20,7 +20,7 @@ export class CommandError extends Error {
 
 export class ScaffoldError extends Error {
   constructor(
-    public readonly tool: "shadcn" | "cta",
+    public readonly tool: "shadcn" | "cta" | "bun",
     message: string,
     public readonly stderr: string,
   ) {

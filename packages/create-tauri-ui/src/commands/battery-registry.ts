@@ -54,34 +54,36 @@ function debugPanelFiles(projectDir: string, template: TemplateName) {
 }
 
 function removeDebugPanelMount(projectDir: string, template: TemplateName) {
-  const mountTargets: Record<TemplateName, { file: string; importMatch: RegExp; jsxMatch: RegExp }> =
-    {
-      vite: {
-        file: "src/main.tsx",
-        importMatch: /import \{ DebugPanel \} from "\.\/components\/debug-panel\.tsx"\r?\n/,
-        jsxMatch: / *\{import\.meta\.env\.DEV \? <DebugPanel \/> : null\}\r?\n/,
-      },
-      next: {
-        file: "app/layout.tsx",
-        importMatch: /import \{ DebugPanel \} from "@\/components\/debug-panel"\r?\n/,
-        jsxMatch: /\{process\.env\.NODE_ENV === "development" \? <DebugPanel \/> : null\}/,
-      },
-      start: {
-        file: "src/routes/__root.tsx",
-        importMatch: /import \{ DebugPanel \} from "\.\.\/components\/debug-panel"\r?\n/,
-        jsxMatch: /\{import\.meta\.env\.DEV \? <DebugPanel \/> : null\}/,
-      },
-      "react-router": {
-        file: "app/root.tsx",
-        importMatch: /import \{ DebugPanel \} from "\.\/components\/debug-panel"\r?\n/,
-        jsxMatch: / *\{import\.meta\.env\.DEV \? <DebugPanel \/> : null\}\r?\n/,
-      },
-      astro: {
-        file: "src/layouts/main.astro",
-        importMatch: /import \{ DebugPanel \} from "@\/components\/debug-panel"\r?\n/,
-        jsxMatch: /\{import\.meta\.env\.DEV \? <DebugPanel client:load \/> : null\}/,
-      },
-    };
+  const mountTargets: Record<
+    TemplateName,
+    { file: string; importMatch: RegExp; jsxMatch: RegExp }
+  > = {
+    vite: {
+      file: "src/main.tsx",
+      importMatch: /import \{ DebugPanel \} from "\.\/components\/debug-panel\.tsx"\r?\n/,
+      jsxMatch: / *\{import\.meta\.env\.DEV \? <DebugPanel \/> : null\}\r?\n/,
+    },
+    next: {
+      file: "app/layout.tsx",
+      importMatch: /import \{ DebugPanel \} from "@\/components\/debug-panel"\r?\n/,
+      jsxMatch: /\{process\.env\.NODE_ENV === "development" \? <DebugPanel \/> : null\}/,
+    },
+    start: {
+      file: "src/routes/__root.tsx",
+      importMatch: /import \{ DebugPanel \} from "\.\.\/components\/debug-panel"\r?\n/,
+      jsxMatch: /\{import\.meta\.env\.DEV \? <DebugPanel \/> : null\}/,
+    },
+    "react-router": {
+      file: "app/root.tsx",
+      importMatch: /import \{ DebugPanel \} from "\.\/components\/debug-panel"\r?\n/,
+      jsxMatch: / *\{import\.meta\.env\.DEV \? <DebugPanel \/> : null\}\r?\n/,
+    },
+    astro: {
+      file: "src/layouts/main.astro",
+      importMatch: /import \{ DebugPanel \} from "@\/components\/debug-panel"\r?\n/,
+      jsxMatch: /\{import\.meta\.env\.DEV \? <DebugPanel client:load \/> : null\}/,
+    },
+  };
 
   const target = mountTargets[template];
   const filePath = path.join(projectDir, target.file);
@@ -173,9 +175,7 @@ export function getBattery(id: string): BatteryDefinition {
   const battery = BATTERIES[id as BatteryId];
 
   if (!battery) {
-    throw new Error(
-      `Unknown battery "${id}". Available: ${Object.keys(BATTERIES).join(", ")}`,
-    );
+    throw new Error(`Unknown battery "${id}". Available: ${Object.keys(BATTERIES).join(", ")}`);
   }
 
   return battery;

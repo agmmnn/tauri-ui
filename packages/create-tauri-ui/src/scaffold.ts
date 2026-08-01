@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import type { ProjectOptions, TauriScaffoldResult } from "./types";
+import type { FrontendScaffoldResult, ProjectOptions, TauriScaffoldResult } from "./types";
 import {
   CommandError,
   PatchError,
@@ -14,9 +14,12 @@ import {
   unregisterCleanupPath,
 } from "./utils";
 
+const SHADCN_VERSION = "4.16.1";
+const SHADCN_PACKAGE = `shadcn@${SHADCN_VERSION}`;
+
 async function runShadcn(projectDir: string, args: string[]) {
   try {
-    await execSafe("bunx", ["--bun", "shadcn@latest", ...args], {
+    await execSafe("bunx", ["--bun", SHADCN_PACKAGE, ...args], {
       cwd: projectDir,
     });
   } catch (error) {
@@ -160,32 +163,40 @@ function buildAstroDashboardShell(includeInvokeExample: boolean) {
   ).replace("export default function DashboardShell()", "export function DashboardShell()");
 }
 
-function moveScaffoldedProject(sourceDir: string, targetDir: string) {
-  try {
-    fs.renameSync(sourceDir, targetDir);
-    return;
-  } catch (error) {
-    if (!(error instanceof Error) || !("code" in error) || error.code !== "EXDEV") {
-      throw error;
+export function finalizeFrontendScaffold(scaffold: FrontendScaffoldResult, targetDir: string) {
+  if (fs.existsSync(targetDir)) {
+    if (fs.readdirSync(targetDir).length > 0) {
+      throw new Error(`Target directory became non-empty during scaffolding: ${targetDir}`);
     }
+
+    fs.rmdirSync(targetDir);
   }
 
-  fs.cpSync(sourceDir, targetDir, { recursive: true, force: true });
-  fs.rmSync(sourceDir, { recursive: true, force: true });
+  fs.renameSync(scaffold.projectDir, targetDir);
+  registerCleanupPath(targetDir);
+  unregisterCleanupPath(scaffold.stagingDir);
+  try {
+    removeTempDir(scaffold.stagingDir);
+  } catch {
+    // The completed project is already in place. Empty staging cleanup is best-effort.
+  }
 }
 
-export async function scaffoldFrontend(options: ProjectOptions) {
-  fs.mkdirSync(path.dirname(options.targetDir), { recursive: true });
-  const tempDir = makeTempDir("create-tauri-ui-frontend-");
-  const tempProjectDir = path.join(tempDir, options.projectName);
-  registerCleanupPath(tempDir);
+export async function scaffoldFrontend(options: ProjectOptions): Promise<FrontendScaffoldResult> {
+  const targetParentDir = path.dirname(options.targetDir);
+  if (!fs.existsSync(targetParentDir)) {
+    fs.mkdirSync(targetParentDir, { recursive: true });
+  }
+  const stagingDir = fs.mkdtempSync(path.join(targetParentDir, ".create-tauri-ui-"));
+  const stagingProjectDir = path.join(stagingDir, options.projectName);
+  registerCleanupPath(stagingDir);
 
   try {
     await execSafe(
       "bunx",
       [
         "--bun",
-        "shadcn@latest",
+        SHADCN_PACKAGE,
         "init",
         "--name",
         options.projectName,
@@ -196,27 +207,20 @@ export async function scaffoldFrontend(options: ProjectOptions) {
         "--yes",
       ],
       {
-        cwd: tempDir,
+        cwd: stagingDir,
       },
     );
 
-    if (!fs.existsSync(tempProjectDir)) {
+    if (!fs.existsSync(stagingProjectDir)) {
       throw new Error("shadcn CLI did not produce the expected project directory.");
     }
-
-    fs.rmSync(path.join(tempProjectDir, "node_modules"), {
-      recursive: true,
-      force: true,
-    });
-
-    moveScaffoldedProject(tempProjectDir, options.targetDir);
   } catch (error) {
-    if (error instanceof CommandError) {
-      unregisterCleanupPath(tempDir);
-      try {
-        removeTempDir(tempDir);
-      } catch {}
+    unregisterCleanupPath(stagingDir);
+    try {
+      removeTempDir(stagingDir);
+    } catch {}
 
+    if (error instanceof CommandError) {
       throw new ScaffoldError(
         "shadcn",
         "shadcn CLI failed while creating the frontend scaffold.",
@@ -224,20 +228,13 @@ export async function scaffoldFrontend(options: ProjectOptions) {
       );
     }
 
-    unregisterCleanupPath(tempDir);
-    try {
-      removeTempDir(tempDir);
-    } catch {}
-
     throw error;
-  } finally {
-    unregisterCleanupPath(tempDir);
-    try {
-      removeTempDir(tempDir);
-    } catch {}
   }
 
-  return options.targetDir;
+  return {
+    stagingDir,
+    projectDir: stagingProjectDir,
+  };
 }
 
 export async function scaffoldTauri(options: ProjectOptions): Promise<TauriScaffoldResult> {

@@ -10,6 +10,6 @@
     "declaration": false,
     "sourceMap": false,
     "esModuleInterop": true,
-    "types": ["node"],
+    "types": ["node"]
   }
 }

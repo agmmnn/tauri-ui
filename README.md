@@ -98,7 +98,7 @@ No full local templates. Just a small asset and patch surface on top of the upst
 
 Run inside an existing tauri-ui project to add, update, or remove batteries without re-scaffolding:
 
-> *Template auto-detected (no manifest file written to your repo), updates are idempotent; commit first and review the diff.*
+> _Template auto-detected (no manifest file written to your repo), updates are idempotent; commit first and review the diff._
 
 ```bash
 bunx create-tauri-ui@latest list                  # show install status
@@ -111,7 +111,7 @@ bunx create-tauri-ui@latest remove workflow
 
 - **[speedbox](https://github.com/agmmnn/speedbox)** — internet and DNS speed test desktop app.
 
-> *Built something with `tauri-ui`? [Open a PR](https://github.com/agmmnn/tauri-ui/pulls) adding it to this list — one line with a link and a short description.*
+> _Built something with `tauri-ui`? [Open a PR](https://github.com/agmmnn/tauri-ui/pulls) adding it to this list — one line with a link and a short description._
 
 ---
 

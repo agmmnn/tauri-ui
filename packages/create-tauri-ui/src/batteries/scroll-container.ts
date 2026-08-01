@@ -5,6 +5,17 @@ import { PatchError, editFile } from "../utils";
 
 const SCROLL_CONTAINER_ATTRIBUTE = "data-ui-scroll-container";
 
+const NATIVE_COLOR_SCHEME_CSS = `
+/* Keep native WebView controls, including scrollbars, in sync with the app theme. */
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+`;
+
 const BASE_SCROLL_CSS = `
 /* Disable page-level overscroll and rubber-band scrolling so the UI feels more desktop-native. */
 html,
@@ -33,14 +44,27 @@ const VITE_ROOT_SCROLL_CSS = `
 }
 `;
 
-function ensureCssSnippet(filePath: string, snippet: string) {
+function ensureCssSnippet(filePath: string, snippet: string, marker: string) {
   editFile(filePath, (content) => {
-    if (content.includes("Disable page-level overscroll and rubber-band scrolling")) {
+    if (content.includes(marker)) {
       return content;
     }
 
     return `${content.trimEnd()}\n${snippet}`;
   });
+}
+
+function ensureScrollCss(filePath: string, rootCss = "") {
+  ensureCssSnippet(
+    filePath,
+    NATIVE_COLOR_SCHEME_CSS,
+    "Keep native WebView controls, including scrollbars, in sync with the app theme",
+  );
+  ensureCssSnippet(
+    filePath,
+    `${BASE_SCROLL_CSS}${rootCss}`,
+    "Disable page-level overscroll and rubber-band scrolling",
+  );
 }
 
 function ensureMainWrapper(filePath: string, matcher: string | RegExp, replacement: string) {
@@ -49,29 +73,29 @@ function ensureMainWrapper(filePath: string, matcher: string | RegExp, replaceme
       return content;
     }
 
+    const wrappedContent = content.replace(matcher, replacement);
+
+    if (wrappedContent !== content) {
+      return wrappedContent;
+    }
+
     const upgradedContent = content.replace(
       new RegExp(`<main(?![^>]*${SCROLL_CONTAINER_ATTRIBUTE})([^>]*)>`),
       `<main ${SCROLL_CONTAINER_ATTRIBUTE}$1>`,
     );
 
-    if (upgradedContent !== content) {
-      return upgradedContent;
-    }
-
-    const nextContent = content.replace(matcher, replacement);
-
-    if (nextContent === content) {
+    if (upgradedContent === content) {
       throw new PatchError(filePath, "Could not insert the scroll container <main> wrapper.");
     }
 
-    return nextContent;
+    return upgradedContent;
   });
 }
 
 export async function applyScrollContainer(projectDir: string, options: ProjectOptions) {
   switch (options.template) {
     case "next":
-      ensureCssSnippet(path.join(projectDir, "app/globals.css"), BASE_SCROLL_CSS);
+      ensureScrollCss(path.join(projectDir, "app/globals.css"));
       ensureMainWrapper(
         path.join(projectDir, "app/layout.tsx"),
         /\{children\}/,
@@ -79,10 +103,7 @@ export async function applyScrollContainer(projectDir: string, options: ProjectO
       );
       return;
     case "vite":
-      ensureCssSnippet(
-        path.join(projectDir, "src/index.css"),
-        `${BASE_SCROLL_CSS}${VITE_ROOT_SCROLL_CSS}`,
-      );
+      ensureScrollCss(path.join(projectDir, "src/index.css"), VITE_ROOT_SCROLL_CSS);
       ensureMainWrapper(
         path.join(projectDir, "src/main.tsx"),
         /<App \/>/,
@@ -90,7 +111,7 @@ export async function applyScrollContainer(projectDir: string, options: ProjectO
       );
       return;
     case "start":
-      ensureCssSnippet(path.join(projectDir, "src/styles.css"), BASE_SCROLL_CSS);
+      ensureScrollCss(path.join(projectDir, "src/styles.css"));
       ensureMainWrapper(
         path.join(projectDir, "src/routes/__root.tsx"),
         /\{children\}/,
@@ -98,7 +119,7 @@ export async function applyScrollContainer(projectDir: string, options: ProjectO
       );
       return;
     case "react-router":
-      ensureCssSnippet(path.join(projectDir, "app/app.css"), BASE_SCROLL_CSS);
+      ensureScrollCss(path.join(projectDir, "app/app.css"));
       ensureMainWrapper(
         path.join(projectDir, "app/root.tsx"),
         /return <Outlet \/>/,
@@ -106,7 +127,7 @@ export async function applyScrollContainer(projectDir: string, options: ProjectO
       );
       return;
     case "astro":
-      ensureCssSnippet(path.join(projectDir, "src/styles/global.css"), BASE_SCROLL_CSS);
+      ensureScrollCss(path.join(projectDir, "src/styles/global.css"));
       ensureMainWrapper(
         path.join(projectDir, "src/layouts/main.astro"),
         /<slot \/>/,

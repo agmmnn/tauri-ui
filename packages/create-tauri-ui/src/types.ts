@@ -6,6 +6,19 @@ export const TARGET_OS = ["windows-latest", "macos-latest", "ubuntu-latest"] as 
 
 export type TargetOs = (typeof TARGET_OS)[number];
 
+export const RELEASE_ARTIFACTS = [
+  "windows-nsis",
+  "windows-msi",
+  "windows-portable",
+  "macos-aarch64-dmg",
+  "macos-x64-dmg",
+  "linux-appimage",
+  "linux-deb",
+  "linux-rpm",
+] as const;
+
+export type ReleaseArtifact = (typeof RELEASE_ARTIFACTS)[number];
+
 export interface CliArgs {
   targetDir?: string;
   template?: TemplateName;
@@ -15,6 +28,7 @@ export interface CliArgs {
   includeStarterUI?: boolean;
   includeInvokeExample?: boolean;
   includeWorkflow?: boolean;
+  animations?: boolean;
   yes?: boolean;
   force?: boolean;
   version?: boolean;
@@ -31,7 +45,7 @@ export interface ProjectOptions {
   includeStarterUI: boolean;
   includeInvokeExample: boolean;
   includeWorkflow: boolean;
-  targetOS: string[];
+  releaseArtifacts: ReleaseArtifact[];
   targetDir: string;
 }
 
@@ -50,5 +64,10 @@ export interface TemplateAdapter {
 
 export interface TauriScaffoldResult {
   tempDir: string;
+  projectDir: string;
+}
+
+export interface FrontendScaffoldResult {
+  stagingDir: string;
   projectDir: string;
 }

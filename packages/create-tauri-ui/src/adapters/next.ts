@@ -15,9 +15,7 @@ export const nextAdapter: TemplateAdapter = {
       "next.config.cjs",
     ];
 
-    const configFile = possibleConfigs.find((file) =>
-      existsSync(path.join(projectDir, file)),
-    );
+    const configFile = possibleConfigs.find((file) => existsSync(path.join(projectDir, file)));
 
     if (!configFile) {
       throw new PatchError(
@@ -31,21 +29,25 @@ export const nextAdapter: TemplateAdapter = {
         return content;
       }
 
-      if (!content.includes("const nextConfig = {}")) {
-        throw new PatchError(
-          configFile,
-          "Could not find the default Next.js config shape.",
-        );
+      const emptyConfig = /const nextConfig(?:\s*:\s*NextConfig)?\s*=\s*\{\}/;
+
+      if (!emptyConfig.test(content)) {
+        throw new PatchError(configFile, "Could not find the default Next.js config shape.");
       }
 
-      return content.replace(
-        "const nextConfig = {}",
-        `const nextConfig = {
-          output: "export",
-          images: {
-            unoptimized: true,
-          },
-        }`,
+      return content.replace(emptyConfig, (declaration) =>
+        declaration.replace(
+          "{}",
+          `{
+  output: "export",
+  images: {
+    unoptimized: true,
+  },
+  turbopack: {
+    root: process.cwd(),
+  },
+}`,
+        ),
       );
     });
 

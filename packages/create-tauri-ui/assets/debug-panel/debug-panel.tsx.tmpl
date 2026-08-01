@@ -505,10 +505,12 @@ function GridLabel({ label, meta }: { label: string; meta?: GridEntryMeta }) {
 
   return (
     <Tooltip>
-      <TooltipTrigger>
-        <span className="cursor-help underline decoration-dotted decoration-muted-foreground/40 underline-offset-4">
-          {label}
-        </span>
+      <TooltipTrigger
+        render={
+          <span className="cursor-help underline decoration-dotted decoration-muted-foreground/40 underline-offset-4" />
+        }
+      >
+        {label}
       </TooltipTrigger>
       <TooltipContent
         side="right"
@@ -1434,10 +1436,17 @@ export function DebugPanel() {
               <PinIcon className="size-3.5" />
             </Button>
             <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button variant="ghost" size="icon-sm" className="size-7" aria-label="Debug panel options">
-                  <EllipsisIcon className="size-3.5" />
-                </Button>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    className="size-7"
+                    aria-label="Debug panel options"
+                  />
+                }
+              >
+                <EllipsisIcon className="size-3.5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
                 <DropdownMenuItem onClick={() => void handleCopySnapshot()}>
@@ -1449,7 +1458,6 @@ export function DebugPanel() {
                   Reload app
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuLabel>Dock</DropdownMenuLabel>
                 <DropdownMenuRadioGroup
                   value={panelSide}
                   onValueChange={(value) => {
@@ -1458,6 +1466,7 @@ export function DebugPanel() {
                     }
                   }}
                 >
+                  <DropdownMenuLabel>Dock</DropdownMenuLabel>
                   <DropdownMenuRadioItem value="left">Left</DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>

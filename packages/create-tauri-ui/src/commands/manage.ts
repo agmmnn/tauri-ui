@@ -1,10 +1,11 @@
 import path from "node:path";
 import process from "node:process";
-import { cancel, confirm, intro, isCancel, log, multiselect, note, outro } from "@clack/prompts";
+import { cancel, confirm, intro, isCancel, log, note, outro } from "@clack/prompts";
 import pc from "picocolors";
 
-import type { ProjectOptions, TargetOs } from "../types";
-import { TARGET_OS } from "../types";
+import { releaseArtifactsForTargetOS } from "../release-artifacts";
+import { promptReleaseArtifacts } from "../release-prompt";
+import type { ProjectOptions, ReleaseArtifact, TargetOs } from "../types";
 import { detectProject } from "./detect";
 import { type BatteryDefinition, getBattery, getStatus, listBatteries } from "./battery-registry";
 
@@ -19,12 +20,6 @@ export interface ManageArgs {
   targetOS?: TargetOs[];
 }
 
-const TARGET_OS_LABELS: Record<string, string> = {
-  "windows-latest": "Windows",
-  "macos-latest": "macOS (Apple Silicon + Intel)",
-  "ubuntu-latest": "Linux",
-};
-
 function unwrap<T>(value: T | symbol): T {
   if (isCancel(value)) {
     throw new Error("Operation cancelled");
@@ -33,32 +28,10 @@ function unwrap<T>(value: T | symbol): T {
   return value as T;
 }
 
-async function promptTargetOS(yes: boolean | undefined): Promise<TargetOs[]> {
-  const defaults: TargetOs[] = ["macos-latest", "ubuntu-latest", "windows-latest"];
-
-  if (yes) {
-    return defaults;
-  }
-
-  const selection = unwrap(
-    await multiselect<TargetOs>({
-      message: "Target platforms for the release workflow",
-      options: TARGET_OS.map((value) => ({
-        value,
-        label: TARGET_OS_LABELS[value] ?? value,
-      })),
-      initialValues: defaults,
-      required: true,
-    }),
-  );
-
-  return selection as TargetOs[];
-}
-
 function buildOptions(
   projectDir: string,
   template: ProjectOptions["template"],
-  targetOS: string[] = [],
+  releaseArtifacts: ReleaseArtifact[] = [],
 ): ProjectOptions {
   const packageName = path.basename(projectDir);
 
@@ -72,7 +45,7 @@ function buildOptions(
     includeStarterUI: false,
     includeInvokeExample: false,
     includeWorkflow: false,
-    targetOS,
+    releaseArtifacts,
     targetDir: projectDir,
   };
 }
@@ -82,22 +55,22 @@ async function runAdd(battery: BatteryDefinition, args: ManageArgs) {
   const status = getStatus(battery, projectDir, template);
 
   if (status.installed && !args.force) {
-    log.warn(
-      `${battery.name} is already installed. Use \`update\` to overwrite, or pass --force.`,
-    );
+    log.warn(`${battery.name} is already installed. Use \`update\` to overwrite, or pass --force.`);
     for (const file of status.detectedFiles) {
       log.message(`  · ${path.relative(projectDir, file)}`);
     }
     return;
   }
 
-  let targetOS: string[] = [];
+  let releaseArtifacts: ReleaseArtifact[] = [];
 
   if (battery.id === "workflow") {
-    targetOS = args.targetOS?.length ? args.targetOS : await promptTargetOS(args.yes);
+    releaseArtifacts = args.targetOS?.length
+      ? releaseArtifactsForTargetOS(args.targetOS)
+      : await promptReleaseArtifacts(args.yes);
   }
 
-  const options = buildOptions(projectDir, template, targetOS);
+  const options = buildOptions(projectDir, template, releaseArtifacts);
   log.info(`Installing ${battery.name} in ${pc.dim(projectDir)}`);
   await battery.apply(projectDir, options);
   log.success(`${battery.name} installed.`);
@@ -128,13 +101,15 @@ async function runUpdate(battery: BatteryDefinition, args: ManageArgs) {
     }
   }
 
-  let targetOS: string[] = [];
+  let releaseArtifacts: ReleaseArtifact[] = [];
 
   if (battery.id === "workflow") {
-    targetOS = args.targetOS?.length ? args.targetOS : await promptTargetOS(args.yes);
+    releaseArtifacts = args.targetOS?.length
+      ? releaseArtifactsForTargetOS(args.targetOS)
+      : await promptReleaseArtifacts(args.yes);
   }
 
-  const options = buildOptions(projectDir, template, targetOS);
+  const options = buildOptions(projectDir, template, releaseArtifacts);
   await battery.apply(projectDir, options);
   log.success(`${battery.name} updated.`);
 }

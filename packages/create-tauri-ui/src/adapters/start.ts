@@ -2,33 +2,17 @@ import path from "node:path";
 
 import type { ProjectOptions, TemplateAdapter } from "../types";
 import { PatchError, editFile, editJson } from "../utils";
-
-function insertStartServerBlock(content: string) {
-  if (content.includes("strictPort: true")) {
-    return content;
-  }
-
-  const closingIndex = content.lastIndexOf("\n})");
-
-  if (closingIndex === -1) {
-    throw new PatchError(
-      "vite.config.ts",
-      "Could not find the TanStack Start config closing brace.",
-    );
-  }
-
-  return `${content.slice(0, closingIndex)}
-  server: {
-    port: 3000,
-    strictPort: true,
-  },${content.slice(closingIndex)}`;
-}
+import { patchViteConfig } from "./vite-config";
 
 export const startAdapter: TemplateAdapter = {
   name: "start",
   async apply(projectDir: string, _options: ProjectOptions) {
     editFile(path.join(projectDir, "vite.config.ts"), (content) => {
-      let nextContent = insertStartServerBlock(content);
+      let nextContent = patchViteConfig(
+        content,
+        "vite.config.ts",
+        "Could not find the TanStack Start config closing brace.",
+      );
 
       if (!nextContent.includes("tanstackStart({ spa: { enabled: true } })")) {
         if (!nextContent.includes("tanstackStart(),")) {

@@ -7,20 +7,47 @@ export const astroAdapter: TemplateAdapter = {
   name: "astro",
   async apply(projectDir: string, _options: ProjectOptions) {
     editFile(path.join(projectDir, "astro.config.mjs"), (content) => {
-      if (content.includes("server: {")) {
-        return content;
+      let nextContent = content.split("__dirname").join("import.meta.dirname");
+      const additions: string[] = [];
+
+      if (!nextContent.includes("server: {")) {
+        additions.push(`  server: {
+    port: 3000,
+  },`);
       }
 
-      const closingIndex = content.lastIndexOf("\n})");
+      if (!nextContent.includes("**/src-tauri/target/**")) {
+        if (nextContent.includes("vite: {")) {
+          nextContent = nextContent.replace(
+            "vite: {",
+            `vite: {
+    server: {
+      watch: {
+        ignored: ["**/src-tauri/target/**"],
+      },
+    },`,
+          );
+        } else {
+          additions.push(`  vite: {
+    server: {
+      watch: {
+        ignored: ["**/src-tauri/target/**"],
+      },
+    },
+  },`);
+        }
+      }
+
+      if (additions.length === 0) return nextContent;
+
+      const closingIndex = nextContent.lastIndexOf("\n})");
 
       if (closingIndex === -1) {
         throw new PatchError("astro.config.mjs", "Could not find the Astro config closing brace.");
       }
 
-      return `${content.slice(0, closingIndex)}
-  server: {
-    port: 3000,
-  },${content.slice(closingIndex)}`;
+      return `${nextContent.slice(0, closingIndex)}
+${additions.join("\n")}${nextContent.slice(closingIndex)}`;
     });
   },
   tauriConfig() {
