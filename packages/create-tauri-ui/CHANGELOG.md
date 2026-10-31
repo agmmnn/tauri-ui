@@ -1,5 +1,11 @@
 # create-tauri-ui
 
+## 1.2.1
+
+### Patch Changes
+
+- dc5ea7e: Update upstream CLI and release workflow pins (`shadcn@4.23.0`, `tauri-apps/tauri-action@action-v1.0.0`, `bun@1.4.4`) and refresh `@clack/*` dependencies.
+
 ## 1.2.0
 
 ### Minor Changes
