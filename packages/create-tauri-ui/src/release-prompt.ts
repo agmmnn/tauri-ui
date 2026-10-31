@@ -20,12 +20,12 @@ const SHORT_ARTIFACT_LABELS: Record<ReleaseArtifact, string> = {
   "linux-rpm": "RPM",
 };
 
-function unwrap<T>(value: T | symbol): T {
+function unwrap<T>(value: T): Exclude<T, symbol> {
   if (isCancel(value)) {
     throw new Error("Operation cancelled");
   }
 
-  return value as T;
+  return value as Exclude<T, symbol>;
 }
 
 export async function promptReleaseArtifacts(yes: boolean | undefined): Promise<ReleaseArtifact[]> {

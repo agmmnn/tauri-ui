@@ -130,7 +130,8 @@ try {
     "utf8",
   );
   assertIncludes(workflow, [
-    "bun-version: 1.3.14",
+    "bun-version: 1.4.4",
+    "tauri-apps/tauri-action@action-v1.0.0",
     "APPLE_SIGNING_IDENTITY:",
     "startsWith(matrix.platform, 'macos-')",
     "The Windows portable executable requires the Microsoft Edge WebView2 Runtime.",

@@ -14,7 +14,7 @@ import {
   unregisterCleanupPath,
 } from "./utils";
 
-const SHADCN_VERSION = "4.16.1";
+const SHADCN_VERSION = "4.23.0";
 const SHADCN_PACKAGE = `shadcn@${SHADCN_VERSION}`;
 
 async function runShadcn(projectDir: string, args: string[]) {

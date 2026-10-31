@@ -20,12 +20,12 @@ export interface ManageArgs {
   targetOS?: TargetOs[];
 }
 
-function unwrap<T>(value: T | symbol): T {
+function unwrap<T>(value: T): Exclude<T, symbol> {
   if (isCancel(value)) {
     throw new Error("Operation cancelled");
   }
 
-  return value as T;
+  return value as Exclude<T, symbol>;
 }
 
 function buildOptions(

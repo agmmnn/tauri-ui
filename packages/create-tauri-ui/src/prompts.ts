@@ -63,12 +63,12 @@ const TEMPLATE_LABELS: Record<TemplateName, string> = {
   astro: "Astro",
 };
 
-function unwrapPrompt<T>(value: T | symbol, message = "Operation cancelled") {
+function unwrapPrompt<T>(value: T, message = "Operation cancelled"): Exclude<T, symbol> {
   if (isCancel(value)) {
     throw new Error(message);
   }
 
-  return value;
+  return value as Exclude<T, symbol>;
 }
 
 function ensureTemplate(value: string): TemplateName {
