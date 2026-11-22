@@ -23,6 +23,83 @@ function assertExcludes(content: string, unexpected: string[]) {
   }
 }
 
+const tauriActionPin = "tauri-apps/tauri-action@action-v1.0.0";
+
+// Inputs declared by tauri-action at `tauriActionPin` (action.yml -> inputs). GitHub Actions
+// silently ignores `with:` keys an action does not declare, so a renamed input degrades to a
+// no-op instead of failing the workflow.
+const tauriActionInputs = new Set([
+  "releaseId",
+  "tagName",
+  "releaseName",
+  "releaseBody",
+  "releaseDraft",
+  "prerelease",
+  "releaseCommitish",
+  "projectPath",
+  "uploadUpdaterJson",
+  "updaterJsonPreferNsis",
+  "tauriScript",
+  "args",
+  "retryAttempts",
+  "owner",
+  "repo",
+  "githubBaseUrl",
+  "releaseAssetNamePattern",
+  "uploadPlainBinary",
+  "uploadWorkflowArtifacts",
+  "workflowArtifactNamePattern",
+  "uploadUpdaterSignatures",
+  "generateReleaseNotes",
+  "mobile",
+]);
+
+function tauriActionStepInputs(workflow: string) {
+  const lines = workflow.split("\n");
+  const stepLine = lines.findIndex((line) => line.includes(`uses: ${tauriActionPin}`));
+
+  if (stepLine === -1) {
+    throw new Error(`Release workflow does not invoke ${tauriActionPin}.`);
+  }
+
+  const withLine = lines.findIndex((line, index) => index > stepLine && line.trim() === "with:");
+
+  if (withLine === -1) {
+    throw new Error(`Release workflow invokes ${tauriActionPin} without a \`with:\` block.`);
+  }
+
+  const withIndent = lines[withLine].length - lines[withLine].trimStart().length;
+  const keys: string[] = [];
+
+  for (let index = withLine + 1; index < lines.length; index += 1) {
+    const line = lines[index];
+
+    if (!line.trim()) continue;
+
+    const indent = line.length - line.trimStart().length;
+
+    if (indent <= withIndent) break;
+
+    const key = line.trimStart().match(/^([A-Za-z0-9_]+):/);
+
+    if (key && indent === withIndent + 2) keys.push(key[1]);
+  }
+
+  return keys;
+}
+
+function assertTauriActionInputsDeclared(workflow: string) {
+  const undeclared = tauriActionStepInputs(workflow).filter(
+    (name) => !tauriActionInputs.has(name),
+  );
+
+  if (undeclared.length > 0) {
+    throw new Error(
+      `Release workflow passes inputs that ${tauriActionPin} does not declare, so they are silently ignored: ${undeclared.join(", ")}`,
+    );
+  }
+}
+
 const allArtifacts: ReleaseArtifact[] = [
   "windows-nsis",
   "windows-msi",
@@ -138,6 +215,7 @@ try {
     'args: "--bundles nsis,msi"',
     'args: "--bundles appimage,deb,rpm"',
   ]);
+  assertTauriActionInputsDeclared(workflow);
 } finally {
   await fs.rm(projectDir, { recursive: true, force: true });
 }

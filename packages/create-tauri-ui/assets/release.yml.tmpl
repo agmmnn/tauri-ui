@@ -60,9 +60,9 @@ jobs:
           generateReleaseNotes: true
           retryAttempts: 2
           args: ${{ matrix.args }}
-          assetNamePattern: ${{ matrix.assetPattern }}
+          releaseAssetNamePattern: ${{ matrix.assetPattern }}
           uploadPlainBinary: ${{ matrix.uploadPlainBinary }}
-          includeUpdaterJson: false
+          uploadUpdaterJson: false
 
       - name: Upload Windows portable executable
         if: matrix.portableUpload
